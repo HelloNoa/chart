@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RedisPubSubService } from '../redis/redis.pubsub.service.js';
 
 @Injectable()
-export class TradingService {
+export class ChartService {
   constructor(private readonly redisPubSubService: RedisPubSubService) {}
   //과거 차트 데이터
   async chart() {

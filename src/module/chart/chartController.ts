@@ -1,13 +1,13 @@
 import { Controller, Get, Param, Query, Res } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { TradingService } from './trading.service.js';
+import { ChartService } from './chart.service.js';
 
-@Controller('trading')
-@ApiTags('Trading')
-export class TradingController {
-  constructor(private readonly tradingService: TradingService) {}
+@Controller('chart')
+@ApiTags('chart')
+export class ChartController {
+  constructor(private readonly tradingService: ChartService) {}
   //과거 차트 데이터
-  @Get('chart')
+  @Get()
   @ApiOperation({ summary: '최근 차트 데이터' })
   @ApiQuery({ name: 'symbol', example: 'btceth' })
   @ApiQuery({ name: 'time', example: '1m' })

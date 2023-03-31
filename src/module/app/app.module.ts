@@ -20,7 +20,7 @@ import {
 import { dbConfig } from '../../config/db.config.js';
 import { cacheConfig } from '../../config/cache.config.js';
 import { SocketModule } from '../socket/socket.module.js';
-import { TradingtModule } from '../trading/trading.module.js';
+import { ChartModule } from '../chart/chart.module.js';
 import { RedisPubSubModule } from '../redis/redis.pubsub.module.js';
 import { RedisClusterModule } from 'nestjs-redis-cluster';
 import { redisClusterOptions } from '../../cllient.options.js';
@@ -41,7 +41,7 @@ import { UpbitSocketModule } from '../upbit/upbit.socket.module.js';
     RedisClusterModule.register(redisClusterOptions()),
     RedisPubSubModule,
     SocketModule,
-    TradingtModule,
+    ChartModule,
     UpbitSocketModule,
   ],
   controllers: [AppController],
