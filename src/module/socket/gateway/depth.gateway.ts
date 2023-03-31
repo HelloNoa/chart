@@ -9,6 +9,7 @@ import {
 // import ws from 'ws';
 import * as WebSocket from 'ws';
 import { regex } from '../../../main.js';
+import { socketEvent } from '../../../dto/redis.dto.js';
 
 @WebSocketGateway({
   path: '/depth',
@@ -22,7 +23,7 @@ export class DepthGateway
 {
   @WebSocketServer()
   server: WebSocket.WebSocketServer;
-  @SubscribeMessage('ping')
+  @SubscribeMessage(socketEvent.sub.ping)
   handleMessage(client: any, payload: any): void {
     const data = JSON.stringify(payload).replace(regex, '');
     client.uuid = payload;
