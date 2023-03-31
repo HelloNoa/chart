@@ -1,0 +1,165 @@
+<html lang="en">
+  <head>
+    <title>Socket Test</title>
+  </head>
+  <body>
+    <script>
+      const SocketEvent = {
+        chart: {
+          pub: {
+            //ping pong
+            ping: 0,
+            //차트 구독
+            ChartSubscriber: 1,
+          },
+          sub: {
+            //ping pong
+            pong: 0,
+            //tradeEvent for chartdraw 차트 구독
+            OrderMatching: 1,
+            //업비트 BTC 원화 가격 Subscribe
+            UpbitBTCPrice: 2,
+            //차트 구독
+            ChartSubscriber: 3,
+          },
+        },
+        depth: {
+          pub: {
+            //ping pong
+            ping: 0,
+            //차트 구독
+            ChartSubscriber: 1,
+          },
+          sub: {
+            //ping pong
+            pong: 0,
+            //tradeEvent for chartdraw 차트 구독
+            OrderMatching: 1,
+            //차트 구독
+            ChartSubscriber: 3,
+          },
+        },
+      };
+      const uuid = uuidv4() && 'aaa';
+      const regex = new RegExp(/\s+/g);
+      // const host = '54.180.78.202';
+      // const host =
+      //   'cm-socket-server-nlb-dev-f296238fef22dc0d.elb.ap-northeast-2.amazonaws.com';
+      const host = '127.0.0.1';
+      const chart = new WebSocket(`ws://${host}/chart`);
+      // socket.binaryType = 'blob';
+      chart.binaryType = 'arraybuffer';
+      const depth = new WebSocket(`ws://${host}/depth`);
+      depth.binaryType = 'arraybuffer';
+
+      chart.onopen = () => {
+        setInterval(() => {
+          const Enum_timestamp = {
+            seconds: 0,
+            nanos: 1,
+          };
+          const Enum_OrderType = {
+            BID: 0,
+            ASK: 1,
+          };
+          const Enum_Symbol = {
+            BTCETH: 0,
+          };
+        }, 10000);
+        console.log('Connected');
+        chart.send(
+          str2ab(
+            JSON.stringify({
+              event: SocketEvent.chart.pub.ping,
+              data: uuid,
+            }),
+          ),
+        );
+        chart.onmessage = function (event) {
+          const buffer = event.data; // 이진 데이터를 ArrayBuffer로 받음
+          const decoder = new TextDecoder();
+          const decodedData = decoder.decode(buffer);
+          const json = JSON.parse(decodedData);
+          Object.keys(json).forEach((channel) => {
+            switch (Number(channel)) {
+              case SocketEvent.chart.sub.pong:
+                console.log(json[SocketEvent.chart.sub.pong]);
+                console.log('pong!');
+                chart.send(
+                  str2ab(
+                    JSON.stringify({
+                      event: SocketEvent.chart.pub.ChartSubscriber,
+                      data: 0,
+                    }),
+                  ),
+                );
+                break;
+              case SocketEvent.chart.sub.OrderMatching:
+                console.log(json[SocketEvent.chart.sub.OrderMatching]);
+                console.log('OrderMatching!');
+                break;
+              case SocketEvent.chart.sub.UpbitBTCPrice:
+                console.log(json[SocketEvent.chart.sub.UpbitBTCPrice][0]);
+                console.log('UpbitBTCPrice!');
+                break;
+              case SocketEvent.chart.sub.ChartSubscriber:
+                console.log(json[SocketEvent.chart.sub.ChartSubscriber]);
+                console.log('ChartSubscriber!');
+                break;
+              default:
+                break;
+            }
+          });
+        };
+      };
+
+      depth.onopen = () => {
+        console.log('Connected');
+        depth.send(
+          str2ab(
+            JSON.stringify({
+              event: SocketEvent.depth.pub.ping,
+              data: uuid,
+            }),
+          ),
+        );
+        depth.onmessage = function (event) {
+          const buffer = event.data; // 이진 데이터를 ArrayBuffer로 받음
+          const decoder = new TextDecoder();
+          const decodedData = decoder.decode(buffer);
+          const json = JSON.parse(decodedData);
+          Object.keys(json).forEach((channel) => {
+            switch (Number(channel)) {
+              case SocketEvent.depth.sub.pong:
+                console.log(json[SocketEvent.depth.sub.pong]);
+                console.log('pong!');
+                break;
+              default:
+                break;
+            }
+          });
+        };
+      };
+      // 문자열을 ArrayBuffer로 변환하는 함수
+      function str2ab(str) {
+        const buf = new ArrayBuffer(str.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0, strLen = str.length; i < strLen; i++) {
+          view[i] = str.charCodeAt(i);
+        }
+        return buf;
+      }
+
+      function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+          /[xy]/g,
+          function (c) {
+            var r = (Math.random() * 16) | 0,
+              v = c === 'x' ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+          },
+        );
+      }
+    </script>
+  </body>
+</html>
