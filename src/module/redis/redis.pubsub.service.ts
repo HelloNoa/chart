@@ -25,7 +25,6 @@ export class RedisPubSubService {
         console.log('-----------------');
         console.log(ch);
         console.log(msg);
-        // this[ch as keyof typeof channel](msg);
         switch (ch) {
           //tradeEvent for chartdraw 차트 구독
           case 'OrderMatchingChannel':
