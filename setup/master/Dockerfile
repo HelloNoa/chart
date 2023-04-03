@@ -10,9 +10,8 @@ COPY . server
 RUN cp server/setup/release/run.sh ./run.sh
 
 WORKDIR /home/server
-RUN npm install -g pnpm
+RUN npm install -g pnpm@7
 
-RUN pnpm env use --global 16
 RUN pnpm install
 RUN pnpm -v
 # RUN pnpm run build
