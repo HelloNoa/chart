@@ -9,7 +9,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - aws s3 cp s3://coin-market-env/chart/prod ./src/config/env/. --recursive
+      - aws s3 cp s3://finexblock-env2/coin-market/prod/chart-server/.prod.env ./src/config/env/.
       - ls -la
       - ls ./src/config/env
       - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG -f ./setup/master/Dockerfile .
