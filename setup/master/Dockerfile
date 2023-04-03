@@ -11,8 +11,9 @@ RUN cp server/setup/release/run.sh ./run.sh
 
 WORKDIR /home/server
 RUN npm install -g pnpm
-RUN pnpm -v
+
 RUN pnpm install
+RUN pnpm -v
 # RUN pnpm run build
 
 WORKDIR /home
