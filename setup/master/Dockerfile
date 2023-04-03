@@ -13,7 +13,7 @@ WORKDIR /home/server
 RUN npm install -g pnpm
 
 RUN pnpm install
-RUN pnpm run build
+# RUN pnpm run build
 
 WORKDIR /home
 ENTRYPOINT ["run.sh"]
