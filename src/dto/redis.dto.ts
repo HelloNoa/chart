@@ -49,24 +49,20 @@ export enum RedisDB {
 }
 
 export enum E_OrderMatching {
-  price = 0,
-  quantity = 1,
-  side = 2,
-  symbol = 3,
-  timestamp = 4,
+  UnitPrice = 0,
+  Quantity = 1,
+  Timestamp = 2,
+  OrderType = 3,
+  Symbol = 4,
 }
 
 export type OrderMatching = {
-  price: number;
-  quantity: number;
-  side: Side;
-  symbol: Symbol;
-  timestamp: Date;
+  UnitPrice: number;
+  Quantity: number;
+  Timestamp: Date;
+  OrderType: Side;
+  Symbol: Symbol;
 };
-
-export enum E_UpbitBTCPrice {
-  price = 0,
-}
 
 type Side = string;
 type Symbol = string;
