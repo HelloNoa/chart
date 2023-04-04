@@ -11,7 +11,6 @@ import { regex } from '../../../main.js';
 import { str2ab } from '../../../utils/index.js';
 import {
   E_OrderMatching,
-  E_UpbitBTCPrice,
   OrderMatching,
   socketEvent,
 } from '../../../dto/redis.dto.js';
@@ -37,16 +36,34 @@ export class ChartGateway
     client.uuid = payload;
     client.send(data, { binary: true });
   }
+  @SubscribeMessage(socketEvent.sub.ChartSubscriber)
+  ChartSubscriberHandleMessage(client: any, payload: any): void {
+    const json = {
+      [socketEvent.pub.ChartSubscriber]: payload,
+    };
+    const data = JSON.stringify(json).replace(regex, '');
+    if (client.chart === undefined) {
+      client.chart = [];
+      client.chart.push(payload);
+    } else if (!client.chart.includes(payload)) {
+      client.chart.push(payload);
+    }
+    client.send(data, { binary: true });
+  }
+
   OrderMatching(req: OrderMatching) {
     this.server.clients.forEach((client: any) => {
-      if (client.readyState === ws.WebSocket.OPEN) {
+      if (
+        client.readyState === ws.WebSocket.OPEN &&
+        client.chart.includes(req.Symbol)
+      ) {
         const json = {
           [socketEvent.pub.OrderMatching]: {
-            [E_OrderMatching.price]: req.price,
-            [E_OrderMatching.quantity]: req.quantity,
-            [E_OrderMatching.side]: req.side,
-            [E_OrderMatching.symbol]: req.symbol,
-            [E_OrderMatching.timestamp]: req.timestamp,
+            [E_OrderMatching.UnitPrice]: req.UnitPrice,
+            [E_OrderMatching.Quantity]: req.Quantity,
+            [E_OrderMatching.Timestamp]: req.Timestamp,
+            [E_OrderMatching.OrderType]: req.OrderType,
+            [E_OrderMatching.Symbol]: req.Symbol,
           },
         };
         const data = str2ab(JSON.stringify(json));
@@ -57,9 +74,7 @@ export class ChartGateway
   UpbitBTCPrice(price: number) {
     this.server.clients.forEach((client: any) => {
       const json = {
-        [socketEvent.pub.UpbitBTCPrice]: {
-          [E_UpbitBTCPrice.price]: price,
-        },
+        [socketEvent.pub.UpbitBTCPrice]: price,
       };
       const data = str2ab(JSON.stringify(json));
       client.send(data, { binary: true });
