@@ -5,39 +5,21 @@
   <body>
     <script>
       const SocketEvent = {
-        chart: {
-          pub: {
-            //ping pong
-            ping: 0,
-            //차트 구독
-            ChartSubscriber: 1,
-          },
-          sub: {
-            //ping pong
-            pong: 0,
-            //tradeEvent for chartdraw 차트 구독
-            OrderMatching: 1,
-            //업비트 BTC 원화 가격 Subscribe
-            UpbitBTCPrice: 2,
-            //차트 구독
-            ChartSubscriber: 3,
-          },
+        pub: {
+          //ping pong
+          ping: 0,
+          //차트 구독
+          ChartSubscriber: 1,
         },
-        depth: {
-          pub: {
-            //ping pong
-            ping: 0,
-            //차트 구독
-            ChartSubscriber: 1,
-          },
-          sub: {
-            //ping pong
-            pong: 0,
-            //tradeEvent for chartdraw 차트 구독
-            OrderMatching: 1,
-            //차트 구독
-            ChartSubscriber: 3,
-          },
+        sub: {
+          //ping pong
+          pong: 0,
+          //tradeEvent for chartdraw 차트 구독
+          OrderMatching: 1,
+          //업비트 BTC 원화 가격 Subscribe
+          UpbitBTCPrice: 2,
+          //차트 구독
+          ChartSubscriber: 3,
         },
       };
       const uuid = uuidv4() && 'aaa';
@@ -70,7 +52,7 @@
         chart.send(
           str2ab(
             JSON.stringify({
-              event: SocketEvent.chart.pub.ping,
+              event: SocketEvent.pub.ping,
               data: uuid,
             }),
           ),
@@ -82,28 +64,28 @@
           const json = JSON.parse(decodedData);
           Object.keys(json).forEach((channel) => {
             switch (Number(channel)) {
-              case SocketEvent.chart.sub.pong:
-                console.log(json[SocketEvent.chart.sub.pong]);
+              case SocketEvent.sub.pong:
+                console.log(json[SocketEvent.sub.pong]);
                 console.log('pong!');
                 chart.send(
                   str2ab(
                     JSON.stringify({
-                      event: SocketEvent.chart.pub.ChartSubscriber,
-                      data: 0,
+                      event: SocketEvent.pub.ChartSubscriber,
+                      data: 'BTCETH',
                     }),
                   ),
                 );
                 break;
-              case SocketEvent.chart.sub.OrderMatching:
-                console.log(json[SocketEvent.chart.sub.OrderMatching]);
+              case SocketEvent.sub.OrderMatching:
+                console.log(json[SocketEvent.sub.OrderMatching]);
                 console.log('OrderMatching!');
                 break;
-              case SocketEvent.chart.sub.UpbitBTCPrice:
-                console.log(json[SocketEvent.chart.sub.UpbitBTCPrice][0]);
+              case SocketEvent.sub.UpbitBTCPrice:
+                console.log(json[SocketEvent.sub.UpbitBTCPrice][0]);
                 console.log('UpbitBTCPrice!');
                 break;
-              case SocketEvent.chart.sub.ChartSubscriber:
-                console.log(json[SocketEvent.chart.sub.ChartSubscriber]);
+              case SocketEvent.sub.ChartSubscriber:
+                console.log(json[SocketEvent.sub.ChartSubscriber]);
                 console.log('ChartSubscriber!');
                 break;
               default:
@@ -118,7 +100,7 @@
         depth.send(
           str2ab(
             JSON.stringify({
-              event: SocketEvent.depth.pub.ping,
+              event: SocketEvent.pub.ping,
               data: uuid,
             }),
           ),
@@ -130,8 +112,8 @@
           const json = JSON.parse(decodedData);
           Object.keys(json).forEach((channel) => {
             switch (Number(channel)) {
-              case SocketEvent.depth.sub.pong:
-                console.log(json[SocketEvent.depth.sub.pong]);
+              case SocketEvent.sub.pong:
+                console.log(json[SocketEvent.sub.pong]);
                 console.log('pong!');
                 break;
               default:
