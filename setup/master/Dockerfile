@@ -7,7 +7,7 @@ WORKDIR /home
 
 COPY . server
 
-RUN cp server/setup/release/run.sh ./run.sh
+RUN cp server/setup/master/run.sh ./run.sh
 
 WORKDIR /home/server
 RUN npm install -g pnpm@7
