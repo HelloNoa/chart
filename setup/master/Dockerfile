@@ -14,7 +14,7 @@ RUN npm install -g pnpm@7
 
 RUN pnpm install
 RUN pnpm -v
-# RUN pnpm run build
+RUN pnpm run build
 
 WORKDIR /home
 ENTRYPOINT ["run.sh"]
