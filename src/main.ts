@@ -18,7 +18,7 @@ async function bootstrap() {
   console.log(process.env.REDIS_PORT);
   if (process.env.USE_SSH_TUNNEL === 'true') {
     await useSSHTunnel(
-      'clustercfg.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com',
+      process.env.REDIS_TUNNELING_HOST + '',
       Number(process.env.REDIS_PORT),
       Number(process.env.REDIS_PORT),
       async () => {
@@ -30,11 +30,10 @@ async function bootstrap() {
     const clusterList = [];
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 4; j++) {
-        //clustercfg.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com
         await useSSHTunnel(
-          `coin-market-memorydb-dev-000${i + 1}-00${
-            j + 1
-          }.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com`,
+          `${process.env.REDIS_NDOE_HOST1}-000${i + 1}-00${j + 1}.${
+            process.env.REDIS_NDOE_HOST2
+          }`,
           Number(9736),
           Number(startPort + Cnt),
           async () => {

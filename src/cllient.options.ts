@@ -1,6 +1,22 @@
 import * as process from 'process';
 import { RedisClusterModuleOptions } from 'nestjs-redis-cluster/dist/cluster.interface.js';
 
+const redisclusterNodeEndPoint = () => {
+  const natMap: any = {};
+  const startPort = 6000;
+  let cnt = 1;
+  for (let i = 0; i < 1; i++) {
+    for (let j = 0; j < 2; j++) {
+      natMap[
+        `${process.env.REDIS_NDOE_HOST1}-000${i}-00${j}.${process.env.REDIS_NDOE_HOST2}`
+      ] = {
+        host: '127.0.0.1',
+        port: startPort + cnt++,
+      };
+    }
+  }
+  return natMap;
+};
 export const redisClusterOptions = (): RedisClusterModuleOptions => ({
   name: 'REDIS_SERVICE',
   nodes: [
@@ -14,53 +30,7 @@ export const redisClusterOptions = (): RedisClusterModuleOptions => ({
   },
   natMap:
     process.env.USE_SSH_TUNNEL === 'true'
-      ? {
-          'coin-market-memorydb-dev-0001-001.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com:9736':
-            {
-              host: '127.0.0.1',
-              port: 6661,
-            },
-          'coin-market-memorydb-dev-0001-002.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com:9736':
-            {
-              host: '127.0.0.1',
-              port: 6662,
-            },
-          'coin-market-memorydb-dev-0001-003.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com:9736':
-            {
-              host: '127.0.0.1',
-              port: 6663,
-            },
-          'coin-market-memorydb-dev-0001-004.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com:9736':
-            {
-              host: '127.0.0.1',
-              port: 6664,
-            },
-          'coin-market-memorydb-dev-0002-001.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com:9736':
-            {
-              host: '127.0.0.1',
-              port: 6665,
-            },
-          'coin-market-memorydb-dev-0002-002.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com:9736':
-            {
-              host: '127.0.0.1',
-              port: 6666,
-            },
-          'coin-market-memorydb-dev-0002-003.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com:9736':
-            {
-              host: '127.0.0.1',
-              port: 6667,
-            },
-          'coin-market-memorydb-dev-0002-004.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com:9736':
-            {
-              host: '127.0.0.1',
-              port: 6668,
-            },
-          'clustercfg.coin-market-memorydb-dev.ya93dq.memorydb.ap-northeast-2.amazonaws.com:9736':
-            {
-              host: '127.0.0.1',
-              port: 9736,
-            },
-        }
+      ? redisclusterNodeEndPoint()
       : undefined,
   enableAutoPipelining: true,
   scaleReads: 'all',
