@@ -28,8 +28,8 @@ async function bootstrap() {
     const startPort = 6660;
     let Cnt = 1;
     const clusterList = [];
-    for (let i = 0; i < 2; i++) {
-      for (let j = 0; j < 4; j++) {
+    for (let i = 0; i < 1; i++) {
+      for (let j = 0; j < 2; j++) {
         await useSSHTunnel(
           `${process.env.REDIS_NDOE_HOST1}-000${i + 1}-00${j + 1}.${
             process.env.REDIS_NDOE_HOST2

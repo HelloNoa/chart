@@ -3,12 +3,14 @@ import { RedisClusterModuleOptions } from 'nestjs-redis-cluster/dist/cluster.int
 
 const redisclusterNodeEndPoint = () => {
   const natMap: any = {};
-  const startPort = 6000;
+  const startPort = 6660;
   let cnt = 1;
   for (let i = 0; i < 1; i++) {
     for (let j = 0; j < 2; j++) {
       natMap[
-        `${process.env.REDIS_NDOE_HOST1}-000${i}-00${j}.${process.env.REDIS_NDOE_HOST2}`
+        `${process.env.REDIS_NDOE_HOST1}-000${i + 1}-00${j + 1}.${
+          process.env.REDIS_NDOE_HOST2
+        }:9736`
       ] = {
         host: '127.0.0.1',
         port: startPort + cnt++,
