@@ -5,15 +5,15 @@ import {
 import process from 'process';
 
 export const getsetSecretString = async () => {
-  const aws_access_key = process.env.AWS_ACCESS_KEY_ID as string;
-  const aws_secret_access_key = process.env.AWS_SECRET_ACCESS_KEY as string;
+  const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY as string;
+  const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY as string;
   const aws_region = process.env.AWS_REGION as string;
   const aws_secret_name = process.env.AWS_SECRET_NAME as string;
 
   const client = new SecretsManagerClient({
     credentials: {
-      accessKeyId: aws_access_key,
-      secretAccessKey: aws_secret_access_key,
+      accessKeyId: AWS_ACCESS_KEY,
+      secretAccessKey: AWS_SECRET_KEY,
     },
     region: aws_region,
   });
