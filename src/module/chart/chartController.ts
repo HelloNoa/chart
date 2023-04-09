@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Query, Res } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ChartService } from './chart.service.js';
+import { ChartReqDto } from './chart.dto.js';
 
 @Controller('chart')
 @ApiTags('chart')
@@ -10,21 +11,29 @@ export class ChartController {
   @Get()
   @ApiOperation({ summary: '최근 차트 데이터' })
   @ApiQuery({ name: 'symbol', example: 'btceth' })
-  @ApiQuery({ name: 'time', example: '1m' })
-  @ApiQuery({ name: 'page', example: '1' })
+  @ApiQuery({ name: 'interval', example: '1m' })
+  @ApiQuery({ name: 'length', example: '100' })
+  @ApiQuery({ name: 'date', example: '2023-04-04' })
   async chart(
     @Param('symbol') symbol: string,
-    @Param('time') time: string,
-    @Param('page') page: number,
+    @Param('interval') interval: string,
+    @Param('length') length: number,
+    @Param('date') date: string,
   ) {
-    return await this.tradingService.chart();
+    const req: ChartReqDto = {
+      order_symbol_id: symbol,
+      interval: interval,
+      length: length,
+      created_at: date,
+    };
+    return await this.tradingService.getChart(req);
   }
   //과거 호가 데이터
   @Get('bidask')
   @ApiQuery({ name: 'symbol', example: 'btceth' })
   @ApiOperation({ summary: '최근 호가 데이터' })
   async bidask(@Param('symbol') symbol: string) {
-    return await this.tradingService.bidask();
+    return await this.tradingService.bidask(symbol);
   }
   //마켓 리스트
   @Get('marketList')

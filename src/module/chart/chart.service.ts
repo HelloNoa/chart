@@ -1,20 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { RedisPubSubService } from '../redis/redis.pubsub.service.js';
+import { chartService } from '../typeorm/chart/chart.service.js';
+import { order_bookService } from '../typeorm/order_book/order_book.service.js';
+import { order_symbolService } from '../typeorm/order_symbol/order_symbol.service.js';
+import { ChartReqDto } from './chart.dto.js';
 
 @Injectable()
 export class ChartService {
-  constructor(private readonly redisPubSubService: RedisPubSubService) {}
+  constructor(
+    private readonly redisPubSubService: RedisPubSubService,
+    private readonly chartService: chartService,
+    private readonly orderBookService: order_bookService,
+    private readonly orderSymbolService: order_symbolService,
+  ) {}
+
   //과거 차트 데이터
-  async chart() {
-    return await this.redisPubSubService.getValue('foo');
+  async getChart({
+    order_symbol_id,
+    interval,
+    length,
+    created_at,
+  }: ChartReqDto) {
+    return await this.chartService.getChart({
+      order_symbol_id,
+      interval,
+      length,
+      created_at,
+    });
   }
+
   //과거 호가 데이터
-  async bidask() {
-    return await this.redisPubSubService.getValue('foo');
+  async bidask(symbol: string) {
+    return await this.orderBookService.getBidAsk(symbol);
   }
+
   //마켓리스트
   async marketList() {
-    return 'btceth';
+    return await this.orderSymbolService.findAll();
   }
 
   async upbitPrice(symbol: string) {
