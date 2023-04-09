@@ -25,6 +25,11 @@ import { RedisPubSubModule } from '../redis/redis.pubsub.module.js';
 import { RedisClusterModule } from 'nestjs-redis-cluster';
 import { redisClusterOptions } from '../../cllient.options.js';
 import { UpbitSocketModule } from '../upbit/upbit.socket.module.js';
+import { order_bookModule } from '../typeorm/order_book/order_book.module.js';
+import { order_symbolModule } from '../typeorm/order_symbol/order_symbol.module.js';
+import { chartModule } from '../typeorm/chart/chart.module.js';
+import { userModule } from '../typeorm/user/user.module.js';
+import { order_book_differenceModule } from '../typeorm/order_book_difference/order_book_difference.module.js';
 
 @Module({
   imports: [
@@ -43,6 +48,11 @@ import { UpbitSocketModule } from '../upbit/upbit.socket.module.js';
     SocketModule,
     ChartModule,
     UpbitSocketModule,
+    order_bookModule,
+    order_symbolModule,
+    order_book_differenceModule,
+    chartModule,
+    userModule,
   ],
   controllers: [AppController],
   providers: [
