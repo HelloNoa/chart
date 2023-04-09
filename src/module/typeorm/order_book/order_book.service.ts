@@ -20,7 +20,8 @@ export class order_bookService {
     return this.order_bookRepository.find();
   }
 
-  async getOrderList(uuid: string, status: status, orderSymbolId?: number) {
+  async getOrderList(uuid: string, status: status[], orderSymbolName?: string) {
+    if (!Array.isArray(status)) status = [status];
     const userId = await this.userService.getUserId(uuid);
     if (userId === null) {
       console.log('User uuid is null');
@@ -28,9 +29,16 @@ export class order_bookService {
     }
     const option: FindOptionsWhere<order_book> = {
       user_id: userId,
-      status,
+      status: In(status),
     };
-    if (orderSymbolId) {
+    if (orderSymbolName) {
+      const orderSymbolId = await this.orderSymbolService.getSymbolId(
+        orderSymbolName,
+      );
+      if (orderSymbolId === null) {
+        console.error('orderSymbolId is null');
+        return null;
+      }
       option.order_symbol_id = orderSymbolId;
     }
     return this.order_bookRepository.findBy(option);
