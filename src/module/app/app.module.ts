@@ -43,7 +43,11 @@ import { order_book_differenceModule } from '../typeorm/order_book_difference/or
       isGlobal: true,
       cache: true,
     }),
-    RedisClusterModule.register(redisClusterOptions()),
+    RedisClusterModule.forRootAsync({
+      useFactory: () => {
+        return redisClusterOptions();
+      },
+    }),
     RedisPubSubModule,
     SocketModule,
     ChartModule,
