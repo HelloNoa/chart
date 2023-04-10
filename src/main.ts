@@ -14,10 +14,7 @@ import { getsetSecretString } from './config/secretsManager.js';
 export const regex = new RegExp(/\s+/g);
 
 async function bootstrap() {
-  console.log(process.env.AWS_REGION);
-  console.log(process.env.ASSUME_SECRET_NAME);
   await getsetSecretString();
-  console.log(process.env.REDIS_PORT);
   if (process.env.USE_SSH_TUNNEL === 'true') {
     await useSSHTunnel(
       process.env.REDIS_TUNNELING_HOST + '',

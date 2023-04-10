@@ -7,12 +7,10 @@ import process from 'process';
 import { randomUUID } from 'crypto';
 
 export const getsetSecretString = async () => {
-  console.log('asdsad');
   const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY as string;
   const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY as string;
   const aws_region = process.env.AWS_REGION as string;
   const aws_secret_name = process.env.ASSUME_SECRET_NAME as string;
-  console.log(AWS_ACCESS_KEY);
 
   const client = new SecretsManagerClient({
     credentials: {
@@ -23,7 +21,6 @@ export const getsetSecretString = async () => {
   });
   let response;
   try {
-    console.log(1111);
     response = await client.send(
       new GetSecretValueCommand({
         SecretId: aws_secret_name,
@@ -32,7 +29,6 @@ export const getsetSecretString = async () => {
         // VersionStage: 'AWSCURRENT', // VersionStage defaults to AWSCURRENT if unspecified
       }),
     );
-    console.log(response);
     const secret: {
       SECRET_NAME: string;
       ROLE_ARN: string;
@@ -56,7 +52,6 @@ export const getsetSecretString = async () => {
       console.error('INVALID_AWS_OPERATION');
       return null;
     }
-    console.log(Credentials);
     const secretManagerClient = new SecretsManagerClient({
       region: process.env.AWS_REGION,
       credentials: {
@@ -76,7 +71,6 @@ export const getsetSecretString = async () => {
       );
       if (!SecretString) return '';
       const secret = JSON.parse(SecretString);
-      console.log(process.env.NODE_ENV);
       const isDev = process.env.NODE_ENV === 'local';
       Object.keys(secret).forEach((key: string) => {
         process.env[key] = secret[key];
@@ -86,8 +80,6 @@ export const getsetSecretString = async () => {
         process.env.REDIS_HOST = '127.0.0.1';
         process.env.USE_SSH_TUNNEL = 'true';
       }
-      console.log(SecretString);
-      console.log(process.env.NODE_ENV);
       return SecretString;
     } catch (error) {
       console.log(error);
