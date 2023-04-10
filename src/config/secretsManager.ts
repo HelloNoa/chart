@@ -11,7 +11,7 @@ export const getsetSecretString = async () => {
   const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY as string;
   const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY as string;
   const aws_region = process.env.AWS_REGION as string;
-  const aws_secret_name = process.env.AWS_SECRET_NAME as string;
+  const aws_secret_name = process.env.ASSUME_SECRET_NAME as string;
   console.log(AWS_ACCESS_KEY);
 
   const client = new SecretsManagerClient({
@@ -76,6 +76,7 @@ export const getsetSecretString = async () => {
       );
       if (!SecretString) return '';
       const secret = JSON.parse(SecretString);
+      console.log(process.env.NODE_ENV);
       const isDev = process.env.NODE_ENV === 'local';
       Object.keys(secret).forEach((key: string) => {
         process.env[key] = secret[key];
@@ -85,6 +86,8 @@ export const getsetSecretString = async () => {
         process.env.REDIS_HOST = '127.0.0.1';
         process.env.USE_SSH_TUNNEL = 'true';
       }
+      console.log(SecretString);
+      console.log(process.env.NODE_ENV);
       return SecretString;
     } catch (error) {
       console.log(error);
