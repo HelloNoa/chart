@@ -8,13 +8,13 @@ import { initSwaggerDocs } from './module/app/app.logger.js';
 import { WsAdapter } from '@nestjs/platform-ws';
 import { useSSHTunnel } from './utils/index.js';
 import * as process from 'process';
-// import { getsetSecretString } from './config/secretsManager.js';
+import { getsetSecretString } from './config/secretsManager.js';
 
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 export const regex = new RegExp(/\s+/g);
 
 async function bootstrap() {
-  // await getsetSecretString();
+  await getsetSecretString();
   console.log(process.env.REDIS_PORT);
   if (process.env.USE_SSH_TUNNEL === 'true') {
     await useSSHTunnel(
