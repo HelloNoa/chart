@@ -11,7 +11,7 @@ phases:
       - echo Building the Docker image...
       - aws s3 cp s3://finexblock-env2/coin-market/prod/chart-server/.prod.env ./src/config/env/.prod.env
       - ls -la
-      - ls ./src/config/env
+      - ls -la ./src/config/env
       - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG -f ./setup/master/Dockerfile .
   post_build:
     commands:

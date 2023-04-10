@@ -28,6 +28,7 @@ export const getsetSecretString = async () => {
         VersionStage: 'AWSCURRENT', // VersionStage defaults to AWSCURRENT if unspecified
       }),
     );
+    console.log(response);
     const secret: {
       SECRET_NAME: string;
       ROLE_ARN: string;
@@ -51,7 +52,8 @@ export const getsetSecretString = async () => {
       console.error('INVALID_AWS_OPERATION');
       return null;
     }
-
+    console.log('Credentials');
+    console.log(Credentials);
     const secretManagerClient = new SecretsManagerClient({
       region: process.env.AWS_REGION,
       credentials: {
@@ -71,6 +73,8 @@ export const getsetSecretString = async () => {
       );
       if (!SecretString) return '';
       const secret = JSON.parse(SecretString);
+      console.log('secret');
+      console.log(secret);
       const isDev = process.env.NODE_ENV === 'local';
       Object.keys(secret).forEach((key: string) => {
         process.env[key] = secret[key];
@@ -83,7 +87,7 @@ export const getsetSecretString = async () => {
       return SecretString;
     } catch (error) {
       console.log(error);
-      throw error;
+      return null;
     }
   } catch (error) {
     // throw error;
