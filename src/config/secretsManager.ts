@@ -7,6 +7,7 @@ import process from 'process';
 import { randomUUID } from 'crypto';
 
 export const getsetSecretString = async () => {
+  console.log('getsetSecretString');
   const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY as string;
   const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY as string;
   const aws_region = process.env.AWS_REGION as string;
