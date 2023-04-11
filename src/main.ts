@@ -61,11 +61,28 @@ async function bootstrap() {
   const configService = app.get<ConfigService>(ConfigService);
 
   const version = configService.getOrThrow('APP_VERSION');
+  app.enableCors({
+    allowedHeaders: [
+      'Pragma',
+      'Cache-Control',
+      'Content-Type',
+      'Access-Control-Allow-Headers',
+      'Authorization',
+      'X-Requested-With',
+    ],
+    exposedHeaders: [],
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    origin: '*',
+    maxAge: 600,
+    optionsSuccessStatus: 204,
+    credentials: false,
+    preflightContinue: false,
+  });
+  app.enableCors({ origin: '*' });
 
   app.setGlobalPrefix(`api/v${version}`, {
     exclude: [{ path: '', method: RequestMethod.GET }],
   });
-
   // // app.use(helmet());
   // console.log('dsad');
   //
