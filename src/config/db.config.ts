@@ -1,5 +1,5 @@
 import { registerAs } from '@nestjs/config';
-import { DB_CONFIG_KEY, AppMode, EnvMode } from '../constants/index.js';
+import { DB_CONFIG_KEY, EnvMode } from '../constants/index.js';
 import { DataSourceOptions } from 'typeorm';
 import { DbConfigSchema } from './config.zod.js';
 import { dirname } from 'path';
@@ -21,7 +21,8 @@ export const dbConfig = registerAs(
     });
 
     let dbConfig: DataSourceOptions;
-    if (AppMode === EnvMode.Test) {
+    // if (AppMode === EnvMode.Test) {
+    if (process.env.NODE_ENV === EnvMode.Test) {
       await useSSHTunnel(
         process.env.DATABASE_HOST + '',
         Number(process.env.DATABASE_PORT),

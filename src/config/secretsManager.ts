@@ -71,12 +71,12 @@ export const getsetSecretString = async () => {
       );
       if (!SecretString) return '';
       const secret = JSON.parse(SecretString);
-      const isDev = process.env.NODE_ENV === 'local';
+      const isDev = process.env.USE_SSH_TUNNEL === 'true';
       Object.keys(secret).forEach((key: string) => {
         process.env[key] = secret[key];
       });
       if (isDev) {
-        process.env.NODE_ENV = 'local';
+        process.env.NODE_ENV = 'test';
         process.env.REDIS_HOST = '127.0.0.1';
         process.env.USE_SSH_TUNNEL = 'true';
       }
