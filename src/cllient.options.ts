@@ -2,6 +2,10 @@ import * as process from 'process';
 import { RedisClusterModuleOptions } from 'nestjs-redis-cluster/dist/cluster.interface.js';
 
 const redisclusterNodeEndPoint = () => {
+  console.log(
+    'SSH TUNNEL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
+  );
+
   const natMap: any = {};
   const startPort = 6660;
   let cnt = 1;
