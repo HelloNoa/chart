@@ -9,6 +9,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
+#       - aws s3 cp s3://finexblock-env2-dev/coin-market/dev/chart-server/.dev.env ./src/config/env/. --recursive
       - aws s3 cp s3://finexblock-env2-dev/coin-market/dev/chart-server/.dev.env ./src/config/env/. --recursive
       - ls -la
       - ls ./src/config/env
