@@ -19,6 +19,10 @@ export class CreateCatDto {
 export const channel = {
   //tradeEvent for chartdraw 차트 구독
   OrderMatchingChannel: 'OrderMatchingChannel',
+  //주문 등록 요청 성공
+  OrderPlacementChannel: 'OrderPlacementChannel',
+  //주문 취소 요청 성공
+  OrderCancellationChannel: 'OrderCancellationChannel',
 };
 export const socketEvent = {
   sub: {
@@ -26,6 +30,8 @@ export const socketEvent = {
     ping: 0,
     //차트 구독
     ChartSubscriber: 1,
+    //호가창 구독
+    OrderBookSubscriber: 2,
   },
   pub: {
     //ping pong
@@ -36,6 +42,10 @@ export const socketEvent = {
     UpbitBTCPrice: 2,
     //차트 구독
     ChartSubscriber: 3,
+    //호가창 구독
+    OrderBookSubscriber: 4,
+    //호가창 front에 pub
+    OrderBook: 5,
   },
 };
 
