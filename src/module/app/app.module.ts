@@ -18,7 +18,7 @@ import {
   ResponseTransformerInterceptor,
 } from '../../infra/index.js';
 import { dbConfig } from '../../config/db.config.js';
-import { cacheConfig } from '../../config/cache.config.js';
+// import { cacheConfig } from '../../config/cache.config.js';
 import { SocketModule } from '../socket/socket.module.js';
 import { ChartModule } from '../chart/chart.module.js';
 import { RedisPubSubModule } from '../redis/redis.pubsub.module.js';
@@ -34,7 +34,7 @@ import { order_book_differenceModule } from '../typeorm/order_book_difference/or
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [commonConfig, dbConfig, cacheConfig],
+      load: [commonConfig, dbConfig],
       envFilePath: [
         `${dirname(
           fileURLToPath(import.meta.url),
