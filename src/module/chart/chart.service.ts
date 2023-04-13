@@ -36,7 +36,7 @@ export class ChartService {
 
   //마켓리스트
   async marketList() {
-    return await this.orderSymbolService.findAll();
+    return await this.orderSymbolService.marketList();
   }
 
   async upbitPrice(symbol: string) {

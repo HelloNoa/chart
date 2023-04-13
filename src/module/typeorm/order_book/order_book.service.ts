@@ -69,41 +69,48 @@ export class order_bookService {
       }
       const ask: OrderBookDto[] = [];
       const bid: OrderBookDto[] = [];
-      orderBookIdList.map(async (e) => {
-        const diff =
-          await this.orderBookDifferenceService.getDifferBiOrderBookId(e.id);
-        if (diff === null) {
-          console.error('diff is null');
-          return null;
-        }
-        if (e.order_type === 'ASK') {
-          if (ask.findIndex((el) => el.price === Number(e.unit_price)) === -1) {
-            ask.push({
-              satoshi: SATOSHI * Number(e.unit_price),
-              price: Number(e.unit_price),
-              volume: Number(e.quantity) + Number(diff),
-            } as OrderBookDto);
-          } else {
-            const index = ask.findIndex(
-              (el) => el.price === Number(e.unit_price),
-            );
-            ask[index].volume += Number(e.quantity) + Number(diff);
+
+      await Promise.all(
+        orderBookIdList.map(async (e) => {
+          const diff =
+            await this.orderBookDifferenceService.getDifferBiOrderBookId(e.id);
+          if (diff === null) {
+            console.error('diff is null');
+            return null;
           }
-        } else if (e.order_type === 'BID') {
-          if (bid.findIndex((el) => el.price === Number(e.unit_price)) === -1) {
-            bid.push({
-              satoshi: SATOSHI * Number(e.unit_price),
-              price: Number(e.unit_price),
-              volume: Number(e.quantity),
-            } as OrderBookDto);
-          } else {
-            const index = bid.findIndex(
-              (el) => el.price === Number(e.unit_price),
-            );
-            bid[index].volume += Number(e.quantity) + Number(diff);
+          if (e.order_type === 'ASK') {
+            if (
+              ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
+            ) {
+              ask.push({
+                satoshi: SATOSHI * Number(e.unit_price),
+                price: Number(e.unit_price),
+                volume: Number(e.quantity) + Number(diff),
+              } as OrderBookDto);
+            } else {
+              const index = ask.findIndex(
+                (el) => el.price === Number(e.unit_price),
+              );
+              ask[index].volume += Number(e.quantity) + Number(diff);
+            }
+          } else if (e.order_type === 'BID') {
+            if (
+              bid.findIndex((el) => el.price === Number(e.unit_price)) === -1
+            ) {
+              bid.push({
+                satoshi: SATOSHI * Number(e.unit_price),
+                price: Number(e.unit_price),
+                volume: Number(e.quantity),
+              } as OrderBookDto);
+            } else {
+              const index = bid.findIndex(
+                (el) => el.price === Number(e.unit_price),
+              );
+              bid[index].volume += Number(e.quantity) + Number(diff);
+            }
           }
-        }
-      });
+        }),
+      );
 
       return { ask: ask, bid: bid } as BidAskDto;
     } catch (e) {
@@ -159,41 +166,48 @@ export class order_bookService {
       });
       const ask: OrderBookDto[] = [];
       const bid: OrderBookDto[] = [];
-      filterOrderBookIdList.map(async (e) => {
-        const diff =
-          await this.orderBookDifferenceService.getDifferBiOrderBookId(e.id);
-        if (diff === null) {
-          console.error('diff is null');
-          return null;
-        }
-        if (e.order_type === 'ASK') {
-          if (ask.findIndex((el) => el.price === Number(e.unit_price)) === -1) {
-            ask.push({
-              satoshi: SATOSHI * Number(e.unit_price),
-              price: Number(e.unit_price),
-              volume: Number(e.quantity) + Number(diff),
-            } as OrderBookDto);
-          } else {
-            const index = ask.findIndex(
-              (el) => el.price === Number(e.unit_price),
-            );
-            ask[index].volume += Number(e.quantity) + Number(diff);
+
+      await Promise.all(
+        filterOrderBookIdList.map(async (e) => {
+          const diff =
+            await this.orderBookDifferenceService.getDifferBiOrderBookId(e.id);
+          if (diff === null) {
+            console.error('diff is null');
+            return null;
           }
-        } else if (e.order_type === 'BID') {
-          if (bid.findIndex((el) => el.price === Number(e.unit_price)) === -1) {
-            bid.push({
-              satoshi: SATOSHI * Number(e.unit_price),
-              price: Number(e.unit_price),
-              volume: Number(e.quantity),
-            } as OrderBookDto);
-          } else {
-            const index = bid.findIndex(
-              (el) => el.price === Number(e.unit_price),
-            );
-            bid[index].volume += Number(e.quantity) + Number(diff);
+          if (e.order_type === 'ASK') {
+            if (
+              ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
+            ) {
+              ask.push({
+                satoshi: SATOSHI * Number(e.unit_price),
+                price: Number(e.unit_price),
+                volume: Number(e.quantity) + Number(diff),
+              } as OrderBookDto);
+            } else {
+              const index = ask.findIndex(
+                (el) => el.price === Number(e.unit_price),
+              );
+              ask[index].volume += Number(e.quantity) + Number(diff);
+            }
+          } else if (e.order_type === 'BID') {
+            if (
+              bid.findIndex((el) => el.price === Number(e.unit_price)) === -1
+            ) {
+              bid.push({
+                satoshi: SATOSHI * Number(e.unit_price),
+                price: Number(e.unit_price),
+                volume: Number(e.quantity),
+              } as OrderBookDto);
+            } else {
+              const index = bid.findIndex(
+                (el) => el.price === Number(e.unit_price),
+              );
+              bid[index].volume += Number(e.quantity) + Number(diff);
+            }
           }
-        }
-      });
+        }),
+      );
 
       return { ask: ask, bid: bid } as BidAskDto;
     } catch (e) {
