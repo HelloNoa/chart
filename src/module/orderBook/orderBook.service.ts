@@ -42,24 +42,26 @@ export class OrderBookService {
 
   async onModuleInit() {
     const list = await this.orderSymbolService.findAll();
-    list.map(async (e) => {
-      const bidask = await this.orderBookService.getAllBidAsk(e.name);
-      if (bidask === null) {
-        console.error('get bidask null!');
-        console.log(e.name);
-        if (!this.orderBook.hasOwnProperty(e.name)) {
-          this.orderBook[e.name] = {
-            ask: [],
-            bid: [],
-          };
+    await Promise.all(
+      list.map(async (e) => {
+        const bidask = await this.orderBookService.getAllBidAsk(e.name);
+        if (bidask === null) {
+          console.error('get bidask null!');
+          console.log(e.name);
+          if (!this.orderBook.hasOwnProperty(e.name)) {
+            this.orderBook[e.name] = {
+              ask: [],
+              bid: [],
+            };
+          }
+        } else {
+          this.orderBook[e.name] = bidask;
         }
-      } else {
-        this.orderBook[e.name] = bidask;
-      }
-      const time = new Date().getTime();
-      this.incomeUpdata[e.name] = time;
-      this.outputUpdate[e.name] = time;
-    });
+        const time = new Date().getTime();
+        this.incomeUpdata[e.name] = time;
+        this.outputUpdate[e.name] = time;
+      }),
+    );
     this.initialize = true;
     setInterval(() => {
       list.map((e) => {
