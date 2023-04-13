@@ -14,6 +14,7 @@ import { getsetSecretString } from './config/secretsManager.js';
 export const regex = new RegExp(/\s+/g);
 
 async function bootstrap() {
+  console.log(process.env.NODE_ENV);
   await getsetSecretString();
   if (process.env.USE_SSH_TUNNEL === 'true') {
     await useSSHTunnel(
@@ -78,7 +79,6 @@ async function bootstrap() {
     credentials: false,
     preflightContinue: false,
   });
-  app.enableCors({ origin: '*' });
 
   app.setGlobalPrefix(`api/v${version}`, {
     exclude: [{ path: '', method: RequestMethod.GET }],
