@@ -31,6 +31,7 @@ import { chartModule } from '../typeorm/chart/chart.module.js';
 import { userModule } from '../typeorm/user/user.module.js';
 import { order_book_differenceModule } from '../typeorm/order_book_difference/order_book_difference.module.js';
 import { OrderBookModule } from '../orderBook/orderBook.module.js';
+import { order_matching_eventModule } from '../typeorm/order_matching_event/order_matching_event.module.js';
 
 @Module({
   imports: [
@@ -46,7 +47,6 @@ import { OrderBookModule } from '../orderBook/orderBook.module.js';
     }),
     RedisClusterModule.forRootAsync({
       useFactory: () => {
-        console.log(redisClusterOptions());
         return redisClusterOptions();
       },
     }),
@@ -60,6 +60,7 @@ import { OrderBookModule } from '../orderBook/orderBook.module.js';
     chartModule,
     userModule,
     OrderBookModule,
+    order_matching_eventModule,
   ],
   controllers: [AppController],
   providers: [
