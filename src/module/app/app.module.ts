@@ -45,6 +45,7 @@ import { order_book_differenceModule } from '../typeorm/order_book_difference/or
     }),
     RedisClusterModule.forRootAsync({
       useFactory: () => {
+        console.log(redisClusterOptions());
         return redisClusterOptions();
       },
     }),
