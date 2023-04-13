@@ -30,6 +30,7 @@ import { order_symbolModule } from '../typeorm/order_symbol/order_symbol.module.
 import { chartModule } from '../typeorm/chart/chart.module.js';
 import { userModule } from '../typeorm/user/user.module.js';
 import { order_book_differenceModule } from '../typeorm/order_book_difference/order_book_difference.module.js';
+import { OrderBookModule } from '../orderBook/orderBook.module.js';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { order_book_differenceModule } from '../typeorm/order_book_difference/or
     order_book_differenceModule,
     chartModule,
     userModule,
+    OrderBookModule,
   ],
   controllers: [AppController],
   providers: [

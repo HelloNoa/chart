@@ -10,6 +10,8 @@
           ping: 0,
           //차트 구독
           ChartSubscriber: 1,
+          //호가창 구독
+          OrderBookSubscriber: 2,
         },
         sub: {
           //ping pong
@@ -20,6 +22,10 @@
           UpbitBTCPrice: 2,
           //차트 구독
           ChartSubscriber: 3,
+          //호가창 구독
+          OrderBookSubscriber: 4,
+          //호가창 front에 pub
+          OrderBook: 5,
         },
       };
       const uuid = uuidv4() && 'aaa';
@@ -75,6 +81,14 @@
                     }),
                   ),
                 );
+                chart.send(
+                  str2ab(
+                    JSON.stringify({
+                      event: SocketEvent.pub.OrderBookSubscriber,
+                      data: 'BTCETH',
+                    }),
+                  ),
+                );
                 break;
               case SocketEvent.sub.OrderMatching:
                 console.log(json[SocketEvent.sub.OrderMatching]);
@@ -87,6 +101,14 @@
               case SocketEvent.sub.ChartSubscriber:
                 console.log(json[SocketEvent.sub.ChartSubscriber]);
                 console.log('ChartSubscriber!');
+                break;
+              case SocketEvent.sub.OrderBookSubscriber:
+                console.log(json[SocketEvent.sub.OrderBookSubscriber]);
+                console.log('OrderBookSubscriber!');
+                break;
+              case SocketEvent.sub.OrderBook:
+                console.log(json[SocketEvent.sub.OrderBook]);
+                console.log('OrderBook!');
                 break;
               default:
                 break;
@@ -122,6 +144,7 @@
           });
         };
       };
+
       // 문자열을 ArrayBuffer로 변환하는 함수
       function str2ab(str) {
         const buf = new ArrayBuffer(str.length);

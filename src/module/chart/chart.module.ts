@@ -15,5 +15,6 @@ import { chartModule } from '../typeorm/chart/chart.module.js';
   ],
   controllers: [ChartController],
   providers: [ChartService],
+  exports: [ChartService],
 })
 export class ChartModule {}

@@ -36,6 +36,7 @@ export class ChartGateway
     client.uuid = payload;
     client.send(data, { binary: true });
   }
+
   @SubscribeMessage(socketEvent.sub.ChartSubscriber)
   ChartSubscriberHandleMessage(client: any, payload: any): void {
     const json = {
@@ -49,6 +50,36 @@ export class ChartGateway
       client.chart.push(payload);
     }
     client.send(data, { binary: true });
+  }
+
+  @SubscribeMessage(socketEvent.sub.OrderBookSubscriber)
+  OrderBookSubscriberHandleMessage(client: any, payload: any): void {
+    const json = {
+      [socketEvent.pub.OrderBookSubscriber]: payload,
+    };
+    const data = JSON.stringify(json).replace(regex, '');
+    if (client.orderBook === undefined) {
+      client.orderBook = [];
+      client.orderBook.push(payload);
+    } else if (!client.orderBook.includes(payload)) {
+      client.orderBook.push(payload);
+    }
+    client.send(data, { binary: true });
+  }
+
+  OrderBook(marketType: string, orderBook: any) {
+    this.server.clients.forEach((client: any) => {
+      if (
+        client.readyState === ws.WebSocket.OPEN &&
+        client.orderBook.includes(marketType)
+      ) {
+        const json = {
+          [socketEvent.pub.OrderBook]: orderBook,
+        };
+        const data = str2ab(JSON.stringify(json));
+        client.send(data, { binary: true });
+      }
+    });
   }
 
   OrderMatching(req: OrderMatching) {
@@ -71,6 +102,7 @@ export class ChartGateway
       }
     });
   }
+
   UpbitBTCPrice(price: number) {
     this.server.clients.forEach((client: any) => {
       const json = {

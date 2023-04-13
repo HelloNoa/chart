@@ -5,6 +5,7 @@ import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere.js';
 import { userService } from '../user/user.service.js';
 import { order_symbolService } from '../order_symbol/order_symbol.service.js';
 import { order_book_differenceService } from '../order_book_difference/order_book_difference.service.js';
+import { BidAskDto, OrderBookDto } from '../../orderBook/orderBook.service.js';
 
 @Injectable()
 export class order_bookService {
@@ -44,7 +45,75 @@ export class order_bookService {
     return this.order_bookRepository.findBy(option);
   }
 
-  async getBidAsk(orderSymbolName: string) {
+  async getAllBidAsk(orderSymbolName: string): Promise<BidAskDto | null> {
+    const SATOSHI = 100_000_000;
+    const orderSymbolId = await this.orderSymbolService.getSymbolId(
+      orderSymbolName,
+    );
+    if (orderSymbolId === null) {
+      console.log('orderSymbolName is null');
+      return null;
+    }
+    try {
+      const values: status[] = ['PLACED', 'PARTIAL_FILLED'];
+      const orderBookIdList = await this.order_bookRepository.find({
+        select: ['id', 'unit_price', 'order_type', 'quantity'],
+        where: {
+          order_symbol_id: orderSymbolId,
+          status: In(values),
+        },
+        order: { unit_price: 'desc' },
+      });
+      if (orderBookIdList.length === 0) {
+        return null;
+      }
+      const ask: OrderBookDto[] = [];
+      const bid: OrderBookDto[] = [];
+      orderBookIdList.map(async (e) => {
+        const diff =
+          await this.orderBookDifferenceService.getDifferBiOrderBookId(e.id);
+        if (diff === null) {
+          console.error('diff is null');
+          return null;
+        }
+        if (e.order_type === 'ASK') {
+          if (ask.findIndex((el) => el.price === Number(e.unit_price)) === -1) {
+            ask.push({
+              satoshi: SATOSHI * Number(e.unit_price),
+              price: Number(e.unit_price),
+              volume: Number(e.quantity) + Number(diff),
+            } as OrderBookDto);
+          } else {
+            const index = ask.findIndex(
+              (el) => el.price === Number(e.unit_price),
+            );
+            ask[index].volume += Number(e.quantity) + Number(diff);
+          }
+        } else if (e.order_type === 'BID') {
+          if (bid.findIndex((el) => el.price === Number(e.unit_price)) === -1) {
+            bid.push({
+              satoshi: SATOSHI * Number(e.unit_price),
+              price: Number(e.unit_price),
+              volume: Number(e.quantity),
+            } as OrderBookDto);
+          } else {
+            const index = bid.findIndex(
+              (el) => el.price === Number(e.unit_price),
+            );
+            bid[index].volume += Number(e.quantity) + Number(diff);
+          }
+        }
+      });
+
+      return { ask: ask, bid: bid } as BidAskDto;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  }
+
+  async getBidAsk(orderSymbolName: string): Promise<BidAskDto | null> {
+    const SATOSHI = 100_000_000;
     const MAXROW = 20;
     const orderSymbolId = await this.orderSymbolService.getSymbolId(
       orderSymbolName,
@@ -66,54 +135,67 @@ export class order_bookService {
       if (orderBookIdList.length === 0) {
         return null;
       }
-      const _askIdList = orderBookIdList.filter((e) => e.order_type === 'ASK');
-      let askIdList: number[] = [];
-      _askIdList.map(
-        (e) =>
-          !askIdList.includes(Number(e.unit_price)) &&
-          askIdList.push(Number(e.unit_price)),
-      );
-      askIdList = askIdList.slice(-MAXROW, -1);
-      const _bidIdList = orderBookIdList.filter((e) => e.order_type === 'BID');
-      let bidIdList: number[] = [];
-      _bidIdList.map(
-        (e) =>
-          !bidIdList.includes(Number(e.unit_price)) &&
-          bidIdList.push(Number(e.unit_price)),
-      );
-      bidIdList = bidIdList.slice(0, MAXROW - 1);
-      const askList: { [key: number]: number } = {};
-      const bidList: { [key: number]: number } = {};
+      let askList: number[] = [];
+      let bidList: number[] = [];
 
-      askIdList.map(async (e) => {
-        askList[Number(e)] = 0;
+      orderBookIdList.map((e) => {
+        const index = Number(e.unit_price) * SATOSHI;
+        if (e.order_type === 'ASK') {
+          if (!askList.includes(index)) {
+            askList.push(index);
+          }
+        } else if (e.order_type === 'BID') {
+          if (!bidList.includes(index)) {
+            bidList.push(index);
+          }
+        }
       });
-      _askIdList.map(async (e) => {
+
+      askList = askList.slice(-MAXROW, -1);
+      bidList = bidList.slice(0, MAXROW - 1);
+      const filterOrderBookIdList = orderBookIdList.filter((e) => {
+        const index = Number(e.unit_price) * SATOSHI;
+        return askList.includes(index);
+      });
+      const ask: OrderBookDto[] = [];
+      const bid: OrderBookDto[] = [];
+      filterOrderBookIdList.map(async (e) => {
         const diff =
           await this.orderBookDifferenceService.getDifferBiOrderBookId(e.id);
         if (diff === null) {
           console.error('diff is null');
           return null;
         }
-        if (askList[Number(e.unit_price)] === undefined)
-          askList[Number(e.unit_price)] = 0;
-        askList[Number(e.unit_price)] += Number(diff);
-      });
-      bidIdList.map(async (e) => {
-        bidList[Number(e)] = 0;
-      });
-      _bidIdList.map(async (e) => {
-        const diff =
-          await this.orderBookDifferenceService.getDifferBiOrderBookId(e.id);
-        if (diff === null) {
-          console.error('diff is null');
-          return null;
+        if (e.order_type === 'ASK') {
+          if (ask.findIndex((el) => el.price === Number(e.unit_price)) === -1) {
+            ask.push({
+              satoshi: SATOSHI * Number(e.unit_price),
+              price: Number(e.unit_price),
+              volume: Number(e.quantity) + Number(diff),
+            } as OrderBookDto);
+          } else {
+            const index = ask.findIndex(
+              (el) => el.price === Number(e.unit_price),
+            );
+            ask[index].volume += Number(e.quantity) + Number(diff);
+          }
+        } else if (e.order_type === 'BID') {
+          if (bid.findIndex((el) => el.price === Number(e.unit_price)) === -1) {
+            bid.push({
+              satoshi: SATOSHI * Number(e.unit_price),
+              price: Number(e.unit_price),
+              volume: Number(e.quantity),
+            } as OrderBookDto);
+          } else {
+            const index = bid.findIndex(
+              (el) => el.price === Number(e.unit_price),
+            );
+            bid[index].volume += Number(e.quantity) + Number(diff);
+          }
         }
-        if (bidList[Number(e.unit_price)] === undefined)
-          bidList[Number(e.unit_price)] = 0;
-        bidList[Number(e.unit_price)] += Number(diff);
       });
-      return { ask: askList, bid: bidList };
+
+      return { ask: ask, bid: bid } as BidAskDto;
     } catch (e) {
       console.error(e);
       return null;
