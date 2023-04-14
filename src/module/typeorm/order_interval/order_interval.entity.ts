@@ -24,7 +24,7 @@ export class order_interval {
   id: number;
 
   @Column('varchar')
-  duration: keyof INTERVAL;
+  duration: keyof typeof INTERVAL;
 
   @Column('timestamp')
   start_time: string;

@@ -18,7 +18,7 @@ export class ChartController {
   @ApiQuery({ name: 'date', example: '2023-04-04' })
   async chart(
     @Query('symbol') symbol: string,
-    @Query('interval') interval: keyof INTERVAL,
+    @Query('interval') interval: keyof typeof INTERVAL,
     @Query('length') length: number,
     @Query('date') date: string,
   ) {
@@ -33,7 +33,7 @@ export class ChartController {
 
   //과거 호가 데이터
   @Get('bidask')
-  @ApiQuery({ name: 'symbol', example: 'btceth' })
+  @ApiQuery({ name: 'symbol', example: 'BTCETH' })
   @ApiOperation({ summary: '최근 호가 데이터' })
   async bidask(@Query('symbol') symbol: string) {
     return await this.tradingService.bidask(symbol);
