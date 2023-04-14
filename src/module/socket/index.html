@@ -8,24 +8,28 @@
         pub: {
           //ping pong
           ping: 0,
+          //uuid
+          uuid: 1,
           //차트 구독
-          ChartSubscriber: 1,
+          ChartSubscriber: 2,
           //호가창 구독
-          OrderBookSubscriber: 2,
+          OrderBookSubscriber: 3,
         },
         sub: {
           //ping pong
           pong: 0,
+          //uuid
+          uuid: 1,
           //tradeEvent for chartdraw 차트 구독
-          OrderMatching: 1,
+          OrderMatching: 2,
           //업비트 BTC 원화 가격 Subscribe
-          UpbitBTCPrice: 2,
+          UpbitBTCPrice: 3,
           //차트 구독
-          ChartSubscriber: 3,
+          ChartSubscriber: 4,
           //호가창 구독
-          OrderBookSubscriber: 4,
+          OrderBookSubscriber: 5,
           //호가창 front에 pub
-          OrderBook: 5,
+          OrderBook: 6,
         },
       };
       const uuid = uuidv4() && 'aaa';
