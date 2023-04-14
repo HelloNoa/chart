@@ -2,6 +2,7 @@ import { Controller, Get, Query, Res } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ChartService } from './chart.service.js';
 import { ChartReqDto } from './chart.dto.js';
+import { INTERVAL } from '../typeorm/order_interval/order_interval.entity.js';
 
 @Controller('chart')
 @ApiTags('chart')
@@ -11,13 +12,13 @@ export class ChartController {
   //과거 차트 데이터
   @Get()
   @ApiOperation({ summary: '최근 차트 데이터' })
-  @ApiQuery({ name: 'symbol', example: 'btceth' })
-  @ApiQuery({ name: 'interval', example: '1m' })
+  @ApiQuery({ name: 'symbol', example: 'BTCETH' })
+  @ApiQuery({ name: 'interval', example: 'ONE_MINUTE' })
   @ApiQuery({ name: 'length', example: '100' })
   @ApiQuery({ name: 'date', example: '2023-04-04' })
   async chart(
     @Query('symbol') symbol: string,
-    @Query('interval') interval: string,
+    @Query('interval') interval: keyof typeof INTERVAL,
     @Query('length') length: number,
     @Query('date') date: string,
   ) {
@@ -32,7 +33,7 @@ export class ChartController {
 
   //과거 호가 데이터
   @Get('bidask')
-  @ApiQuery({ name: 'symbol', example: 'btceth' })
+  @ApiQuery({ name: 'symbol', example: 'BTCETH' })
   @ApiOperation({ summary: '최근 호가 데이터' })
   async bidask(@Query('symbol') symbol: string) {
     return await this.tradingService.bidask(symbol);
