@@ -33,6 +33,15 @@ export class ChartGateway
       [socketEvent.pub.pong]: payload,
     };
     const data = JSON.stringify(json).replace(regex, '');
+    client.send(data, { binary: true });
+  }
+
+  @SubscribeMessage(socketEvent.sub.uuid)
+  uuidHandleMessage(client: any, payload: any): void {
+    const json = {
+      [socketEvent.pub.uuid]: payload,
+    };
+    const data = JSON.stringify(json).replace(regex, '');
     client.uuid = payload;
     client.send(data, { binary: true });
   }
