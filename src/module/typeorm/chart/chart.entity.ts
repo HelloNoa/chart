@@ -5,30 +5,33 @@ export class chart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
+  @Column('bigint')
   order_symbol_id: number;
 
-  @Column('decimal')
-  interval: string;
+  @Column('bigint')
+  order_interval_id: number;
 
   @Column('decimal')
-  open_price: string;
+  open_price: number;
 
   @Column('decimal')
-  low_price: string;
+  low_price: number;
 
   @Column('decimal')
-  high_price: string;
+  high_price: number;
 
   @Column('decimal')
-  close_price: string;
+  close_price: number;
 
   @Column('decimal')
-  volume: string;
+  volume: number;
 
   @Column('datetime')
   created_at: string;
 
   @Column('datetime')
   updated_at: string;
+
+  @Column('decimal')
+  trading_value: number;
 }
