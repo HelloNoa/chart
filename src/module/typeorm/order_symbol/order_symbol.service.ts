@@ -18,15 +18,41 @@ export class order_symbolService {
   async marketList() {
     const symvolList = await this.findAll();
     return await Promise.all(
-      symvolList.map(async (e: order_symbol & { price?: number }) => {
-        const price = await this.orderMatchingEventService.lastPrice(e.id);
-        if (price === null) {
-          e.price = 0;
-        } else {
-          e.price = Number(price.unit_price);
-        }
-        return e;
-      }),
+      symvolList.map(
+        async (
+          e: order_symbol & {
+            price?: number;
+            volume?: number;
+            updown?: number;
+          },
+        ) => {
+          const price = await this.orderMatchingEventService.lastPrice(e.id);
+          //TODO volume이랑 updown 구현
+          const volume = 1;
+          const updown = Math.random() * 10;
+          if (price === null) {
+            e.price = 0;
+          } else {
+            e.price = Number(price.unit_price);
+          }
+          if (volume === null) {
+            e.volume = 0;
+          } else {
+            e.volume = Number(volume);
+          }
+          if (updown === null) {
+            e.updown = 0;
+          } else {
+            if (Math.random() > 0.5) {
+              e.updown = -Number(updown);
+            } else {
+              e.updown = -Number(updown);
+            }
+          }
+
+          return e;
+        },
+      ),
     );
   }
 
