@@ -5,6 +5,7 @@ import { ChartReqDto } from '../../chart/chart.dto.js';
 import { MYSQL_DATASOURCE_KEY } from '../../../constants/index.js';
 import { order_symbolService } from '../order_symbol/order_symbol.service.js';
 import { order_intervalService } from '../order_interval/order_interval.service.js';
+import { INTERVAL } from '../order_interval/order_interval.entity.js';
 
 @Injectable()
 export class chartService {
@@ -19,6 +20,24 @@ export class chartService {
 
   async findAll(): Promise<chart[]> {
     return this.chartRepository.find();
+  }
+
+  async getDailyClosePrice() {
+    const intervarId = await this.orderIntervalService.getOrderIntervalId(
+      INTERVAL.ONE_DAY,
+    );
+    const queryBuilder = this.chartRepository.createQueryBuilder('chart');
+    queryBuilder
+      .select('chart.created_at', 't')
+      .addSelect('chart.close_price', 'c')
+      .where('chart.order_interval_id in (:...intervarId)', { intervarId })
+      .orderBy('chart.created_at', 'ASC');
+    const data = await queryBuilder.getRawMany();
+    if (data.length === 0) {
+      console.error('chart data not found');
+      return null;
+    }
+    return data;
   }
 
   async getChart({
