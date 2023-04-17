@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { order_bookService } from '../typeorm/order_book/order_book.service.js';
 import { order_symbolService } from '../typeorm/order_symbol/order_symbol.service.js';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
+import { chartService } from '../typeorm/chart/chart.service.js';
 
 export interface OrderBookDto {
   satoshi: number;
@@ -27,10 +28,13 @@ export class OrderBookService {
     [key: string]: BidAskDto;
   } = {};
 
+  private dailyLastPrice: { [key: string]: number } = {};
+
   constructor(
-    private readonly orderBookService: order_bookService,
     private readonly orderSymbolService: order_symbolService,
+    private readonly orderBookService: order_bookService,
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
+    private readonly chartService: chartService,
   ) {
     this.initialize = false;
     // this.init();
@@ -44,6 +48,15 @@ export class OrderBookService {
     const list = await this.orderSymbolService.findAll();
     await Promise.all(
       list.map(async (e) => {
+        const chart = await this.chartService.getDailyClosePrice();
+        if (chart === null) {
+          console.error('chart is null');
+        } else {
+          chart.forEach((el) => {
+            this.dailyLastPrice[e.name] = el.c;
+          });
+        }
+
         const bidask = await this.orderBookService.getAllBidAsk(e.name);
         if (bidask === null) {
           console.error('get bidask null!');
@@ -164,5 +177,9 @@ export class OrderBookService {
       ask: ask,
       bid: bid,
     } as BidAskDto);
+  }
+
+  getDailyLastPrice() {
+    return this.dailyLastPrice;
   }
 }
