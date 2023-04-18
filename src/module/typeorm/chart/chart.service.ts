@@ -22,7 +22,7 @@ export class chartService {
     return this.chartRepository.find();
   }
 
-  async getDailyClosePrice() {
+  async getDailyTick() {
     const intervarId = await this.orderIntervalService.getOrderIntervalId(
       INTERVAL.ONE_DAY,
     );
@@ -30,6 +30,7 @@ export class chartService {
     queryBuilder
       .select('chart.created_at', 't')
       .addSelect('chart.close_price', 'c')
+      .addSelect('chart.volume', 'v')
       .where('chart.order_interval_id in (:...intervarId)', { intervarId })
       .orderBy('chart.created_at', 'ASC');
     const data = await queryBuilder.getRawMany();

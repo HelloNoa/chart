@@ -28,7 +28,7 @@ export class OrderBookService {
     [key: string]: BidAskDto;
   } = {};
 
-  private dailyLastPrice: { [key: string]: number } = {};
+  private dailyLastTick: { [key: string]: { [key: string]: any } } = {};
 
   constructor(
     private readonly orderSymbolService: order_symbolService,
@@ -48,12 +48,12 @@ export class OrderBookService {
     const list = await this.orderSymbolService.findAll();
     await Promise.all(
       list.map(async (e) => {
-        const chart = await this.chartService.getDailyClosePrice();
+        const chart = await this.chartService.getDailyTick();
         if (chart === null) {
           console.error('chart is null');
         } else {
           chart.forEach((el) => {
-            this.dailyLastPrice[e.name] = el.c;
+            this.dailyLastTick[e.name] = el;
           });
         }
 
@@ -179,7 +179,7 @@ export class OrderBookService {
     } as BidAskDto);
   }
 
-  getDailyLastPrice() {
-    return this.dailyLastPrice;
+  getDailyLastTick() {
+    return this.dailyLastTick;
   }
 }
