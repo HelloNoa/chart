@@ -31,7 +31,4 @@ export class chart {
 
   @Column('datetime')
   updated_at: string;
-
-  @Column('decimal')
-  trading_value: number;
 }

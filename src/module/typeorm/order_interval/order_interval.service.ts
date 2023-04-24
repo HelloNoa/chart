@@ -13,11 +13,11 @@ export class order_intervalService {
     return this.orderIntervalRepository.find();
   }
 
-  async getOrderIntervalId(duration: keyof typeof INTERVAL) {
+  async getOrderIntervalId(interval: keyof typeof INTERVAL) {
     const orderInterval = await this.orderIntervalRepository.find({
       select: ['id'],
       where: {
-        duration,
+        interval,
       },
     });
     return orderInterval.map((e) => e.id);

@@ -12,13 +12,13 @@ export class order_matching_event {
   order_interval_id: number;
 
   @Column('decimal')
-  quantity: number;
-
-  @Column('decimal')
   unit_price: number;
 
   @Column('varchar')
   order_type: string;
+
+  @Column('decimal')
+  quantity: number;
 
   @Column('timestamp')
   created_at: string;
