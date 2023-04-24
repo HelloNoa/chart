@@ -42,7 +42,7 @@ export class ChartService {
   //마켓리스트
   async marketList() {
     const symvolList = await this.orderSymbolService.findAll();
-    const lastPrice = this.OrderBookService.getDailyLastPrice();
+    const lastTick = this.OrderBookService.getDailyLastTick();
     return await Promise.all(
       symvolList.map(
         async (
@@ -50,21 +50,24 @@ export class ChartService {
             price?: number;
             volume?: number;
             updown?: number;
+            mark?: boolean;
           },
         ) => {
           const price = await this.orderMatchingEventService.lastPrice(e.id);
-          //TODO volume 구현
-          const volume = 0;
+          //TODO mark 구현
+          const volume = Number(lastTick[e.name].v);
           if (price === null) {
             e.price = 0;
             e.updown = 0;
           } else {
             e.price = Number(price.unit_price);
 
-            const updown = Number(price.unit_price) - lastPrice[e.name];
-            e.updown = (updown / lastPrice[e.name]) * 100;
+            const updown =
+              Number(price.unit_price) - Number(lastTick[e.name].c);
+            e.updown = (updown / Number(lastTick[e.name].c)) * 100;
           }
-          if (volume === null) {
+          e.mark = false;
+          if (volume === null || volume === undefined) {
             e.volume = 0;
           } else {
             e.volume = Number(volume);

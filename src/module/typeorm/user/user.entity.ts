@@ -6,22 +6,10 @@ export class user {
   id: number;
 
   @Column('varchar')
-  uuid: string;
-
-  @Column('varchar')
   nice_di: string;
 
-  @Column('longtext')
-  google_sso_id: string;
-
-  @Column('longtext')
-  apple_sso_id: string;
-
-  @Column('longtext')
-  metaverse_sso_id: string;
-
-  @Column('tinyint')
-  is_email_user: number;
+  @Column('varchar')
+  uuid: string;
 
   @Column('varchar')
   user_type: string;
@@ -37,4 +25,10 @@ export class user {
 
   @Column('timestamp')
   deleted_at: string;
+
+  @Column('tinyint')
+  is_email_user: number;
+
+  @Column('varchar')
+  nice_ci: string;
 }

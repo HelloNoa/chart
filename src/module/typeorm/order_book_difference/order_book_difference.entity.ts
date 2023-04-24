@@ -1,10 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export type reason = 'CANCEL' | 'PLACE' | 'FILL';
+
 @Entity()
 export class order_book_difference {
   @PrimaryGeneratedColumn()
-  id: number;
+  Key: string;
 
   @Column('bigint')
   order_book_id: number;
