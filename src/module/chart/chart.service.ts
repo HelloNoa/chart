@@ -55,7 +55,14 @@ export class ChartService {
         ) => {
           const price = await this.orderMatchingEventService.lastPrice(e.id);
           //TODO mark 구현
-          const volume = Number(lastTick[e.name].v);
+          const volume = (() => {
+            if (lastTick[e.name] === undefined) {
+              console.log('lastTick is null');
+              return 0;
+            } else {
+              return Number(lastTick[e.name].v);
+            }
+          })();
           if (price === null) {
             e.price = 0;
             e.updown = 0;
