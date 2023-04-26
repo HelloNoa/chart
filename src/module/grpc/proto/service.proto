@@ -1,0 +1,35 @@
+syntax = "proto3";
+package finexblock;
+option go_package = "./finexblock";
+
+import "message.proto";
+
+service MarketOrder {
+  rpc MarketBidInit(stream MarketOrderInput) returns (Ack);
+}
+
+service LimitOrder {
+  rpc LimitOrderInit(stream LimitOrderInput) returns (Ack);
+}
+
+service CancelOrder {
+  rpc CancelOrder(stream OrderCancellation) returns (Ack);
+}
+
+
+service Event {
+  rpc OrderPlacementEvent(stream OrderPlacement) returns (Ack);
+  rpc OrderPlacementFailedEvent(stream OrderPlacementFailed) returns (Ack);
+  rpc OrderCancellationEvent(stream OrderCancellation) returns (Ack);
+  rpc OrderCancellationFailedEvent(stream OrderCancellationFailed) returns (Ack);
+  rpc OrderMatchingEvent (stream OrderMatching) returns (Ack);
+  rpc OrderMatchingFailedEvent (stream OrderMatchingFailed) returns (Ack);
+  rpc OrderPartialFillEvent (stream OrderPartialFill) returns (Ack);
+  rpc OrderFulfillmentEvent (stream OrderFulfillment) returns (Ack);
+  rpc OrderInitializeEvent (stream OrderInitialize) returns (Ack);
+}
+
+service LifeCycle {
+	rpc StartEngine(StartEngineInput) returns(StartEngineOutput);
+	rpc StopEngine(StopEngineInput) returns(StopEngineOutput);
+}
