@@ -33,6 +33,7 @@ import { order_book_differenceModule } from '../typeorm/order_book_difference/or
 import { OrderBookModule } from '../orderBook/orderBook.module.js';
 import { order_matching_eventModule } from '../typeorm/order_matching_event/order_matching_event.module.js';
 import { order_intervalModule } from '../typeorm/order_interval/order_interval.module.js';
+import { GrpcModule } from '../grpc/grpc.module.js';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { order_intervalModule } from '../typeorm/order_interval/order_interval.m
     order_matching_eventModule,
     order_symbolModule,
     userModule,
+    GrpcModule,
   ],
   controllers: [AppController],
   providers: [
