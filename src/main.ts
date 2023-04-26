@@ -9,8 +9,11 @@ import { WsAdapter } from '@nestjs/platform-ws';
 import { useSSHTunnel } from './utils/index.js';
 import * as process from 'process';
 import { getsetSecretString } from './config/secretsManager.js';
+import { dirname, join } from 'path';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { fileURLToPath } from 'url';
 
-// const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url));
 export const regex = new RegExp(/\s+/g);
 
 async function bootstrap() {
@@ -89,6 +92,18 @@ async function bootstrap() {
   initSwaggerDocs(app);
 
   app.useWebSocketAdapter(new WsAdapter(app));
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: ['finexblock'],
+      url: `localhost:50051`,
+      protoPath: [
+        join(__dirname, '/module/grpc/proto/message.proto'),
+        join(__dirname, '/module/grpc/proto/service.proto'),
+      ],
+    },
+  });
 
   await app.startAllMicroservices();
   await app.listen(configService.get('PORT', 80));
