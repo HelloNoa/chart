@@ -26,6 +26,7 @@ export interface MarketOrder {
     ...rest: any[]
   ): Observable<Ack>;
 }
+
 export interface LimitOrder {
   LimitOrderInit(
     data: LimitOrderInput,
@@ -33,6 +34,7 @@ export interface LimitOrder {
     ...rest: any[]
   ): Observable<Ack>;
 }
+
 export interface CancelOrder {
   CancelOrder(
     data: OrderCancellation,
@@ -40,49 +42,58 @@ export interface CancelOrder {
     ...rest: any[]
   ): Observable<Ack>;
 }
+
 export interface Event {
   OrderPlacementEvent(
-    data: Observable<OrderPlacement>,
+    data: OrderPlacement,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+
   OrderPlacementFailedEvent(
-    data: Observable<OrderPlacementFailed>,
+    data: OrderPlacementFailed,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+
   OrderCancellationEvent(
-    data: Observable<OrderCancellation>,
+    data: OrderCancellation,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+
   OrderCancellationFailedEvent(
-    data: Observable<OrderCancellationFailed>,
+    data: OrderCancellationFailed,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+
   OrderMatchingEvent(
-    data: Observable<OrderMatching>,
+    data: OrderMatching,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+
   OrderMatchingFailedEvent(
-    data: Observable<OrderMatchingFailed>,
+    data: OrderMatchingFailed,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+
   OrderPartialFillEvent(
-    data: Observable<OrderPartialFill>,
+    data: OrderPartialFill,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+
   OrderFulfillmentEvent(
-    data: Observable<OrderFulfillment>,
+    data: OrderFulfillment,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+
   OrderInitializeEvent(
-    data: Observable<OrderInitialize>,
+    data: OrderInitialize,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
@@ -94,6 +105,7 @@ export interface LifeCycle {
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<StartEngineOutput>;
+
   StopEngine(
     data: StopEngineInput,
     metadata?: Metadata,

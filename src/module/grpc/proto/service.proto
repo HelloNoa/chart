@@ -18,15 +18,15 @@ service CancelOrder {
 
 
 service Event {
-	rpc OrderPlacementEvent(stream OrderPlacement) returns (Ack);
-	rpc OrderPlacementFailedEvent(stream OrderPlacementFailed) returns (Ack);
-	rpc OrderCancellationEvent(stream OrderCancellation) returns (Ack);
-	rpc OrderCancellationFailedEvent(stream OrderCancellationFailed) returns (Ack);
-	rpc OrderMatchingEvent (stream OrderMatching) returns (Ack);
-	rpc OrderMatchingFailedEvent (stream OrderMatchingFailed) returns (Ack);
-	rpc OrderPartialFillEvent (stream OrderPartialFill) returns (Ack);
-	rpc OrderFulfillmentEvent (stream OrderFulfillment) returns (Ack);
-	rpc OrderInitializeEvent (stream OrderInitialize) returns (Ack);
+	rpc OrderPlacementEvent(OrderPlacement) returns (Ack);
+	rpc OrderPlacementFailedEvent(OrderPlacementFailed) returns (Ack);
+	rpc OrderCancellationEvent(OrderCancellation) returns (Ack);
+	rpc OrderCancellationFailedEvent(OrderCancellationFailed) returns (Ack);
+	rpc OrderMatchingEvent (OrderMatching) returns (Ack);
+	rpc OrderMatchingFailedEvent (OrderMatchingFailed) returns (Ack);
+	rpc OrderPartialFillEvent (OrderPartialFill) returns (Ack);
+	rpc OrderFulfillmentEvent (OrderFulfillment) returns (Ack);
+	rpc OrderInitializeEvent (OrderInitialize) returns (Ack);
 }
 
 service LifeCycle {
