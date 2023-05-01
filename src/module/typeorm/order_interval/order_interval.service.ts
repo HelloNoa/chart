@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { INTERVAL, order_interval } from './order_interval.entity.js';
+import { duration, order_interval } from './order_interval.entity.js';
 
 @Injectable()
 export class order_intervalService {
@@ -13,11 +13,11 @@ export class order_intervalService {
     return this.orderIntervalRepository.find();
   }
 
-  async getOrderIntervalId(interval: keyof typeof INTERVAL) {
+  async getOrderIntervalId(interval: keyof typeof duration) {
     const orderInterval = await this.orderIntervalRepository.find({
       select: ['id'],
       where: {
-        interval,
+        duration: interval,
       },
     });
     return orderInterval.map((e) => e.id);
