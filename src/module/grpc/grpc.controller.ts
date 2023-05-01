@@ -3,10 +3,14 @@ import { GrpcMethod } from '@nestjs/microservices';
 
 import { Observable } from 'rxjs';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
+import { OrderBookService } from '../orderBook/orderBook.service.js';
 
 @Controller()
 export class GrpcController {
-  constructor(private readonly chartGateway: ChartGateway) {}
+  constructor(
+    private readonly chartGateway: ChartGateway,
+    private readonly orderBookService: OrderBookService,
+  ) {}
 
   @GrpcMethod('Health', 'Check')
   async Check(
@@ -46,7 +50,14 @@ export class GrpcController {
   async OrderPlacementEventmessages(messages: any) {
     console.log('OrderPlacementEvent');
     console.log(messages);
-    this.chartGateway.OrderMatching(messages);
+    const req = {
+      symbol: messages.Symbol,
+      type: 1,
+      quantity: messages.Quantity,
+      unitPrice: messages.UnitPrice,
+      orderType: messages.OrderType,
+    };
+    this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
 
@@ -54,7 +65,15 @@ export class GrpcController {
   async OrderCancellationEvent(messages: any) {
     console.log('OrderCancellationEvent');
     console.log(messages);
-    this.chartGateway.OrderMatching(messages);
+    const req = {
+      symbol: '',
+      type: 2,
+      quantity: 0,
+      unitPrice: 0,
+      orderType: '',
+    };
+    //TODO
+    // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
 
@@ -62,6 +81,14 @@ export class GrpcController {
   async OrderMatchingEvent(messages: any) {
     console.log('OrderMatchingEvent');
     console.log(messages);
+    const req = {
+      symbol: messages.Symbol,
+      type: 0,
+      quantity: messages.Quantity,
+      unitPrice: messages.UnitPrice,
+      orderType: messages.OrderType,
+    };
+    this.orderBookService.updateOrderBook(req);
     this.chartGateway.OrderMatching(messages);
     return { Success: true };
   }
