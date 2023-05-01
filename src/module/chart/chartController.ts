@@ -2,7 +2,7 @@ import { Controller, Get, Query, Res } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ChartService } from './chart.service.js';
 import { ChartReqDto } from './chart.dto.js';
-import { INTERVAL } from '../typeorm/order_interval/order_interval.entity.js';
+import { duration } from '../typeorm/order_interval/order_interval.entity.js';
 
 @Controller('chart')
 @ApiTags('chart')
@@ -18,7 +18,7 @@ export class ChartController {
   @ApiQuery({ name: 'date', example: '2023-04-04' })
   async chart(
     @Query('symbol') symbol: string,
-    @Query('interval') interval: keyof typeof INTERVAL,
+    @Query('interval') interval: keyof typeof duration,
     @Query('length') length: number,
     @Query('date') date: string,
   ) {

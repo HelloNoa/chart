@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-export enum INTERVAL {
+export enum duration {
   ONE_MINUTE = 'ONE_MINUTE',
   THREE_MINUTE = 'THREE_MINUTE',
   FIVE_MINUTE = 'FIVE_MINUTE',
@@ -24,7 +24,7 @@ export class order_interval {
   id: number;
 
   @Column('varchar')
-  interval: keyof typeof INTERVAL;
+  duration: keyof typeof duration;
 
   @Column('timestamp')
   start_time: string;
