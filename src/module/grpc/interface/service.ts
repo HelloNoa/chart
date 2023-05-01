@@ -6,6 +6,7 @@ import {
   MarketOrderInput,
   OrderCancellation,
   OrderCancellationFailed,
+  OrderCancelled,
   OrderFulfillment,
   OrderInitialize,
   OrderMatching,
@@ -57,7 +58,7 @@ export interface Event {
   ): Observable<Ack>;
 
   OrderCancellationEvent(
-    data: OrderCancellation,
+    data: OrderCancelled,
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
