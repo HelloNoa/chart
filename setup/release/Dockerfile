@@ -2,6 +2,7 @@
 FROM node:18-alpine
 ENV TZ=Asia/Seoul
 EXPOSE 80
+EXPOSE 50051
 
 WORKDIR /home
 
