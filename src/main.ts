@@ -96,6 +96,7 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
+      credentials: false,
       package: ['finexblock'],
       url:
         process.env.USE_SSH_TUNNEL === 'true'
