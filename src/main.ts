@@ -97,7 +97,10 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       package: ['finexblock'],
-      url: `localhost:50051`,
+      url:
+        process.env.USE_SSH_TUNNEL === 'true'
+          ? '127.0.0.1:50051'
+          : '0.0.0.0:50051',
       protoPath: [
         join(__dirname, '/module/grpc/proto/message.proto'),
         join(__dirname, '/module/grpc/proto/service.proto'),
