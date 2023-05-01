@@ -6,72 +6,55 @@ export enum OrderType {
 }
 
 export enum SymbolType {
-  // BTCARB = 0,
-  // BTCDOGE = 0,
-  // BTCSOL = 0,
-  // BTCSXP = 0,
-  // BTCMANA = 0,
-  // BTCETH = 0,
-  // BTCSAND = 0,
-  // BTCMLK = 0,
-  // BTCETC = 0,
-  // BTCAVAX = 0,
-  // BTCSTX = 0,
-  // BTCAPT = 0,
-  // BTCHIVE = 0,
-  // BTCAXS = 0,
   BTCADA = 0,
-  // BTCMATIC = 0,
-  // BTCSTEEM = 0,
-  // BTCXRP = 0,
-  // BTCSBD = 0,
-  // BTCNEO = 0,
+  BTCAPT = 1,
+  BTCARB = 2,
+  BTCAUDIO = 3,
+  BTCAVAX = 4,
+  BTCAXS = 5,
+  BTCETH = 6,
+  BTCETC = 7,
+  BTCDOGE = 8,
+  BTCHIVE = 9,
+  BTCMANA = 10,
+  BTCMATIC = 11,
+  BTCMLK = 12,
+  BTCSAND = 13,
+  BTCSBD = 14,
+  BTCSOL = 15,
+  BTCSTX = 16,
+  BTCSXP = 17,
+  BTCXRP = 18,
+  BTCSTEEM = 19,
 }
 
 export enum Currency {
   BTC = 0,
   ADA = 1,
+  APT = 2,
+  ARB = 3,
+  AUDIO = 4,
+  AVAX = 5,
+  AXS = 6,
+  ETH = 7,
+  ETC = 8,
+  DOGE = 9,
+  HIVE = 10,
+  MANA = 11,
+  MATIC = 12,
+  MLK = 13,
+  SAND = 14,
+  SBD = 15,
+  SOL = 16,
+  STX = 17,
+  SXP = 18,
+  XRP = 19,
+  STEEM = 20,
 }
 
 export interface Fee {
   Amount: number;
 }
-
-export interface AskCancellation {
-  UserUUID: string;
-  OrderUUID: string;
-  RefundAmount: number;
-  RefundCurrency: keyof typeof Currency;
-  OrderType: keyof typeof OrderType;
-  TotalQuantity: number;
-  UnitPrice: number;
-  Symbol: keyof typeof SymbolType;
-  timestamp?: Timestamp;
-}
-
-export interface BidCancellation {
-  UserUUID: string;
-  OrderUUID: string;
-  RefundAmount: number;
-  RefundCurrency: keyof typeof Currency;
-  OrderType: keyof typeof OrderType;
-  TotalQuantity: number;
-  UnitPrice: number;
-  Symbol: keyof typeof SymbolType;
-  timestamp?: Timestamp;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StopEngineInput {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StopEngineOutput {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StartEngineInput {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StartEngineOutput {}
 
 export interface Ack {
   Success: boolean;
@@ -128,6 +111,15 @@ export interface MarketOrderAsk {
 export interface OrderCancellation {
   UserUUID: string;
   OrderUUID: string;
+}
+
+export interface OrderCancelled {
+  UserUUID: string;
+  OrderUUID: string;
+  Quantity: number;
+  UnitPrice: number;
+  OrderType: keyof typeof OrderType;
+  Symbol: keyof typeof SymbolType;
 }
 
 export interface OrderCancellationFailed {
@@ -231,3 +223,29 @@ export interface LimitOrderInput {
 export interface LimitOrderOutput {
   Success: boolean;
 }
+
+export interface OrderMatchingEvent {
+  UnitPrice: number;
+  Quantity: number;
+  Timestamp?: Timestamp;
+  OrderType: keyof typeof OrderType;
+  Symbol: keyof typeof SymbolType;
+}
+
+export interface BalanceUpdate {
+  UserUUID: string;
+  Diff: number;
+  Currency: keyof typeof Currency;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface StopEngineInput {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface StopEngineOutput {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface StartEngineInput {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface StartEngineOutput {}
