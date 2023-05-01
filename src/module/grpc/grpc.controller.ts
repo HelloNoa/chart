@@ -8,6 +8,17 @@ import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 export class GrpcController {
   constructor(private readonly chartGateway: ChartGateway) {}
 
+  @GrpcMethod('Health', 'Check')
+  async Check(
+    messages: any,
+    // metadata?: Metadata,
+    // call?: ServerDuplexStream<any, any>,
+  ) {
+    console.log('GRPC HealthCheck');
+    console.log(messages);
+    return { status: 'SERVING' };
+  }
+
   @GrpcMethod('LimitOrder', 'LimitOrderInit')
   async LimitOrderInit(
     messages: Observable<any>,
