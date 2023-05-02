@@ -1,5 +1,5 @@
 cd ~
-cd src
+cd /home/ec2-user/finexblock
 
 # export GOROOT=/usr/local/go
 # export GOPATH=$HOME/go
@@ -14,6 +14,6 @@ cd src
 
 docker rm -f $(docker ps -aq)
 sudo systemctl start docker
-# docker rm -f finexblock-btc-engine
+
 docker build -t finexblock-order .
 docker run -d --network=host finexblock-order:latest

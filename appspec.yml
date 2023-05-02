@@ -2,8 +2,8 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/src
-    description: /home/ec2-user/src
+    destination: /home/ec2-user/finexblock
+    description: /home/ec2-user/finexblock
 file_exists_behavior: OVERWRITE
 permissions:
   - object: /
@@ -18,6 +18,3 @@ hooks:
   AfterInstall:
     - location: scripts/after_install.sh
       runas: ec2-user
-      # environment:
-      #   variables:
-      #     GOROOT: $PATH:/usr/local/go/bin:$GOROOT
