@@ -5,7 +5,7 @@ export type reason = 'CANCEL' | 'PLACE' | 'FILL';
 @Entity()
 export class order_book_difference {
   @PrimaryGeneratedColumn()
-  Key: string;
+  id: bigint;
 
   @Column('bigint')
   order_book_id: number;
