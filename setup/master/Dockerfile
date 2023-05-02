@@ -18,4 +18,5 @@ RUN pnpm -v
 RUN pnpm run build
 
 WORKDIR /home
-ENTRYPOINT ["run.sh"]
+RUN chmod +x ./run.sh
+ENTRYPOINT ["./run.sh"]
