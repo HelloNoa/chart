@@ -4,13 +4,55 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { OrderBookService } from '../orderBook/orderBook.service.js';
+import { OrderType, SymbolType } from './interface/message.js';
 
 @Controller()
 export class GrpcController {
   constructor(
     private readonly chartGateway: ChartGateway,
     private readonly orderBookService: OrderBookService,
-  ) {}
+  ) {
+    //   setTimeout(() => {
+    //     setInterval(() => {
+    //       const req = {
+    //         UserUUID: 'aaa',
+    //         OrderUUID: 'aaa',
+    //         Quantity: Math.floor(Math.random() * 100000000),
+    //         UnitPrice: Math.floor(Math.random() * 100000000),
+    //         Symbol: 0,
+    //         OrderType: Math.random() > 0.5 ? 0 : 1,
+    //       };
+    //       this.OrderPlacementEvent(req);
+    //     }, 10);
+    //   }, 5000);
+    //
+    //   setTimeout(() => {
+    //     setInterval(() => {
+    //       const req = {
+    //         UserUUID: 'aaa',
+    //         OrderUUID: 'aaa',
+    //         Quantity: Math.floor(Math.random() * 100000000),
+    //         UnitPrice: Math.floor(Math.random() * 100000000),
+    //         Symbol: 0,
+    //         OrderType: Math.random() > 0.5 ? 0 : 1,
+    //       };
+    //       this.OrderCancellationEvent(req);
+    //     }, 10);
+    //   }, 5000);
+    //   setTimeout(() => {
+    //     setInterval(() => {
+    //       const req = {
+    //         UserUUID: 'aaa',
+    //         OrderUUID: 'aaa',
+    //         Quantity: Math.floor(Math.random() * 100000000),
+    //         UnitPrice: Math.floor(Math.random() * 100000000),
+    //         Symbol: 0,
+    //         OrderType: Math.random() > 0.5 ? 0 : 1,
+    //       };
+    //       this.OrderMatchingEvent(req);
+    //     }, 10);
+    //   }, 5000);
+  }
 
   @GrpcMethod('Health', 'Check')
   async Check(
@@ -47,15 +89,19 @@ export class GrpcController {
   // }
 
   @GrpcMethod('Event', 'OrderPlacementEvent')
-  async OrderPlacementEventmessages(messages: any) {
+  async OrderPlacementEvent(messages: any) {
     console.log('OrderPlacementEvent');
     console.log(messages);
+    console.log(messages.OrderType);
+    console.log(messages.Symbol);
+    console.log(OrderType[messages.OrderType]);
+    console.log(SymbolType[messages.Symbol]);
     const req = {
-      symbol: messages.Symbol,
+      symbol: SymbolType[messages.Symbol],
       type: 1,
       quantity: messages.Quantity,
       unitPrice: messages.UnitPrice,
-      orderType: messages.OrderType,
+      orderType: OrderType[messages.OrderType],
     };
     this.orderBookService.updateOrderBook(req);
     return { Success: true };
@@ -65,15 +111,18 @@ export class GrpcController {
   async OrderCancellationEvent(messages: any) {
     console.log('OrderCancellationEvent');
     console.log(messages);
+    console.log(messages.OrderType);
+    console.log(messages.Symbol);
+    console.log(OrderType[messages.OrderType]);
+    console.log(SymbolType[messages.Symbol]);
     const req = {
-      symbol: '',
+      symbol: SymbolType[messages.Symbol],
       type: 2,
-      quantity: 0,
-      unitPrice: 0,
-      orderType: '',
+      quantity: messages.Quantity,
+      unitPrice: messages.UnitPrice,
+      orderType: OrderType[messages.OrderType],
     };
-    //TODO
-    // this.orderBookService.updateOrderBook(req);
+    this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
 
@@ -81,12 +130,16 @@ export class GrpcController {
   async OrderMatchingEvent(messages: any) {
     console.log('OrderMatchingEvent');
     console.log(messages);
+    console.log(messages.OrderType);
+    console.log(messages.Symbol);
+    console.log(OrderType[messages.OrderType]);
+    console.log(SymbolType[messages.Symbol]);
     const req = {
-      symbol: messages.Symbol,
+      symbol: SymbolType[messages.Symbol],
       type: 0,
       quantity: messages.Quantity,
       unitPrice: messages.UnitPrice,
-      orderType: messages.OrderType,
+      orderType: OrderType[messages.OrderType],
     };
     this.orderBookService.updateOrderBook(req);
     this.chartGateway.OrderMatching(messages);

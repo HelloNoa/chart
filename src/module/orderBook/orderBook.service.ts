@@ -78,7 +78,7 @@ export class OrderBookService {
     this.initialize = true;
     setInterval(() => {
       list.map((e) => {
-        if (this.incomeUpdata > this.outputUpdate) {
+        if (this.incomeUpdata[e.name] > this.outputUpdate[e.name]) {
           console.log('hello');
 
           _.remove(this.orderBook[e.name].bid, (n) => {

@@ -80,6 +80,7 @@ export class ChartGateway
     this.server.clients.forEach((client: any) => {
       if (
         client.readyState === ws.WebSocket.OPEN &&
+        client.orderBook &&
         client.orderBook.includes(marketType)
       ) {
         const json = {
@@ -95,6 +96,7 @@ export class ChartGateway
     this.server.clients.forEach((client: any) => {
       if (
         client.readyState === ws.WebSocket.OPEN &&
+        client.chart &&
         client.chart.includes(req.Symbol)
       ) {
         const json = {
