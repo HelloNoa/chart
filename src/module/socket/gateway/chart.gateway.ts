@@ -14,6 +14,22 @@ import {
   OrderMatching,
   socketEvent,
 } from '../../../dto/redis.dto.js';
+import { JwtService } from '@nestjs/jwt';
+
+type jwt = {
+  //uuid
+  uuid: string;
+  //성인 여부
+  isAdult: boolean;
+  //otp 여부
+  isOtpVerified: boolean;
+  //발급일시
+  iat: number;
+  //만료일시
+  exp: number;
+  //발급 주최
+  iss: string;
+};
 
 @WebSocketGateway({
   path: '/chart',
@@ -27,6 +43,8 @@ export class ChartGateway
   @WebSocketServer()
   server: ws.Server;
 
+  constructor(private readonly jwtService: JwtService) {}
+
   @SubscribeMessage(socketEvent.sub.ping)
   handleMessage(client: any, payload: any): void {
     const json = {
@@ -37,13 +55,25 @@ export class ChartGateway
   }
 
   @SubscribeMessage(socketEvent.sub.uuid)
-  uuidHandleMessage(client: any, payload: any): void {
-    const json = {
-      [socketEvent.pub.uuid]: payload,
-    };
-    const data = JSON.stringify(json).replace(regex, '');
-    client.uuid = payload;
-    client.send(data, { binary: true });
+  async uuidHandleMessage(client: any, payload: any): Promise<void> {
+    try {
+      const jwtPayload: jwt = await this.jwtService.verifyAsync(payload, {
+        secret: process.env.JWT_SECRET,
+      });
+      client.uuid = jwtPayload.uuid;
+      const json = {
+        [socketEvent.pub.uuid]: jwtPayload.uuid,
+      };
+      const data = JSON.stringify(json).replace(regex, '');
+      client.send(data, { binary: true });
+    } catch (e) {
+      console.error(e);
+      const json = {
+        [socketEvent.pub.uuid]: e,
+      };
+      const data = JSON.stringify(json).replace(regex, '');
+      client.send(data, { binary: true });
+    }
   }
 
   @SubscribeMessage(socketEvent.sub.ChartSubscriber)
