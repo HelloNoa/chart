@@ -154,9 +154,10 @@ export class order_bookService {
           }
         }
       });
-
-      askList = askList.slice(-MAXROW, -1);
-      bidList = bidList.slice(0, MAXROW - 1);
+      askList = askList.slice(
+        Math.min(askList.length, Math.max(askList.length - MAXROW, 0)),
+      );
+      bidList = bidList.slice(0, MAXROW);
       const filterOrderBookIdList = orderBookIdList.filter((e) => {
         const index = Number(e.unit_price) * SATOSHI;
         return askList.includes(index);
@@ -167,11 +168,9 @@ export class order_bookService {
       await Promise.all(
         filterOrderBookIdList.map(async (e) => {
           const diff =
-            await this.orderBookDifferenceService.getDifferBiOrderBookId(e.id);
-          if (diff === null) {
-            console.error('diff is null');
-            return null;
-          }
+            (await this.orderBookDifferenceService.getDifferBiOrderBookId(
+              e.id,
+            )) ?? 0;
           if (e.order_type === 'ASK') {
             if (
               ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
