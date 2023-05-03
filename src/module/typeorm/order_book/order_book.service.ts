@@ -69,15 +69,12 @@ export class order_bookService {
       }
       const ask: OrderBookDto[] = [];
       const bid: OrderBookDto[] = [];
-
       await Promise.all(
         orderBookIdList.map(async (e) => {
           const diff =
-            await this.orderBookDifferenceService.getDifferBiOrderBookId(e.id);
-          if (diff === null) {
-            console.error('diff is null');
-            return null;
-          }
+            (await this.orderBookDifferenceService.getDifferBiOrderBookId(
+              e.id,
+            )) ?? 0;
           if (e.order_type === 'ASK') {
             if (
               ask.findIndex((el) => el.price === Number(e.unit_price)) === -1

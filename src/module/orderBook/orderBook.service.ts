@@ -46,6 +46,8 @@ export class OrderBookService {
 
   async onModuleInit() {
     const list = await this.orderSymbolService.findAll();
+    // const list = [{ id: 4, name: 'BTCADA' }];
+
     await Promise.all(
       list.map(async (e) => {
         const chart = await this.chartService.getDailyTick();
