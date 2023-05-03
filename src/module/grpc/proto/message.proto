@@ -1,59 +1,61 @@
 syntax = "proto3";
 package finexblock;
-option go_package = "./finexblock";
 
 import "google/protobuf/timestamp.proto";
 
 enum OrderType {
-	BID = 0; // 구매 매수
-	ASK = 1; // 판매 매도
+	ORDER_NIL = 0;
+	BID = 1; // 구매 매수
+	ASK = 2; // 판매 매도
 }
 
 enum SymbolType {
-	BTCADA = 0;
-	BTCAPT = 1;
-	BTCARB = 2;
-	BTCAUDIO = 3;
-	BTCAVAX = 4;
-	BTCAXS = 5;
-	BTCETH = 6;
-	BTCETC = 7;
-	BTCDOGE = 8;
-	BTCHIVE = 9;
-	BTCMANA = 10;
-	BTCMATIC = 11;
-	BTCMLK = 12;
-	BTCSAND = 13;
-	BTCSBD = 14;
-	BTCSOL = 15;
-	BTCSTX = 16;
-	BTCSXP = 17;
-	BTCXRP = 18;
-	BTCSTEEM = 19;
+	SYMBOL_NIL = 0;
+	BTCADA = 1;
+	BTCAPT = 2;
+	BTCARB = 3;
+	BTCAUDIO = 4;
+	BTCAVAX = 5;
+	BTCAXS = 6;
+	BTCETH = 7;
+	BTCETC = 8;
+	BTCDOGE = 9;
+	BTCHIVE = 10;
+	BTCMANA = 11;
+	BTCMATIC = 12;
+	BTCMLK = 13;
+	BTCSAND = 14;
+	BTCSBD = 15;
+	BTCSOL = 16;
+	BTCSTX = 17;
+	BTCSXP = 18;
+	BTCXRP = 19;
+	BTCSTEEM = 20;
 }
 
 enum Currency {
-	BTC = 0;
-	ADA = 1;
-	APT = 2;
-	ARB = 3;
-	AUDIO = 4;
-	AVAX = 5;
-	AXS = 6;
-	ETH = 7;
-	ETC = 8;
-	DOGE = 9;
-	HIVE = 10;
-	MANA = 11;
-	MATIC = 12;
-	MLK = 13;
-	SAND = 14;
-	SBD = 15;
-	SOL = 16;
-	STX = 17;
-	SXP = 18;
-	XRP = 19;
-	STEEM = 20;
+	CURRENCY_NIL = 0;
+	BTC = 1;
+	ADA = 2;
+	APT = 3;
+	ARB = 4;
+	AUDIO = 5;
+	AVAX = 6;
+	AXS = 7;
+	ETH = 8;
+	ETC = 9;
+	DOGE = 10;
+	HIVE = 11;
+	MANA = 12;
+	MATIC = 13;
+	MLK = 14;
+	SAND = 15;
+	SBD = 16;
+	SOL = 17;
+	STX = 18;
+	SXP = 19;
+	XRP = 20;
+	STEEM = 21;
 }
 
 message Fee {

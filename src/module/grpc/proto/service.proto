@@ -1,6 +1,5 @@
 syntax = "proto3";
 package finexblock;
-option go_package = "./finexblock";
 
 import "message.proto";
 
