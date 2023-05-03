@@ -107,15 +107,15 @@ export class OrderBookService {
       case 0:
         // OrderMatchingChannel;
         if (req.orderType === 'BID') {
-          const index = this.orderBook[req.symbol].bid.findIndex(
-            (e) => e.price === Number(req.unitPrice),
-          );
-          this.orderBook[req.symbol].bid[index].volume -= req.quantity;
-        } else if (req.orderType === 'ASK') {
           const index = this.orderBook[req.symbol].ask.findIndex(
             (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].ask[index].volume -= req.quantity;
+        } else if (req.orderType === 'ASK') {
+          const index = this.orderBook[req.symbol].bid.findIndex(
+            (e) => e.price === Number(req.unitPrice),
+          );
+          this.orderBook[req.symbol].bid[index].volume -= req.quantity;
         }
         break;
       case 1:
