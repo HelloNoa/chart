@@ -69,9 +69,13 @@ export class ChartService {
           } else {
             e.price = Number(price.unit_price);
 
-            const updown =
-              Number(price.unit_price) - Number(lastTick[e.name].c);
-            e.updown = (updown / Number(lastTick[e.name].c)) * 100;
+            if (lastTick[e.name] !== undefined) {
+              const updown =
+                Number(price.unit_price) - Number(lastTick[e.name].c);
+              e.updown = (updown / Number(lastTick[e.name].c)) * 100;
+            } else {
+              e.updown = 0;
+            }
           }
           e.mark = false;
           if (volume === null || volume === undefined) {
@@ -79,7 +83,6 @@ export class ChartService {
           } else {
             e.volume = Number(volume);
           }
-
           return e;
         },
       ),
