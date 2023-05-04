@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { order_interval } from '../order_interval/order_interval.entity.js';
+import { order_symbol } from '../order_symbol/order_symbol.entity.js';
 
 @Entity('chart')
 export class chart {
@@ -43,4 +51,12 @@ export class chart {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @ManyToOne(() => order_interval)
+  @JoinColumn({ name: 'order_interval_id' })
+  order_interval: order_interval;
+
+  @ManyToOne(() => order_symbol)
+  @JoinColumn({ name: 'order_symbol_id' })
+  order_symbol: order_symbol;
 }
