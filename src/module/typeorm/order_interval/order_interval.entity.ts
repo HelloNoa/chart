@@ -18,17 +18,17 @@ export enum duration {
   ONE_MONTH = 'ONE_MONTH',
 }
 
-@Entity()
+@Entity('order_interval')
 export class order_interval {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
+  @Column({ length: 32, type: 'varchar' })
   duration: keyof typeof duration;
 
-  @Column('timestamp')
-  start_time: string;
+  @Column({ name: 'start_time', type: 'timestamp' })
+  startTime: Date;
 
-  @Column('timestamp')
-  end_time: string;
+  @Column({ name: 'end_time', type: 'timestamp' })
+  endTime: Date;
 }

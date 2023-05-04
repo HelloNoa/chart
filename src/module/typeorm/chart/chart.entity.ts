@@ -1,34 +1,46 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('chart')
 export class chart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('bigint')
-  order_symbol_id: number;
+  @Column({ name: 'order_symbol_id' })
+  orderSymbolId: number;
 
-  @Column('bigint')
-  order_interval_id: number;
+  @Column({ name: 'order_interval_id' })
+  orderIntervalId: number;
 
-  @Column('decimal')
-  open_price: number;
+  @Column({ name: 'open_price', type: 'decimal', precision: 30, scale: 4 })
+  openPrice: number;
 
-  @Column('decimal')
-  low_price: number;
+  @Column({ name: 'low_price', type: 'decimal', precision: 30, scale: 4 })
+  lowPrice: number;
 
-  @Column('decimal')
-  high_price: number;
+  @Column({ name: 'high_price', type: 'decimal', precision: 30, scale: 4 })
+  highPrice: number;
 
-  @Column('decimal')
-  close_price: number;
+  @Column({ name: 'close_price', type: 'decimal', precision: 30, scale: 4 })
+  closePrice: number;
 
-  @Column('decimal')
-  volume: number;
+  @Column('text')
+  volume: string;
 
-  @Column('datetime')
-  created_at: string;
+  @Column('text')
+  tradingValue: string;
 
-  @Column('datetime')
-  updated_at: string;
+  @Column({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @Column({
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 }
