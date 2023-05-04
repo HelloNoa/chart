@@ -21,7 +21,7 @@ import {
 } from './message.js';
 
 export interface MarketOrder {
-  MarketBidInit(
+  MarketOrderInit(
     data: MarketOrderInput,
     metadata?: Metadata,
     ...rest: any[]
