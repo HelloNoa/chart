@@ -7,6 +7,7 @@ import { ChartReqDto } from './chart.dto.js';
 import { OrderBookService } from '../orderBook/orderBook.service.js';
 import { order_symbol } from '../typeorm/order_symbol/order_symbol.entity.js';
 import { order_matching_eventService } from '../typeorm/order_matching_event/order_matching_event.service.js';
+import { DECIMAL } from '../../dto/redis.dto.js';
 
 @Injectable()
 export class ChartService {
@@ -43,6 +44,7 @@ export class ChartService {
   async marketList() {
     const symvolList = await this.orderSymbolService.findAll();
     const lastTick = this.OrderBookService.getDailyLastTick();
+
     return await Promise.all(
       symvolList.map(
         async (
@@ -55,29 +57,29 @@ export class ChartService {
         ) => {
           const price = await this.orderMatchingEventService.lastPrice(e.id);
           //TODO mark 구현
+          e.mark = false;
           const volume = (() => {
             if (lastTick[e.name] === undefined) {
               console.log('lastTick is null');
               return 0;
             } else {
-              return Number(lastTick[e.name].v);
+              return Number(lastTick[e.name].volume);
             }
           })();
           if (price === null) {
             e.price = 0;
             e.updown = 0;
           } else {
-            e.price = Number(price.unit_price);
+            e.price = Number(price.unit_price / DECIMAL.BTC);
 
             if (lastTick[e.name] !== undefined) {
               const updown =
-                Number(price.unit_price) - Number(lastTick[e.name].c);
-              e.updown = (updown / Number(lastTick[e.name].c)) * 100;
+                Number(price.unit_price) - Number(lastTick[e.name].openPrice);
+              e.updown = (updown / Number(lastTick[e.name].openPrice)) * 100;
             } else {
               e.updown = 0;
             }
           }
-          e.mark = false;
           if (volume === null || volume === undefined) {
             e.volume = 0;
           } else {
