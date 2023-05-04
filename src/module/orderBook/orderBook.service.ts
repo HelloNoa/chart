@@ -48,17 +48,16 @@ export class OrderBookService {
     const list = await this.orderSymbolService.findAll();
     // const list = [{ id: 4, name: 'BTCADA' }];
 
+    const chart = await this.chartService.getDailyTick();
+    if (chart === null) {
+      console.error('chart is null');
+    } else {
+      chart.forEach((el) => {
+        this.dailyLastTick[el.order_symbol.name] = el;
+      });
+    }
     await Promise.all(
       list.map(async (e) => {
-        const chart = await this.chartService.getDailyTick();
-        if (chart === null) {
-          console.error('chart is null');
-        } else {
-          chart.forEach((el) => {
-            this.dailyLastTick[e.name] = el;
-          });
-        }
-
         const bidask = await this.orderBookService.getAllBidAsk(e.name);
         if (bidask === null) {
           console.error('get bidask null!');
@@ -77,6 +76,7 @@ export class OrderBookService {
         this.outputUpdate[e.name] = time;
       }),
     );
+
     this.initialize = true;
     setInterval(() => {
       list.map((e) => {
