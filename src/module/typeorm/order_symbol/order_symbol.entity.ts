@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('order_symbol')
 export class order_symbol {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
+  @Column({ length: 64 })
   name: string;
 }

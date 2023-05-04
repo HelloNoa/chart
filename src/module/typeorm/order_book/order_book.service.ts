@@ -6,6 +6,7 @@ import { userService } from '../user/user.service.js';
 import { order_symbolService } from '../order_symbol/order_symbol.service.js';
 import { order_book_differenceService } from '../order_book_difference/order_book_difference.service.js';
 import { BidAskDto, OrderBookDto } from '../../orderBook/orderBook.service.js';
+import { DECIMAL } from '../../../dto/redis.dto.js';
 
 @Injectable()
 export class order_bookService {
@@ -117,7 +118,6 @@ export class order_bookService {
   }
 
   async getBidAsk(orderSymbolName: string): Promise<BidAskDto | null> {
-    const SATOSHI = 100_000_000;
     const MAXROW = 20;
     const orderSymbolId = await this.orderSymbolService.getSymbolId(
       orderSymbolName,
@@ -143,7 +143,7 @@ export class order_bookService {
       let bidList: number[] = [];
 
       orderBookIdList.map((e) => {
-        const index = Number(e.unit_price) * SATOSHI;
+        const index = Number(e.unit_price);
         if (e.order_type === 'ASK') {
           if (!askList.includes(index)) {
             askList.push(index);
@@ -159,12 +159,11 @@ export class order_bookService {
       );
       bidList = bidList.slice(0, MAXROW);
       const filterOrderBookIdList = orderBookIdList.filter((e) => {
-        const index = Number(e.unit_price) * SATOSHI;
-        return askList.includes(index);
+        const index = Number(e.unit_price);
+        return askList.includes(index) || bidList.includes(index);
       });
       const ask: OrderBookDto[] = [];
       const bid: OrderBookDto[] = [];
-
       await Promise.all(
         filterOrderBookIdList.map(async (e) => {
           const diff =
@@ -176,8 +175,8 @@ export class order_bookService {
               ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
             ) {
               ask.push({
-                satoshi: SATOSHI * Number(e.unit_price),
-                price: Number(e.unit_price),
+                satoshi: Number(e.unit_price),
+                price: Number(e.unit_price) / DECIMAL.BTC,
                 volume: Number(e.quantity) + Number(diff),
               } as OrderBookDto);
             } else {
@@ -191,8 +190,8 @@ export class order_bookService {
               bid.findIndex((el) => el.price === Number(e.unit_price)) === -1
             ) {
               bid.push({
-                satoshi: SATOSHI * Number(e.unit_price),
-                price: Number(e.unit_price),
+                satoshi: Number(e.unit_price),
+                price: Number(e.unit_price) / DECIMAL.BTC,
                 volume: Number(e.quantity),
               } as OrderBookDto);
             } else {
@@ -204,8 +203,10 @@ export class order_bookService {
           }
         }),
       );
-
-      return { ask: ask, bid: bid } as BidAskDto;
+      return {
+        ask: ask.sort((a, b) => b.satoshi - a.satoshi),
+        bid: bid.sort((a, b) => b.satoshi - a.satoshi),
+      } as BidAskDto;
     } catch (e) {
       console.error(e);
       return null;
