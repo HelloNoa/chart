@@ -4,7 +4,7 @@ package finexblock;
 import "message.proto";
 
 service MarketOrder {
-	rpc MarketBidInit(MarketOrderInput) returns (Ack);
+	rpc MarketOrderInit(MarketOrderInput) returns (Ack);
 }
 
 service LimitOrder {
