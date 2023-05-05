@@ -4,7 +4,7 @@ import { order_bookService } from '../typeorm/order_book/order_book.service.js';
 import { order_symbolService } from '../typeorm/order_symbol/order_symbol.service.js';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { chartService } from '../typeorm/chart/chart.service.js';
-import { Currency } from '../grpc/interface/message.js';
+import { DECIMAL } from '../../dto/redis.dto.js';
 
 export interface OrderBookDto {
   satoshi: number;
@@ -103,6 +103,7 @@ export class OrderBookService {
     unitPrice: number;
     orderType: string;
   }) {
+    console.log('before', this.orderBook[req.symbol]);
     switch (req.type) {
       case 0:
         // OrderMatchingChannel;
@@ -127,7 +128,7 @@ export class OrderBookService {
           if (index === -1) {
             this.orderBook[req.symbol].bid.push({
               satoshi: req.unitPrice,
-              price: req.unitPrice / Currency.BTC,
+              price: req.unitPrice / DECIMAL.BTC,
               volume: req.quantity,
             });
           } else {
@@ -140,7 +141,7 @@ export class OrderBookService {
           if (index === -1) {
             this.orderBook[req.symbol].ask.push({
               satoshi: req.unitPrice,
-              price: req.unitPrice / Currency.BTC,
+              price: req.unitPrice / DECIMAL.BTC,
               volume: req.quantity,
             });
           } else {
@@ -166,6 +167,7 @@ export class OrderBookService {
         break;
     }
     this.incomeUpdata[req.symbol] = new Date().getTime();
+    console.log('after', this.orderBook[req.symbol]);
   }
 
   puborderBook(symbol: string) {

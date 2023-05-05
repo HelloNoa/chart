@@ -47,7 +47,6 @@ export class order_bookService {
   }
 
   async getAllBidAsk(orderSymbolName: string): Promise<BidAskDto | null> {
-    const SATOSHI = 100_000_000;
     const orderSymbolId = await this.orderSymbolService.getSymbolId(
       orderSymbolName,
     );
@@ -78,31 +77,31 @@ export class order_bookService {
             )) ?? 0;
           if (e.order_type === 'ASK') {
             if (
-              ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
+              ask.findIndex((el) => el.satoshi === Number(e.unit_price)) === -1
             ) {
               ask.push({
-                satoshi: SATOSHI * Number(e.unit_price),
-                price: Number(e.unit_price),
+                satoshi: Number(e.unit_price),
+                price: Number(e.unit_price) / DECIMAL.BTC,
                 volume: Number(e.quantity) + Number(diff),
               } as OrderBookDto);
             } else {
               const index = ask.findIndex(
-                (el) => el.price === Number(e.unit_price),
+                (el) => el.satoshi === Number(e.unit_price),
               );
               ask[index].volume += Number(e.quantity) + Number(diff);
             }
           } else if (e.order_type === 'BID') {
             if (
-              bid.findIndex((el) => el.price === Number(e.unit_price)) === -1
+              bid.findIndex((el) => el.satoshi === Number(e.unit_price)) === -1
             ) {
               bid.push({
-                satoshi: SATOSHI * Number(e.unit_price),
-                price: Number(e.unit_price),
+                satoshi: Number(e.unit_price),
+                price: Number(e.unit_price) / DECIMAL.BTC,
                 volume: Number(e.quantity),
               } as OrderBookDto);
             } else {
               const index = bid.findIndex(
-                (el) => el.price === Number(e.unit_price),
+                (el) => el.satoshi === Number(e.unit_price),
               );
               bid[index].volume += Number(e.quantity) + Number(diff);
             }
