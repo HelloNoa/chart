@@ -6,7 +6,6 @@ import { userService } from '../user/user.service.js';
 import { order_symbolService } from '../order_symbol/order_symbol.service.js';
 import { order_book_differenceService } from '../order_book_difference/order_book_difference.service.js';
 import { BidAskDto, OrderBookDto } from '../../orderBook/orderBook.service.js';
-import { DECIMAL } from '../../../dto/redis.dto.js';
 
 @Injectable()
 export class order_bookService {
@@ -77,31 +76,29 @@ export class order_bookService {
             )) ?? 0;
           if (e.order_type === 'ASK') {
             if (
-              ask.findIndex((el) => el.satoshi === Number(e.unit_price)) === -1
+              ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
             ) {
               ask.push({
-                satoshi: Number(e.unit_price),
-                price: Number(e.unit_price) / DECIMAL.BTC,
+                price: Number(e.unit_price),
                 volume: Number(e.quantity) + Number(diff),
               } as OrderBookDto);
             } else {
               const index = ask.findIndex(
-                (el) => el.satoshi === Number(e.unit_price),
+                (el) => el.price === Number(e.unit_price),
               );
               ask[index].volume += Number(e.quantity) + Number(diff);
             }
           } else if (e.order_type === 'BID') {
             if (
-              bid.findIndex((el) => el.satoshi === Number(e.unit_price)) === -1
+              bid.findIndex((el) => el.price === Number(e.unit_price)) === -1
             ) {
               bid.push({
-                satoshi: Number(e.unit_price),
-                price: Number(e.unit_price) / DECIMAL.BTC,
+                price: Number(e.unit_price),
                 volume: Number(e.quantity),
               } as OrderBookDto);
             } else {
               const index = bid.findIndex(
-                (el) => el.satoshi === Number(e.unit_price),
+                (el) => el.price === Number(e.unit_price),
               );
               bid[index].volume += Number(e.quantity) + Number(diff);
             }
@@ -174,31 +171,29 @@ export class order_bookService {
             )) ?? 0;
           if (e.order_type === 'ASK') {
             if (
-              ask.findIndex((el) => el.satoshi === Number(e.unit_price)) === -1
+              ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
             ) {
               ask.push({
-                satoshi: Number(e.unit_price),
-                price: Number(e.unit_price) / DECIMAL.BTC,
+                price: Number(e.unit_price),
                 volume: Number(e.quantity) + Number(diff),
               } as OrderBookDto);
             } else {
               const index = ask.findIndex(
-                (el) => el.satoshi === Number(e.unit_price),
+                (el) => el.price === Number(e.unit_price),
               );
               ask[index].volume += Number(e.quantity) + Number(diff);
             }
           } else if (e.order_type === 'BID') {
             if (
-              bid.findIndex((el) => el.satoshi === Number(e.unit_price)) === -1
+              bid.findIndex((el) => el.price === Number(e.unit_price)) === -1
             ) {
               bid.push({
-                satoshi: Number(e.unit_price),
-                price: Number(e.unit_price) / DECIMAL.BTC,
+                price: Number(e.unit_price),
                 volume: Number(e.quantity),
               } as OrderBookDto);
             } else {
               const index = bid.findIndex(
-                (el) => el.satoshi === Number(e.unit_price),
+                (el) => el.price === Number(e.unit_price),
               );
               bid[index].volume += Number(e.quantity) + Number(diff);
             }
@@ -206,8 +201,8 @@ export class order_bookService {
         }),
       );
       return {
-        ask: ask.sort((a, b) => b.satoshi - a.satoshi),
-        bid: bid.sort((a, b) => b.satoshi - a.satoshi),
+        ask: ask.sort((a, b) => b.price - a.price),
+        bid: bid.sort((a, b) => b.price - a.price),
       } as BidAskDto;
     } catch (e) {
       console.error(e);

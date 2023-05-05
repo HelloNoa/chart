@@ -4,10 +4,8 @@ import { order_bookService } from '../typeorm/order_book/order_book.service.js';
 import { order_symbolService } from '../typeorm/order_symbol/order_symbol.service.js';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { chartService } from '../typeorm/chart/chart.service.js';
-import { DECIMAL } from '../../dto/redis.dto.js';
 
 export interface OrderBookDto {
-  satoshi: number;
   price: number;
   volume: number;
 }
@@ -109,12 +107,12 @@ export class OrderBookService {
         // OrderMatchingChannel;
         if (req.orderType === 'BID') {
           const index = this.orderBook[req.symbol].ask.findIndex(
-            (e) => e.satoshi === Number(req.unitPrice),
+            (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].ask[index].volume -= req.quantity;
         } else if (req.orderType === 'ASK') {
           const index = this.orderBook[req.symbol].bid.findIndex(
-            (e) => e.satoshi === Number(req.unitPrice),
+            (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].bid[index].volume -= req.quantity;
         }
@@ -123,12 +121,11 @@ export class OrderBookService {
         //OrderPlacementChannel
         if (req.orderType === 'BID') {
           const index = this.orderBook[req.symbol].bid.findIndex(
-            (e) => e.satoshi === Number(req.unitPrice),
+            (e) => e.price === Number(req.unitPrice),
           );
           if (index === -1) {
             this.orderBook[req.symbol].bid.push({
-              satoshi: req.unitPrice,
-              price: req.unitPrice / DECIMAL.BTC,
+              price: req.unitPrice,
               volume: req.quantity,
             });
           } else {
@@ -136,12 +133,11 @@ export class OrderBookService {
           }
         } else if (req.orderType === 'ASK') {
           const index = this.orderBook[req.symbol].ask.findIndex(
-            (e) => e.satoshi === Number(req.unitPrice),
+            (e) => e.price === Number(req.unitPrice),
           );
           if (index === -1) {
             this.orderBook[req.symbol].ask.push({
-              satoshi: req.unitPrice,
-              price: req.unitPrice / DECIMAL.BTC,
+              price: req.unitPrice,
               volume: req.quantity,
             });
           } else {
@@ -153,12 +149,12 @@ export class OrderBookService {
         //OrderCancellationChannel
         if (req.orderType === 'BID') {
           const index = this.orderBook[req.symbol].bid.findIndex(
-            (e) => e.satoshi === Number(req.unitPrice),
+            (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].bid[index].volume -= req.quantity;
         } else if (req.orderType === 'ASK') {
           const index = this.orderBook[req.symbol].ask.findIndex(
-            (e) => e.satoshi === Number(req.unitPrice),
+            (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].ask[index].volume -= req.quantity;
         }
@@ -172,10 +168,10 @@ export class OrderBookService {
 
   puborderBook(symbol: string) {
     const ask = this.orderBook[symbol].ask
-      .sort((a, b) => b.satoshi - a.satoshi)
+      .sort((a, b) => b.price - a.price)
       .slice(-MAXROW, -1);
     const bid = this.orderBook[symbol].bid
-      .sort((a, b) => b.satoshi - a.satoshi)
+      .sort((a, b) => b.price - a.price)
       .slice(0, MAXROW - 1);
     this.chartSocketService.OrderBook(symbol, {
       ask: ask,
