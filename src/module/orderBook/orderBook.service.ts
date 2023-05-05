@@ -167,12 +167,13 @@ export class OrderBookService {
   }
 
   puborderBook(symbol: string) {
+    const askLength = this.orderBook[symbol].ask.length;
     const ask = this.orderBook[symbol].ask
       .sort((a, b) => b.price - a.price)
-      .slice(-MAXROW, -1);
+      .slice(Math.min(askLength, Math.max(askLength - MAXROW)), 0);
     const bid = this.orderBook[symbol].bid
       .sort((a, b) => b.price - a.price)
-      .slice(0, MAXROW - 1);
+      .slice(0, MAXROW);
     this.chartSocketService.OrderBook(symbol, {
       ask: ask,
       bid: bid,
