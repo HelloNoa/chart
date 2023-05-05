@@ -119,6 +119,7 @@ export class order_bookService {
 
   async getBidAsk(orderSymbolName: string): Promise<BidAskDto | null> {
     const MAXROW = 20;
+
     const orderSymbolId = await this.orderSymbolService.getSymbolId(
       orderSymbolName,
     );
@@ -126,8 +127,10 @@ export class order_bookService {
       console.log('orderSymbolName is null');
       return null;
     }
+
+    const values: status[] = ['PLACED', 'PARTIAL_FILLED'];
+
     try {
-      const values: status[] = ['PLACED', 'PARTIAL_FILLED'];
       const orderBookIdList = await this.order_bookRepository.find({
         select: ['id', 'unit_price', 'order_type', 'quantity'],
         where: {
@@ -172,7 +175,7 @@ export class order_bookService {
             )) ?? 0;
           if (e.order_type === 'ASK') {
             if (
-              ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
+              ask.findIndex((el) => el.satoshi === Number(e.unit_price)) === -1
             ) {
               ask.push({
                 satoshi: Number(e.unit_price),
@@ -181,13 +184,13 @@ export class order_bookService {
               } as OrderBookDto);
             } else {
               const index = ask.findIndex(
-                (el) => el.price === Number(e.unit_price),
+                (el) => el.satoshi === Number(e.unit_price),
               );
               ask[index].volume += Number(e.quantity) + Number(diff);
             }
           } else if (e.order_type === 'BID') {
             if (
-              bid.findIndex((el) => el.price === Number(e.unit_price)) === -1
+              bid.findIndex((el) => el.satoshi === Number(e.unit_price)) === -1
             ) {
               bid.push({
                 satoshi: Number(e.unit_price),
@@ -196,7 +199,7 @@ export class order_bookService {
               } as OrderBookDto);
             } else {
               const index = bid.findIndex(
-                (el) => el.price === Number(e.unit_price),
+                (el) => el.satoshi === Number(e.unit_price),
               );
               bid[index].volume += Number(e.quantity) + Number(diff);
             }
