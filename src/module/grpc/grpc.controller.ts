@@ -103,7 +103,8 @@ export class GrpcController {
       unitPrice: messages.UnitPrice,
       orderType: OrderType[messages.OrderType],
     };
-    this.orderBookService.updateOrderBook(req);
+    this.orderBookService.queue.push(req);
+    // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
 
@@ -122,7 +123,8 @@ export class GrpcController {
       unitPrice: messages.UnitPrice,
       orderType: OrderType[messages.OrderType],
     };
-    this.orderBookService.updateOrderBook(req);
+    this.orderBookService.queue.push(req);
+    // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
 
@@ -141,7 +143,8 @@ export class GrpcController {
       unitPrice: messages.UnitPrice,
       orderType: OrderType[messages.OrderType],
     };
-    this.orderBookService.updateOrderBook(req);
+    this.orderBookService.queue.push(req);
+    // this.orderBookService.updateOrderBook(req);
     this.chartGateway.OrderMatching(messages);
     return { Success: true };
   }

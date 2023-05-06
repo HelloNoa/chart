@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import _ from 'lodash';
 import { order_bookService } from '../typeorm/order_book/order_book.service.js';
 import { order_symbolService } from '../typeorm/order_symbol/order_symbol.service.js';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
@@ -17,8 +16,17 @@ export interface BidAskDto {
 
 const MAXROW = 20;
 
+type T_QUEUE = {
+  symbol: string;
+  type: number;
+  quantity: number;
+  unitPrice: number;
+  orderType: string;
+};
+
 @Injectable()
 export class OrderBookService {
+  public queue: T_QUEUE[] = [];
   private initialize: boolean;
   private outputUpdate: { [key: string]: number } = {};
   private incomeUpdata: { [key: string]: number } = {};
@@ -34,6 +42,7 @@ export class OrderBookService {
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
     private readonly chartService: chartService,
   ) {
+    this.queue = [];
     this.initialize = false;
     // this.init();
   }
@@ -76,22 +85,31 @@ export class OrderBookService {
     );
 
     this.initialize = true;
+    const cycle = async () => {
+      const length = this.queue.length;
+      for (let i = 0; i < length; i++) {
+        await this.RooopUpdate(this.queue[0]);
+        this.queue.shift();
+      }
+
+      setTimeout(cycle, 200);
+    };
+    cycle();
     setInterval(() => {
       list.map((e) => {
         if (this.incomeUpdata[e.name] > this.outputUpdate[e.name]) {
           console.log('hello');
-
-          _.remove(this.orderBook[e.name].bid, (n) => {
-            return n.volume === 0;
-          });
-          _.remove(this.orderBook[e.name].ask, (n) => {
-            return n.volume === 0;
-          });
           this.puborderBook(e.name);
           this.outputUpdate[e.name] = new Date().getTime();
         }
       });
     }, 200);
+  }
+
+  async RooopUpdate(q: any) {
+    await new Promise((res) => {
+      res(this.updateOrderBook(q));
+    });
   }
 
   updateOrderBook(req: {
@@ -110,11 +128,17 @@ export class OrderBookService {
             (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].ask[index].volume -= req.quantity;
+          if (this.orderBook[req.symbol].ask[index].volume <= 0) {
+            this.orderBook[req.symbol].ask.splice(index, 1);
+          }
         } else if (req.orderType === 'ASK') {
           const index = this.orderBook[req.symbol].bid.findIndex(
             (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].bid[index].volume -= req.quantity;
+          if (this.orderBook[req.symbol].ask[index].volume <= 0) {
+            this.orderBook[req.symbol].ask.splice(index, 1);
+          }
         }
         break;
       case 1:
@@ -128,6 +152,7 @@ export class OrderBookService {
               price: req.unitPrice,
               volume: req.quantity,
             });
+            this.orderBook[req.symbol].bid.sort((a, b) => b.price - a.price);
           } else {
             this.orderBook[req.symbol].bid[index].volume += req.quantity;
           }
@@ -140,6 +165,7 @@ export class OrderBookService {
               price: req.unitPrice,
               volume: req.quantity,
             });
+            this.orderBook[req.symbol].ask.sort((a, b) => b.price - a.price);
           } else {
             this.orderBook[req.symbol].ask[index].volume += req.quantity;
           }
@@ -152,11 +178,17 @@ export class OrderBookService {
             (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].bid[index].volume -= req.quantity;
+          if (this.orderBook[req.symbol].ask[index].volume <= 0) {
+            this.orderBook[req.symbol].ask.splice(index, 1);
+          }
         } else if (req.orderType === 'ASK') {
           const index = this.orderBook[req.symbol].ask.findIndex(
             (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].ask[index].volume -= req.quantity;
+          if (this.orderBook[req.symbol].ask[index].volume <= 0) {
+            this.orderBook[req.symbol].ask.splice(index, 1);
+          }
         }
         break;
       default:
@@ -164,16 +196,13 @@ export class OrderBookService {
     }
     this.incomeUpdata[req.symbol] = new Date().getTime();
     console.log('after', this.orderBook[req.symbol]);
+    return true;
   }
 
   puborderBook(symbol: string) {
     const askLength = this.orderBook[symbol].ask.length;
-    const ask = this.orderBook[symbol].ask
-      .sort((a, b) => b.price - a.price)
-      .slice(askLength - MAXROW, 0);
-    const bid = this.orderBook[symbol].bid
-      .sort((a, b) => b.price - a.price)
-      .slice(0, MAXROW);
+    const ask = this.orderBook[symbol].ask.slice(askLength - MAXROW);
+    const bid = this.orderBook[symbol].bid.slice(0, MAXROW);
     this.chartSocketService.OrderBook(symbol, {
       ask: ask,
       bid: bid,
