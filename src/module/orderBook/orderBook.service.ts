@@ -136,8 +136,8 @@ export class OrderBookService {
             (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].bid[index].volume -= req.quantity;
-          if (this.orderBook[req.symbol].ask[index].volume <= 0) {
-            this.orderBook[req.symbol].ask.splice(index, 1);
+          if (this.orderBook[req.symbol].bid[index].volume <= 0) {
+            this.orderBook[req.symbol].bid.splice(index, 1);
           }
         }
         break;
@@ -178,8 +178,8 @@ export class OrderBookService {
             (e) => e.price === Number(req.unitPrice),
           );
           this.orderBook[req.symbol].bid[index].volume -= req.quantity;
-          if (this.orderBook[req.symbol].ask[index].volume <= 0) {
-            this.orderBook[req.symbol].ask.splice(index, 1);
+          if (this.orderBook[req.symbol].bid[index].volume <= 0) {
+            this.orderBook[req.symbol].bid.splice(index, 1);
           }
         } else if (req.orderType === 'ASK') {
           const index = this.orderBook[req.symbol].ask.findIndex(
