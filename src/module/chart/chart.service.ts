@@ -7,7 +7,6 @@ import { ChartReqDto } from './chart.dto.js';
 import { OrderBookService } from '../orderBook/orderBook.service.js';
 import { order_symbol } from '../typeorm/order_symbol/order_symbol.entity.js';
 import { order_matching_eventService } from '../typeorm/order_matching_event/order_matching_event.service.js';
-import { DECIMAL } from '../../dto/redis.dto.js';
 
 @Injectable()
 export class ChartService {
@@ -70,12 +69,16 @@ export class ChartService {
             e.price = 0;
             e.updown = 0;
           } else {
-            e.price = Number(price.unit_price / DECIMAL.BTC);
+            e.price = Number(price.unit_price);
 
             if (lastTick[e.name] !== undefined) {
-              const updown =
-                Number(price.unit_price) - Number(lastTick[e.name].openPrice);
-              e.updown = (updown / Number(lastTick[e.name].openPrice)) * 100;
+              if (Number(lastTick[e.name].openPrice) === 0) {
+                e.updown = 0;
+              } else {
+                const updown =
+                  Number(price.unit_price) - Number(lastTick[e.name].openPrice);
+                e.updown = (updown / Number(lastTick[e.name].openPrice)) * 100;
+              }
             } else {
               e.updown = 0;
             }
