@@ -136,10 +136,10 @@ export interface OrderFulfillment {
   OrderUUID: string;
   FilledQuantity: number;
   UnitPrice: number;
-  Symbol: keyof typeof SymbolType;
-  OrderType: keyof typeof OrderType;
-  MakeTime?: Timestamp;
-  TakeTime?: Timestamp;
+  Symbol: SymbolType;
+  OrderType: OrderType;
+  MakeTime: Timestamp;
+  TakeTime: Timestamp;
   Fee: Fee;
 }
 
@@ -177,10 +177,10 @@ export interface OrderPartialFill {
   TotalQuantity: number;
   FilledQuantity: number;
   UnitPrice: number;
-  Symbol: keyof typeof SymbolType;
-  OrderType: keyof typeof OrderType;
-  MakeTime?: Timestamp;
-  TakeTime?: Timestamp;
+  Symbol: SymbolType;
+  OrderType: OrderType;
+  MakeTime: Timestamp;
+  TakeTime: Timestamp;
   Fee: Fee;
 }
 
