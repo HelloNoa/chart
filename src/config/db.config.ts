@@ -58,7 +58,7 @@ export const dbConfig = registerAs(
         username: env['DATABASE_USERNAME'],
         password: env['DATABASE_PASSWORD'],
         database: env['DATABASE_SCHEMA'],
-        timezone: '+09:00', // 서울 시간(+9)을 사용하도록 설정
+        timezone: '+00:00',
         entities: [__dirname + '/../**/*.entity.{ts,js}'],
         namingStrategy: new SnakeNamingStrategy(),
       };

@@ -70,7 +70,6 @@ export class ChartService {
             e.updown = 0;
           } else {
             e.price = Number(price.unit_price);
-
             if (lastTick[e.name] !== undefined) {
               if (Number(lastTick[e.name].openPrice) === 0) {
                 e.updown = 0;
