@@ -47,6 +47,7 @@ export const dbConfig = registerAs(
         username: env['DATABASE_USERNAME'],
         password: env['DATABASE_PASSWORD'],
         database: env['DATABASE_SCHEMA'],
+        timezone: '+00:00',
         entities: [__dirname + '/../**/*.entity.{ts,js}'],
         namingStrategy: new SnakeNamingStrategy(),
       };
