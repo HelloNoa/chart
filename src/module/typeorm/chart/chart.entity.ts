@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  Relation,
 } from 'typeorm';
 import { order_interval } from '../order_interval/order_interval.entity.js';
 import { order_symbol } from '../order_symbol/order_symbol.entity.js';
@@ -54,9 +55,9 @@ export class chart {
 
   @ManyToOne(() => order_interval)
   @JoinColumn({ name: 'order_interval_id' })
-  order_interval: order_interval;
+  order_interval: Relation<order_interval>;
 
   @ManyToOne(() => order_symbol)
   @JoinColumn({ name: 'order_symbol_id' })
-  order_symbol: order_symbol;
+  order_symbol: Relation<order_symbol>;
 }
