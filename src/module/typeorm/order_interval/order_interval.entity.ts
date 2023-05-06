@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  OneToMany,
+  Relation,
+} from 'typeorm';
+import { chart } from '../chart/chart.entity.js';
 
 export enum duration {
   ONE_MINUTE = 'ONE_MINUTE',
@@ -31,4 +39,8 @@ export class order_interval {
 
   @Column({ name: 'end_time', type: 'timestamp' })
   endTime: Date;
+
+  @OneToMany(() => chart, (chart) => chart.order_interval)
+  @JoinColumn({ name: 'chart' })
+  chart: Relation<chart>[];
 }
