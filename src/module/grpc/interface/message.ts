@@ -241,6 +241,7 @@ export enum Reason {
   WITHDRAWAL = 2,
   MAKE = 3,
   TAKE = 4,
+  REFUND = 5,
 }
 
 export interface BalanceUpdate {
