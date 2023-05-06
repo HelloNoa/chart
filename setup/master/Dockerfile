@@ -1,6 +1,6 @@
 # FROM 615794048861.dkr.ecr.ap-northeast-2.amazonaws.com/coin-market-socket-server-prod:master
 FROM node:18-alpine
-ENV TZ=Asia/Seoul
+#ENV TZ=Asia/Seoul
 EXPOSE 80
 EXPOSE 50051
 
