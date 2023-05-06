@@ -170,7 +170,7 @@ export class OrderBookService {
     const askLength = this.orderBook[symbol].ask.length;
     const ask = this.orderBook[symbol].ask
       .sort((a, b) => b.price - a.price)
-      .slice(Math.min(askLength, Math.max(askLength - MAXROW)), 0);
+      .slice(askLength - MAXROW, 0);
     const bid = this.orderBook[symbol].bid
       .sort((a, b) => b.price - a.price)
       .slice(0, MAXROW);
