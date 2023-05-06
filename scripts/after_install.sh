@@ -15,5 +15,5 @@ cd /home/ec2-user/finexblock
 docker rm -f $(docker ps -aq)
 sudo systemctl start docker
 
-docker build -t finexblock-order .
-docker run -d --network=host finexblock-order:latest
+docker build -t finexblock-chart .
+docker run -d --network=host finexblock-chart:latest
