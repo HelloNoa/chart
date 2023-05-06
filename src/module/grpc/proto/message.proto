@@ -239,10 +239,19 @@ message OrderMatchingEvent {
 	SymbolType Symbol = 5 [json_name = "symbol"];
 }
 
+enum Reason {
+	ADVANCE_PAYMENT = 0;
+	DEPOSIT = 1;
+	WITHDRAWAL = 2;
+	MAKE = 3;
+	TAKE = 4;
+}
+
 message BalanceUpdate {
-	string UserUUID = 1;
-	double Diff = 2;
-	Currency Currency = 3;
+	string UserUUID = 1 [json_name = "user_uuid"];
+	double Diff = 2 [json_name = "diff"];
+	Currency Currency = 3 [json_name = "currency"];
+	Reason Reason = 4 [json_name = "reason"];
 }
 
 
