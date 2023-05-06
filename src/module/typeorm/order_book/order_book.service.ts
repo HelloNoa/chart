@@ -80,13 +80,13 @@ export class order_bookService {
             ) {
               ask.push({
                 price: Number(e.unit_price),
-                volume: Number(e.quantity) + Number(diff),
+                volume: Number(e.quantity) - Number(diff),
               } as OrderBookDto);
             } else {
               const index = ask.findIndex(
                 (el) => el.price === Number(e.unit_price),
               );
-              ask[index].volume += Number(e.quantity) + Number(diff);
+              ask[index].volume += Number(e.quantity) - Number(diff);
             }
           } else if (e.order_type === 'BID') {
             if (
@@ -100,7 +100,7 @@ export class order_bookService {
               const index = bid.findIndex(
                 (el) => el.price === Number(e.unit_price),
               );
-              bid[index].volume += Number(e.quantity) + Number(diff);
+              bid[index].volume += Number(e.quantity) - Number(diff);
             }
           }
         }),
@@ -175,13 +175,13 @@ export class order_bookService {
             ) {
               ask.push({
                 price: Number(e.unit_price),
-                volume: Number(e.quantity) + Number(diff),
+                volume: Number(e.quantity) - Number(diff),
               } as OrderBookDto);
             } else {
               const index = ask.findIndex(
                 (el) => el.price === Number(e.unit_price),
               );
-              ask[index].volume += Number(e.quantity) + Number(diff);
+              ask[index].volume += Number(e.quantity) - Number(diff);
             }
           } else if (e.order_type === 'BID') {
             if (
@@ -195,7 +195,7 @@ export class order_bookService {
               const index = bid.findIndex(
                 (el) => el.price === Number(e.unit_price),
               );
-              bid[index].volume += Number(e.quantity) + Number(diff);
+              bid[index].volume += Number(e.quantity) - Number(diff);
             }
           }
         }),

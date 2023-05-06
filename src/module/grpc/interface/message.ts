@@ -235,10 +235,20 @@ export interface OrderMatchingEvent {
   Symbol: keyof typeof SymbolType;
 }
 
+export enum Reason {
+  ADVANCE_PAYMENT = 0,
+  DEPOSIT = 1,
+  WITHDRAWAL = 2,
+  MAKE = 3,
+  TAKE = 4,
+  REFUND = 5,
+}
+
 export interface BalanceUpdate {
   UserUUID: string;
   Diff: number;
-  Currency: keyof typeof Currency;
+  Currency: Currency;
+  Reason: Reason;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
