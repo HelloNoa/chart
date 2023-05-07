@@ -21,13 +21,13 @@ export class ChartService {
 
   //과거 차트 데이터
   async getChart({
-    order_symbol_id,
+    order_symbol_name,
     interval,
     length,
     created_at,
   }: ChartReqDto) {
     return await this.chartService.getChart({
-      order_symbol_id,
+      order_symbol_name,
       interval,
       length,
       created_at,
