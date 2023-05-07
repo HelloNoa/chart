@@ -51,38 +51,44 @@ export class chartService {
   }
 
   async getChart({
-    order_symbol_id,
+    order_symbol_name,
     interval,
     length,
     created_at,
   }: ChartReqDto) {
+    // SELECT *
+    // FROM (
+    //   SELECT open_price,low_price,high_price,close_price,volume, created_at
+    //   FROM chart
+    //   JOIN order_interval oi ON oi.id = chart.order_interval_id
+    //   WHERE order_symbol_id = 4
+    //     AND duration = 'ONE_MINUTE'
+    //   ORDER BY created_at DESC
+    //   LIMIT 100
+    // ) sub
+    // ORDER BY created_at ASC
     try {
-      const id = await this.orderSymbolService.getSymbolId(order_symbol_id);
-      const intervarId = await this.orderIntervalService.getOrderIntervalId(
-        interval,
-      );
-      const queryBuilder = this.chartRepository.createQueryBuilder('chart');
+      const data = await this.chartRepository
+        .createQueryBuilder('chart')
+        .leftJoinAndSelect('chart.order_interval', 'order_interval')
+        .leftJoinAndSelect('chart.order_symbol', 'order_symbol')
+        .select('chart.open_price', 'o')
+        .addSelect('chart.low_price', 'l')
+        .addSelect('chart.high_price', 'h')
+        .addSelect('chart.close_price', 'c')
+        .addSelect('chart.volume', 'v')
+        .addSelect('chart.created_at', 't')
+        .addSelect('order_symbol.name', 'name')
+        .where('order_symbol.name = :order_symbol_name', { order_symbol_name })
+        .andWhere('order_interval.duration = :duration', {
+          duration: interval,
+        })
+        .andWhere('chart.created_at <= :created_at', { created_at })
+        .orderBy('chart.created_at', 'DESC')
+        .limit(length)
+        .getRawMany();
 
-      if (intervarId.length === 0) {
-        console.log('intervarId length is 0');
-        return null;
-      } else {
-        queryBuilder
-          .select('chart.open_price', 'o')
-          .addSelect('chart.low_price', 'l')
-          .addSelect('chart.high_price', 'h')
-          .addSelect('chart.close_price', 'c')
-          .addSelect('chart.volume', 'v')
-          .addSelect('chart.created_at', 't')
-          .where('chart.order_symbol_id = :id', { id })
-          .andWhere('chart.order_interval_id in (:...intervarId)', {
-            intervarId,
-          })
-          .andWhere('chart.created_at < :created_at', { created_at })
-          .orderBy('chart.created_at', 'ASC')
-          .take(length);
-      }
-      const data = await queryBuilder.getRawMany();
+      data.sort((a, b) => a.t.getTime() - b.t.getTime());
       if (data.length === 0) {
         console.error('chart data not found');
         return null;

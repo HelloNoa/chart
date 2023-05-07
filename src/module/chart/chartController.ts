@@ -23,7 +23,7 @@ export class ChartController {
     @Query('date') date: string,
   ) {
     const req: ChartReqDto = {
-      order_symbol_id: symbol,
+      order_symbol_name: symbol,
       interval: interval,
       length: length,
       created_at: date,
