@@ -30,6 +30,8 @@ export enum SymbolType {
   BTCSTEEM = 20,
 }
 
+export const CurrencyLength = 21;
+
 export enum Currency {
   CURRENCY_NIL = 0,
   BTC = 1,
