@@ -94,7 +94,7 @@ export class order_bookService {
             ) {
               bid.push({
                 price: Number(e.unit_price),
-                volume: Number(e.quantity),
+                volume: Number(e.quantity) - Number(diff),
               } as OrderBookDto);
             } else {
               const index = bid.findIndex(
@@ -189,7 +189,7 @@ export class order_bookService {
             ) {
               bid.push({
                 price: Number(e.unit_price),
-                volume: Number(e.quantity),
+                volume: Number(e.quantity) - Number(diff),
               } as OrderBookDto);
             } else {
               const index = bid.findIndex(
