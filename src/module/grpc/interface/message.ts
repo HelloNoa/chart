@@ -193,7 +193,7 @@ export interface OrderPlacement {
   UnitPrice: number;
   Symbol: keyof typeof SymbolType;
   OrderType: keyof typeof OrderType;
-  MakeTime?: Timestamp;
+  MakeTime: Timestamp;
 }
 
 export interface OrderPlacementFailed {
@@ -208,7 +208,7 @@ export interface MarketOrderInput {
   Quantity: number;
   OrderType: keyof typeof OrderType;
   Symbol: keyof typeof SymbolType;
-  MakeTime?: Timestamp;
+  MakeTime: Timestamp;
 }
 
 export interface MarketOrderOutput {
@@ -222,7 +222,7 @@ export interface LimitOrderInput {
   UnitPrice: number;
   OrderType: keyof typeof OrderType;
   Symbol: keyof typeof SymbolType;
-  MakeTime?: Timestamp;
+  MakeTime: Timestamp;
 }
 
 export interface LimitOrderOutput {
