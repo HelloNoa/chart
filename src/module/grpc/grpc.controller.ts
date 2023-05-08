@@ -143,6 +143,8 @@ export class GrpcController {
       unitPrice: messages.UnitPrice,
       orderType: OrderType[messages.OrderType],
     };
+    console.log('111');
+    console.log(this.chartSocketService.OrderMatching);
     this.chartSocketService.OrderMatching(messages);
     this.orderBookService.queue.push(req);
     // this.orderBookService.updateOrderBook(req);
