@@ -4,7 +4,7 @@ import { SocketModule } from '../socket/socket.module.js';
 import { OrderBookModule } from '../orderBook/orderBook.module.js';
 
 @Module({
-  imports: [OrderBookModule, forwardRef(() => SocketModule)],
+  imports: [OrderBookModule, SocketModule],
   controllers: [GrpcController],
 })
 export class GrpcModule {}
