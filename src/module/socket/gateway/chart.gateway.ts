@@ -126,12 +126,7 @@ export class ChartGateway
   }
 
   OrderMatching(req: OrderMatchingEvent) {
-    console.log('socket OrderMatching');
-    console.log(this.server.clients);
-    console.log('aaa');
     this.server.clients.forEach((client: any) => {
-      console.log(client.chart);
-      console.log(SymbolType[req.Symbol]);
       if (
         client.readyState === ws.WebSocket.OPEN &&
         client.chart &&
