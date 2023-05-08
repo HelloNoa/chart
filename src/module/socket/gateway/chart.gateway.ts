@@ -109,6 +109,25 @@ export class ChartGateway
     client.send(data, { binary: true });
   }
 
+  Ticker(marketType: string, ticker: any) {
+    this.server.clients.forEach((client: any) => {
+      if (
+        client.readyState === ws.WebSocket.OPEN &&
+        client.chart &&
+        client.chart.includes(marketType)
+      ) {
+        const json = {
+          [socketEvent.pub.Ticker]: {
+            0: marketType,
+            1: ticker,
+          },
+        };
+        const data = str2ab(JSON.stringify(json));
+        client.send(data, { binary: true });
+      }
+    });
+  }
+
   OrderBook(marketType: string, orderBook: any) {
     this.server.clients.forEach((client: any) => {
       if (
