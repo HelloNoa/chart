@@ -232,9 +232,9 @@ export interface LimitOrderOutput {
 export interface OrderMatchingEvent {
   UnitPrice: number;
   Quantity: number;
-  Timestamp?: Timestamp;
-  OrderType: keyof typeof OrderType;
-  Symbol: keyof typeof SymbolType;
+  Timestamp: Timestamp;
+  OrderType: OrderType;
+  Symbol: SymbolType;
 }
 
 export enum Reason {
