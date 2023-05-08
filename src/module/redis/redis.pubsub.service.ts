@@ -4,6 +4,7 @@ import * as IORedis from 'ioredis';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { RedisClusterService } from 'nestjs-redis-cluster';
 import { OrderBookService } from '../orderBook/orderBook.service.js';
+import { OrderMatchingEvent } from '../grpc/interface/message.js';
 
 @Injectable()
 export class RedisPubSubService {
@@ -84,7 +85,7 @@ export class RedisPubSubService {
   }
 
   //tradeEvent for chartdraw 차트 구독
-  OrderMatching(req: OrderMatching) {
+  OrderMatching(req: OrderMatchingEvent) {
     this.chartSocketService.OrderMatching(req);
   }
 
