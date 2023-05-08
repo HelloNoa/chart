@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 
 import { Observable } from 'rxjs';
@@ -9,7 +9,7 @@ import { OrderType, SymbolType } from './interface/message.js';
 @Controller()
 export class GrpcController {
   constructor(
-    private readonly chartGateway: ChartGateway,
+    @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
     private readonly orderBookService: OrderBookService,
   ) {
     //   setTimeout(() => {
@@ -145,7 +145,7 @@ export class GrpcController {
     };
     this.orderBookService.queue.push(req);
     // this.orderBookService.updateOrderBook(req);
-    this.chartGateway.OrderMatching(messages);
+    this.chartSocketService.OrderMatching(messages);
     return { Success: true };
   }
 }
