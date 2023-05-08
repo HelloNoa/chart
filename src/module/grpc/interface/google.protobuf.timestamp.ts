@@ -2,7 +2,7 @@ export interface Timestamp {
   seconds: {
     low: number;
     high: number;
-    unsinged: boolean;
+    unsigned: boolean;
   };
   nanos: number;
 }
