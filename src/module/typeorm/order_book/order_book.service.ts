@@ -5,7 +5,10 @@ import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere.js';
 import { userService } from '../user/user.service.js';
 import { order_symbolService } from '../order_symbol/order_symbol.service.js';
 import { order_book_differenceService } from '../order_book_difference/order_book_difference.service.js';
-import { BidAskDto, OrderBookDto } from '../../orderBook/orderBook.service.js';
+import {
+  BidAskDto,
+  OrderBookDto,
+} from '../../inMemory/orderBook/orderBook.service.js';
 
 @Injectable()
 export class order_bookService {

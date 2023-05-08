@@ -5,7 +5,7 @@ import { RedisPubSubModule } from '../redis/redis.pubsub.module.js';
 import { order_bookModule } from '../typeorm/order_book/order_book.module.js';
 import { order_symbolModule } from '../typeorm/order_symbol/order_symbol.module.js';
 import { chartModule } from '../typeorm/chart/chart.module.js';
-import { OrderBookModule } from '../orderBook/orderBook.module.js';
+import { OrderBookModule } from '../inMemory/orderBook/orderBook.module.js';
 import { order_matching_eventModule } from '../typeorm/order_matching_event/order_matching_event.module.js';
 
 @Module({

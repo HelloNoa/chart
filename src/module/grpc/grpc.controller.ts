@@ -3,7 +3,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 
 import { Observable } from 'rxjs';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
-import { OrderBookService } from '../orderBook/orderBook.service.js';
+import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
 import { OrderType, SymbolType } from './interface/message.js';
 
 @Controller()

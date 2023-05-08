@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { order_bookService } from '../typeorm/order_book/order_book.service.js';
-import { order_symbolService } from '../typeorm/order_symbol/order_symbol.service.js';
-import { ChartGateway } from '../socket/gateway/chart.gateway.js';
-import { chartService } from '../typeorm/chart/chart.service.js';
+import { order_bookService } from '../../typeorm/order_book/order_book.service.js';
+import { order_symbolService } from '../../typeorm/order_symbol/order_symbol.service.js';
+import { ChartGateway } from '../../socket/gateway/chart.gateway.js';
+import { chartService } from '../../typeorm/chart/chart.service.js';
 
 export interface OrderBookDto {
   price: number;

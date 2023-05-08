@@ -30,7 +30,7 @@ import { order_symbolModule } from '../typeorm/order_symbol/order_symbol.module.
 import { chartModule } from '../typeorm/chart/chart.module.js';
 import { userModule } from '../typeorm/user/user.module.js';
 import { order_book_differenceModule } from '../typeorm/order_book_difference/order_book_difference.module.js';
-import { OrderBookModule } from '../orderBook/orderBook.module.js';
+import { OrderBookModule } from '../inMemory/orderBook/orderBook.module.js';
 import { order_matching_eventModule } from '../typeorm/order_matching_event/order_matching_event.module.js';
 import { order_intervalModule } from '../typeorm/order_interval/order_interval.module.js';
 import { GrpcModule } from '../grpc/grpc.module.js';

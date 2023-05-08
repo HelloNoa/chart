@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { channel, OrderMatching } from '../../dto/redis.dto.js';
+import { channel } from '../../dto/redis.dto.js';
 import * as IORedis from 'ioredis';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { RedisClusterService } from 'nestjs-redis-cluster';
-import { OrderBookService } from '../orderBook/orderBook.service.js';
+import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
 import { OrderMatchingEvent } from '../grpc/interface/message.js';
 
 @Injectable()
