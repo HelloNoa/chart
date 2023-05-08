@@ -136,6 +136,7 @@ export class GrpcController {
     console.log(messages.Symbol);
     console.log(OrderType[messages.OrderType]);
     console.log(SymbolType[messages.Symbol]);
+    console.log('0000');
     const req = {
       symbol: SymbolType[messages.Symbol],
       type: 0,
