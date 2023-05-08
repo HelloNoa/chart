@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
 import { OrderType, SymbolType } from './interface/message.js';
+import { TickerService } from '../inMemory/ticker/ticker.service.js';
 
 @Controller()
 export class GrpcController {
   constructor(
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
     private readonly orderBookService: OrderBookService,
+    private readonly tickerService: TickerService,
   ) {
     //   setTimeout(() => {
     //     setInterval(() => {
@@ -143,8 +145,15 @@ export class GrpcController {
       unitPrice: messages.UnitPrice,
       orderType: OrderType[messages.OrderType],
     };
+
+    const tickerReq = {
+      symbol: SymbolType[messages.Symbol],
+      volume: messages.UnitPrice * messages.Quantity,
+      unitPrice: messages.UnitPrice,
+    };
     this.chartSocketService.OrderMatching(messages);
     this.orderBookService.queue.push(req);
+    this.tickerService.queue.push(tickerReq);
     // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
