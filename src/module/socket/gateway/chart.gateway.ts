@@ -9,12 +9,13 @@ import {
 import ws from 'ws';
 import { regex } from '../../../main.js';
 import { str2ab } from '../../../utils/index.js';
-import {
-  E_OrderMatching,
-  OrderMatching,
-  socketEvent,
-} from '../../../dto/redis.dto.js';
+import { E_OrderMatching, socketEvent } from '../../../dto/redis.dto.js';
 import { JwtService } from '@nestjs/jwt';
+import {
+  OrderMatchingEvent,
+  OrderType,
+  SymbolType,
+} from '../../grpc/interface/message.js';
 
 type jwt = {
   //uuid
@@ -122,20 +123,22 @@ export class ChartGateway
     });
   }
 
-  OrderMatching(req: OrderMatching) {
+  OrderMatching(req: OrderMatchingEvent) {
     this.server.clients.forEach((client: any) => {
       if (
         client.readyState === ws.WebSocket.OPEN &&
         client.chart &&
-        client.chart.includes(req.Symbol)
+        client.chart.includes(SymbolType[req.Symbol])
       ) {
         const json = {
           [socketEvent.pub.OrderMatching]: {
             [E_OrderMatching.UnitPrice]: req.UnitPrice,
             [E_OrderMatching.Quantity]: req.Quantity,
-            [E_OrderMatching.Timestamp]: req.Timestamp,
-            [E_OrderMatching.OrderType]: req.OrderType,
-            [E_OrderMatching.Symbol]: req.Symbol,
+            [E_OrderMatching.Timestamp]: new Date(
+              req.Timestamp.seconds.low * 1000,
+            ).getTime(),
+            [E_OrderMatching.OrderType]: OrderType[req.OrderType],
+            [E_OrderMatching.Symbol]: SymbolType[req.Symbol],
           },
         };
         const data = str2ab(JSON.stringify(json));
