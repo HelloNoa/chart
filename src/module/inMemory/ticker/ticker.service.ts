@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { order_symbolService } from '../../typeorm/order_symbol/order_symbol.service.js';
 import { ChartGateway } from '../../socket/gateway/chart.gateway.js';
 import { chartService } from '../../typeorm/chart/chart.service.js';
+import { order_intervalService } from '../../typeorm/order_interval/order_interval.service.js';
+import { duration } from '../../typeorm/order_interval/order_interval.entity.js';
 
 interface ticker {
   openPrice: number;
@@ -9,13 +11,14 @@ interface ticker {
   highPrice: number;
   currentPrice: number;
   volume: number;
+  updown: number;
 }
 
 @Injectable()
 export class TickerService {
   public queue: { symbol: string; volume: number; unitPrice: number }[] = [];
   public ticker: { [key: string]: ticker } = {};
-
+  private intervarId = 0;
   private outputUpdate: { [key: string]: number } = {};
   private incomeUpdata: { [key: string]: number } = {};
 
@@ -23,6 +26,7 @@ export class TickerService {
     private readonly orderSymbolService: order_symbolService,
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
     private readonly chartService: chartService,
+    private readonly orderIntervalService: order_intervalService,
   ) {
     this.queue = [];
   }
@@ -38,12 +42,14 @@ export class TickerService {
       chart.forEach((el) => {
         this.incomeUpdata[el.order_symbol.name] = time;
         this.outputUpdate[el.order_symbol.name] = time;
+        const _updown = Number(el.closePrice) - Number(el.openPrice);
         this.ticker[el.order_symbol.name] = {
-          openPrice: el.openPrice,
+          openPrice: Number(el.openPrice),
           lowPrice: el.lowPrice,
           highPrice: el.highPrice,
           currentPrice: el.closePrice,
           volume: Number(el.tradingValue),
+          updown: (_updown / Number(el.openPrice)) * 100,
         };
       });
     }
@@ -58,6 +64,38 @@ export class TickerService {
       setTimeout(cycle, 200);
     };
     cycle();
+
+    this.intervarId =
+      (await this.orderIntervalService.getLastOrderIntervalId(
+        duration.ONE_DAY,
+      )) ?? 0;
+    setInterval(async () => {
+      const intervarId =
+        (await this.orderIntervalService.getLastOrderIntervalId(
+          duration.ONE_DAY,
+        )) ?? 0;
+      if (intervarId !== this.intervarId) {
+        const _chart = await this.chartService.getDailyTick();
+        if (_chart === null) {
+          console.error('_chart is null');
+          return null;
+        }
+        const time = new Date().getTime();
+        _chart.forEach((el) => {
+          this.incomeUpdata[el.order_symbol.name] = time;
+          this.outputUpdate[el.order_symbol.name] = time;
+          const _updown = Number(el.closePrice) - Number(el.openPrice);
+          this.ticker[el.order_symbol.name] = {
+            openPrice: Number(el.openPrice),
+            lowPrice: el.lowPrice,
+            highPrice: el.highPrice,
+            currentPrice: el.closePrice,
+            volume: Number(el.tradingValue),
+            updown: (_updown / Number(el.openPrice)) * 100,
+          };
+        });
+      }
+    }, 60 * 1000);
     setInterval(() => {
       list.map((e) => {
         if (this.incomeUpdata[e.name] > this.outputUpdate[e.name]) {
@@ -87,6 +125,10 @@ export class TickerService {
       req.unitPrice,
     );
     this.ticker[req.symbol].volume += req.volume;
+    const _updown =
+      Number(req.unitPrice) - Number(this.ticker[req.symbol].openPrice);
+    this.ticker[req.symbol].updown =
+      (_updown / Number(this.ticker[req.symbol].openPrice)) * 100;
     this.incomeUpdata[req.symbol] = new Date().getTime();
     console.log('after Ticker', this.ticker[req.symbol]);
     return true;
