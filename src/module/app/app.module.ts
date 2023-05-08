@@ -34,6 +34,7 @@ import { OrderBookModule } from '../inMemory/orderBook/orderBook.module.js';
 import { order_matching_eventModule } from '../typeorm/order_matching_event/order_matching_event.module.js';
 import { order_intervalModule } from '../typeorm/order_interval/order_interval.module.js';
 import { GrpcModule } from '../grpc/grpc.module.js';
+import { TickerModule } from '../inMemory/ticker/ticker.module.js';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { GrpcModule } from '../grpc/grpc.module.js';
     ChartModule,
     UpbitSocketModule,
     OrderBookModule,
+    TickerModule,
     chartModule,
     order_bookModule,
     order_book_differenceModule,
