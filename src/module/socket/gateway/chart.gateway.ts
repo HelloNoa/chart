@@ -48,21 +48,6 @@ export class ChartGateway
     // this.test();
   }
 
-  test() {
-    setInterval(() => {
-      this.OrderMatching({
-        UnitPrice: 1,
-        Quantity: 1,
-        Timestamp: {
-          seconds: { low: 1683535939, high: 0, unsigned: false },
-          nanos: 376516353,
-        },
-        OrderType: 2,
-        Symbol: 1,
-      });
-    }, 1000);
-  }
-
   @SubscribeMessage(socketEvent.sub.ping)
   handleMessage(client: any, payload: any): void {
     const json = {
@@ -141,6 +126,9 @@ export class ChartGateway
   }
 
   OrderMatching(req: OrderMatchingEvent) {
+    console.log('socket OrderMatching');
+    console.log(this.server.clients);
+    console.log('aaa');
     this.server.clients.forEach((client: any) => {
       console.log(client.chart);
       console.log(SymbolType[req.Symbol]);
