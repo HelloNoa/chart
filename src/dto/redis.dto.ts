@@ -50,6 +50,7 @@ export const socketEvent = {
     OrderBookSubscriber: 5,
     //호가창 front에 pub
     OrderBook: 6,
+    Ticker: 7,
   },
 };
 
