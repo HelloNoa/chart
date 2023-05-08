@@ -43,7 +43,7 @@ export class TickerService {
           lowPrice: el.lowPrice,
           highPrice: el.highPrice,
           currentPrice: el.closePrice,
-          volume: Number(el.volume),
+          volume: Number(el.tradingValue),
         };
       });
     }

@@ -70,7 +70,7 @@ export class chartService {
         .addSelect('chart.low_price', 'l')
         .addSelect('chart.high_price', 'h')
         .addSelect('chart.close_price', 'c')
-        .addSelect('chart.volume', 'v')
+        .addSelect('chart.trading_value', 'v')
         .addSelect('chart.created_at', 't')
         .addSelect('order_symbol.name', 'name')
         .where('order_symbol.name = :order_symbol_name', { order_symbol_name })
