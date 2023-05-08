@@ -5,10 +5,7 @@ import { ChartReqDto } from '../../chart/chart.dto.js';
 import { MYSQL_DATASOURCE_KEY } from '../../../constants/index.js';
 import { order_symbolService } from '../order_symbol/order_symbol.service.js';
 import { order_intervalService } from '../order_interval/order_interval.service.js';
-import {
-  duration,
-  order_interval,
-} from '../order_interval/order_interval.entity.js';
+import { duration } from '../order_interval/order_interval.entity.js';
 
 @Injectable()
 export class chartService {
@@ -26,20 +23,17 @@ export class chartService {
   }
 
   async getDailyTick() {
-    const intervarId = await this.orderIntervalService.getOrderIntervalId(
+    const intervarId = await this.orderIntervalService.getLastOrderIntervalId(
       duration.ONE_DAY,
     );
-    if (intervarId.length === 0) {
+    if (intervarId === null) {
       console.log('intervarId length is 0');
       return null;
     } else {
       const data = await this.chartRepository.find({
         where: {
-          order_interval: {
-            duration: 'ONE_DAY',
-          },
+          orderIntervalId: intervarId,
         },
-        order: { createdAt: 'desc' },
         relations: ['order_interval', 'order_symbol'],
       });
       if (data.length === 0) {

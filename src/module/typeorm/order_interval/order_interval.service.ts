@@ -13,13 +13,19 @@ export class order_intervalService {
     return this.orderIntervalRepository.find();
   }
 
-  async getOrderIntervalId(interval: keyof typeof duration) {
-    const orderInterval = await this.orderIntervalRepository.find({
+  async getLastOrderIntervalId(interval: keyof typeof duration) {
+    const orderInterval = await this.orderIntervalRepository.findOne({
       select: ['id'],
       where: {
         duration: interval,
       },
+      order: { id: 'DESC' },
     });
-    return orderInterval.map((e) => e.id);
+    if (orderInterval === null) {
+      console.log('orderInterval ID is null');
+      return null;
+    } else {
+      return orderInterval.id;
+    }
   }
 }
