@@ -11,6 +11,7 @@ import { getsetSecretString } from './config/secretsManager.js';
 import { dirname, join } from 'path';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { fileURLToPath } from 'url';
+import { initSwaggerDocs } from './module/app/app.logger.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const regex = new RegExp(/\s+/g);
@@ -88,7 +89,7 @@ async function bootstrap() {
   // // app.use(helmet());
   // console.log('dsad');
   //
-  // initSwaggerDocs(app);
+  initSwaggerDocs(app);
 
   app.useWebSocketAdapter(new WsAdapter(app));
 
