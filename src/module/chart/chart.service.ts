@@ -106,6 +106,10 @@ export class ChartService {
     return this.tickerService.getTicker(symbol);
   }
 
+  async openPrice(): Promise<any> {
+    return await this.chartService.getDailyTick();
+  }
+
   async upbitPrice(symbol: string) {
     return await fetch(`https://api.upbit.com/v1/ticker?markets=${symbol}`)
       .then((res) => res.json())
