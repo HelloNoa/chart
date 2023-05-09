@@ -7,6 +7,7 @@ import { order_symbolModule } from '../typeorm/order_symbol/order_symbol.module.
 import { chartModule } from '../typeorm/chart/chart.module.js';
 import { OrderBookModule } from '../inMemory/orderBook/orderBook.module.js';
 import { order_matching_eventModule } from '../typeorm/order_matching_event/order_matching_event.module.js';
+import { TickerModule } from '../inMemory/ticker/ticker.module.js';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { order_matching_eventModule } from '../typeorm/order_matching_event/orde
     order_symbolModule,
     chartModule,
     OrderBookModule,
+    TickerModule,
     order_matching_eventModule,
   ],
   controllers: [ChartController],

@@ -7,6 +7,7 @@ import { ChartReqDto } from './chart.dto.js';
 import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
 import { order_symbol } from '../typeorm/order_symbol/order_symbol.entity.js';
 import { order_matching_eventService } from '../typeorm/order_matching_event/order_matching_event.service.js';
+import { TickerService } from '../inMemory/ticker/ticker.service.js';
 
 @Injectable()
 export class ChartService {
@@ -17,6 +18,7 @@ export class ChartService {
     private readonly orderSymbolService: order_symbolService,
     private readonly orderMatchingEventService: order_matching_eventService,
     private readonly OrderBookService: OrderBookService,
+    private readonly tickerService: TickerService,
   ) {}
 
   //과거 차트 데이터
@@ -91,6 +93,10 @@ export class ChartService {
         },
       ),
     );
+  }
+
+  async ticker(symbol: string): Promise<any> {
+    return this.tickerService.getTicker(symbol);
   }
 
   async upbitPrice(symbol: string) {
