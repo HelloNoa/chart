@@ -4,7 +4,6 @@ import { AppModule } from './module/app/app.module.js';
 import { Logger, RequestMethod } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppMode } from './constants/index.js';
-import { initSwaggerDocs } from './module/app/app.logger.js';
 import { WsAdapter } from '@nestjs/platform-ws';
 import { useSSHTunnel } from './utils/index.js';
 import * as process from 'process';
@@ -89,7 +88,7 @@ async function bootstrap() {
   // // app.use(helmet());
   // console.log('dsad');
   //
-  initSwaggerDocs(app);
+  // initSwaggerDocs(app);
 
   app.useWebSocketAdapter(new WsAdapter(app));
 
