@@ -44,8 +44,11 @@ export class ChartService {
   //마켓리스트
   async marketList() {
     const symvolList = await this.orderSymbolService.findAll();
-    const lastTick = this.OrderBookService.getDailyLastTick();
-
+    const lastTick = await this.chartService.getDailyTick();
+    if (lastTick === null) {
+      console.error('lastTick is null.');
+      return null;
+    }
     return await Promise.all(
       symvolList.map(
         async (
@@ -56,15 +59,19 @@ export class ChartService {
             mark?: boolean;
           },
         ) => {
+          const _tickId = lastTick.findIndex(
+            (el) => el.order_symbol.id === e.id,
+          );
+          const tick = lastTick[_tickId];
           const price = await this.orderMatchingEventService.lastPrice(e.id);
           //TODO mark 구현
           e.mark = false;
           const volume = (() => {
-            if (lastTick[e.name] === undefined) {
+            if (tick === undefined) {
               console.log('lastTick is null');
               return 0;
             } else {
-              return Number(lastTick[e.name].volume);
+              return Number(tick.tradingValue);
             }
           })();
           if (price === null) {
@@ -72,13 +79,13 @@ export class ChartService {
             e.updown = 0;
           } else {
             e.price = Number(price.unit_price);
-            if (lastTick[e.name] !== undefined) {
-              if (Number(lastTick[e.name].openPrice) === 0) {
+            if (tick !== undefined) {
+              if (Number(tick.openPrice) === 0) {
                 e.updown = 0;
               } else {
                 const updown =
-                  Number(price.unit_price) - Number(lastTick[e.name].openPrice);
-                e.updown = (updown / Number(lastTick[e.name].openPrice)) * 100;
+                  Number(price.unit_price) - Number(tick.openPrice);
+                e.updown = (updown / Number(tick.openPrice)) * 100;
               }
             } else {
               e.updown = 0;

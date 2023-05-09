@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { order_bookService } from '../../typeorm/order_book/order_book.service.js';
 import { order_symbolService } from '../../typeorm/order_symbol/order_symbol.service.js';
 import { ChartGateway } from '../../socket/gateway/chart.gateway.js';
-import { chartService } from '../../typeorm/chart/chart.service.js';
 
 export interface OrderBookDto {
   price: number;
@@ -34,13 +33,10 @@ export class OrderBookService {
     [key: string]: BidAskDto;
   } = {};
 
-  private dailyLastTick: { [key: string]: { [key: string]: any } } = {};
-
   constructor(
     private readonly orderSymbolService: order_symbolService,
     private readonly orderBookService: order_bookService,
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
-    private readonly chartService: chartService,
   ) {
     this.queue = [];
     this.initialize = false;
@@ -55,14 +51,6 @@ export class OrderBookService {
     const list = await this.orderSymbolService.findAll();
     // const list = [{ id: 4, name: 'BTCADA' }];
 
-    const chart = await this.chartService.getDailyTick();
-    if (chart === null) {
-      console.error('chart is null');
-    } else {
-      chart.forEach((el) => {
-        this.dailyLastTick[el.order_symbol.name] = el;
-      });
-    }
     await Promise.all(
       list.map(async (e) => {
         const bidask = await this.orderBookService.getAllBidAsk(e.name);
@@ -207,9 +195,5 @@ export class OrderBookService {
       ask: ask,
       bid: bid,
     } as BidAskDto);
-  }
-
-  getDailyLastTick() {
-    return this.dailyLastTick;
   }
 }
