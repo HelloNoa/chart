@@ -136,7 +136,10 @@ export class ChartGateway
         client.orderBook.includes(marketType)
       ) {
         const json = {
-          [socketEvent.pub.OrderBook]: orderBook,
+          [socketEvent.pub.OrderBook]: {
+            0: marketType,
+            1: orderBook,
+          },
         };
         const data = str2ab(JSON.stringify(json));
         client.send(data, { binary: true });
