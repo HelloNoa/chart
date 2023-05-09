@@ -134,6 +134,13 @@ export class TickerService {
     return true;
   }
 
+  getTicker(symbol: string) {
+    return {
+      symbol: symbol,
+      ticker: this.ticker[symbol],
+    };
+  }
+
   pubTicker(symbol: string) {
     this.chartSocketService.Ticker(symbol, this.ticker[symbol]);
   }

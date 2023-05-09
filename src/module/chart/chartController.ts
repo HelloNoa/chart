@@ -46,6 +46,14 @@ export class ChartController {
     return await this.tradingService.marketList();
   }
 
+  //Ticker
+  @Get('ticker')
+  @ApiOperation({ summary: 'ticker' })
+  @ApiQuery({ name: 'symbol', example: 'KRW-BTC' })
+  async ticker(@Query('symbol') symbol: string): Promise<any> {
+    return await this.tradingService.ticker(symbol);
+  }
+
   //업비트 코인 원화 가격
   @Get('upbit/price')
   @ApiOperation({ summary: '업비트 코인 원화 가격' })
