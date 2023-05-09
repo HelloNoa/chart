@@ -54,6 +54,13 @@ export class ChartController {
     return await this.tradingService.ticker(symbol);
   }
 
+  //금일 시작가
+  @Get('todayOpenPrice')
+  @ApiOperation({ summary: '금일 시작가' })
+  async openPrice(): Promise<any> {
+    return await this.tradingService.openPrice();
+  }
+
   //업비트 코인 원화 가격
   @Get('upbit/price')
   @ApiOperation({ summary: '업비트 코인 원화 가격' })
