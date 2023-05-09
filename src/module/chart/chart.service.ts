@@ -63,7 +63,6 @@ export class ChartService {
             (el) => el.order_symbol.id === e.id,
           );
           const tick = lastTick[_tickId];
-          console.log(tick);
           const price = await this.orderMatchingEventService.lastPrice(e.id);
           //TODO mark 구현
           e.mark = false;
