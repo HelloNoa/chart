@@ -89,7 +89,9 @@ async function bootstrap() {
   // // app.use(helmet());
   // console.log('dsad');
   //
-  initSwaggerDocs(app);
+  if (['dev', 'test'].includes(process.env.NODE_ENV + '')) {
+    initSwaggerDocs(app);
+  }
 
   app.useWebSocketAdapter(new WsAdapter(app));
 
