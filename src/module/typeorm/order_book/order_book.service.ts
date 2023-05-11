@@ -158,8 +158,6 @@ export class order_bookService {
       });
       askList = askList.slice(askList.length - MAXROW);
       bidList = bidList.slice(0, MAXROW);
-      console.log(askList);
-      console.log(askList.length);
       const filterOrderBookIdList = orderBookIdList.filter((e) => {
         const index = Number(e.unit_price);
         return askList.includes(index) || bidList.includes(index);
