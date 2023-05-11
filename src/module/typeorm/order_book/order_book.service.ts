@@ -156,7 +156,7 @@ export class order_bookService {
           }
         }
       });
-      askList = askList.slice(askList.length - MAXROW);
+      askList = askList.slice(-MAXROW);
       bidList = bidList.slice(0, MAXROW);
       const filterOrderBookIdList = orderBookIdList.filter((e) => {
         const index = Number(e.unit_price);
