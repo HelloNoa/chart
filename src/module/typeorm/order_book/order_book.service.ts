@@ -156,10 +156,10 @@ export class order_bookService {
           }
         }
       });
-      askList = askList.slice(
-        Math.min(askList.length, Math.max(askList.length - MAXROW, 0)),
-      );
+      askList = askList.slice(askList.length - MAXROW);
       bidList = bidList.slice(0, MAXROW);
+      console.log(askList);
+      console.log(askList.length);
       const filterOrderBookIdList = orderBookIdList.filter((e) => {
         const index = Number(e.unit_price);
         return askList.includes(index) || bidList.includes(index);
@@ -172,7 +172,10 @@ export class order_bookService {
             (await this.orderBookDifferenceService.getDifferBiOrderBookId(
               e.id,
             )) ?? 0;
-          if (e.order_type === 'ASK') {
+          if (
+            e.order_type === 'ASK' &&
+            askList.includes(Number(e.unit_price))
+          ) {
             if (
               ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
             ) {
@@ -186,7 +189,10 @@ export class order_bookService {
               );
               ask[index].volume += Number(e.quantity) - Number(diff);
             }
-          } else if (e.order_type === 'BID') {
+          } else if (
+            e.order_type === 'BID' &&
+            bidList.includes(Number(e.unit_price))
+          ) {
             if (
               bid.findIndex((el) => el.price === Number(e.unit_price)) === -1
             ) {
