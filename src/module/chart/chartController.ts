@@ -64,9 +64,9 @@ export class ChartController {
   //업비트 코인 원화 가격
   @Get('upbit/price')
   @ApiOperation({ summary: '업비트 코인 원화 가격' })
-  @ApiQuery({ name: 'symbol', example: 'KRW-BTC' })
+  @ApiQuery({ name: 'symbol', example: 'KRW-BTC', required: false })
   async upbitPrice(@Res() res: any, @Query('symbol') symbol: string) {
     const data = await this.tradingService.upbitPrice(symbol);
-    res.send(JSON.stringify(data[0].trade_price));
+    res.send(data);
   }
 }

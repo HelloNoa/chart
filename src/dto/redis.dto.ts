@@ -92,7 +92,7 @@ type Fee = {
 
 //rlawodnjs ssg dlaudrl gksghk
 
-export const DECIMAL = {
+export const DECIMAL: { [key: string]: number } = {
   BTC: 100_000_000,
   ADA: 1_000_000,
   SXP: 1_000_000_000_000_000_000,
