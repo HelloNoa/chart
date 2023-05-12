@@ -119,13 +119,10 @@ export class ChartService {
       )
         .then((res) => res.json())
         .then((res) => res);
-      console.log(_data.length);
       const KRW_BTC =
         _data[_data.findIndex((e: any) => e.market === 'KRW-BTC')].trade_price;
       const data = _data.map((e: any) => {
         if (e.market.includes('BTC-')) {
-          console.log(e.opening_price);
-          console.log(KRW_BTC);
           return {
             symbol: e.market.split('BTC-')[1],
             openPrice: e.opening_price * KRW_BTC,
@@ -139,20 +136,14 @@ export class ChartService {
           };
         }
       });
-      console.log(data);
       return data;
     } else {
-      return await fetch(`https://api.upbit.com/v1/ticker?markets=${symbol}`)
+      const data = await fetch(
+        `https://api.upbit.com/v1/ticker?markets=${symbol}`,
+      )
         .then((res) => res.json())
-        .then((res) =>
-          res.map((e: any) => {
-            return {
-              symbol: e.market,
-              openPrice: e.opening_price,
-              tradePrice: e.trade_price,
-            };
-          }),
-        );
+        .then((res) => res);
+      return data[0].trade_price + '';
     }
   }
 }
