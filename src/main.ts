@@ -89,7 +89,7 @@ async function bootstrap() {
   // // app.use(helmet());
   // console.log('dsad');
   //
-  if (['dev', 'test'].includes(process.env.NODE_ENV + '')) {
+  if (['prod', 'dev', 'test'].includes(process.env.NODE_ENV + '')) {
     initSwaggerDocs(app);
   }
 
