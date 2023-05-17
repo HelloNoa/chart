@@ -1,3 +1,4 @@
+#!/bin/sh
 cd /home/server
 export NODE_ENV=DEV
-npm run start:prod
+npm run start:dev
