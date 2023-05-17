@@ -1,4 +1,4 @@
-import { Controller, Inject } from '@nestjs/common';
+import { Controller, Inject, UseGuards } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 
 import { Observable } from 'rxjs';
@@ -6,8 +6,10 @@ import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
 import { OrderType, SymbolType } from './interface/message.js';
 import { TickerService } from '../inMemory/ticker/ticker.service.js';
+import { GrpcIpGuard } from './grpcIpGuard.js';
 
 @Controller()
+@UseGuards(GrpcIpGuard)
 export class GrpcController {
   constructor(
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,

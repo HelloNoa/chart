@@ -1,0 +1,65 @@
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { RpcException } from '@nestjs/microservices';
+
+const _allowIps = {
+  office: '121.134.226.223',
+  localhost: '127.0.0.1',
+  TRADING_GRPC_BTCADA_HOST: '10.0.128.254',
+  TRADING_GRPC_BTCSXP_HOST: '10.0.129.181',
+  TRADING_GRPC_BTCSTX_HOST: '10.0.132.229',
+  TRADING_GRPC_BTCSTEEM_HOST: '10.0.131.132',
+  TRADING_GRPC_BTCSOL_HOST: '10.0.142.244',
+  TRADING_GRPC_BTCSAND_HOST: '10.0.137.84',
+  TRADING_GRPC_BTCMANA_HOST: '10.0.138.147',
+  TRADING_GRPC_BTCETH_HOST: '10.0.134.166',
+  TRADING_GRPC_BTCETC_HOST: '10.0.139.196',
+  TRADING_GRPC_BTCDOGE_HOST: '10.0.140.73',
+  TRADING_GRPC_BTCAXS_HOST: '10.0.129.241',
+  TRADING_GRPC_BTCAVAX_HOST: '10.0.131.233',
+  TRADING_GRPC_BTCAUDIO_HOST: '10.0.141.101',
+  TRADING_GRPC_BTCARB_HOST: '10.0.135.172',
+  TRADING_GRPC_BTCAPT_HOST: '10.0.143.34',
+  TRADING_GRPC_BTCXRP_HOST: '10.0.131.169',
+  TRADING_GRPC_BTCSBD_HOST: '10.0.136.248',
+  TRADING_GRPC_BTCMLK_HOST: '10.0.142.245',
+  TRADING_GRPC_BTCMATIC_HOST: '10.0.128.207',
+  TRADING_GRPC_BTCHIVE_HOST: '10.0.142.56',
+  TRADING_GRPC_BTCADA_DEV_HOST: '10.0.129.106',
+  TRADING_GRPC_BTCSXP_DEV_HOST: '10.0.131.52',
+  TRADING_GRPC_BTCSTX_DEV_HOST: '10.0.141.8',
+  TRADING_GRPC_BTCSTEEM_DEV_HOST: '10.0.133.167',
+  TRADING_GRPC_BTCSOL_DEV_HOST: '10.0.137.27',
+  TRADING_GRPC_BTCSAND_DEV_HOST: '10.0.143.162',
+  TRADING_GRPC_BTCMANA_DEV_HOST: '10.0.134.228',
+  TRADING_GRPC_BTCETH_DEV_HOST: '10.0.133.17',
+  TRADING_GRPC_BTCETC_DEV_HOST: '10.0.130.218',
+  TRADING_GRPC_BTCDOGE_DEV_HOST: '10.0.130.211',
+  TRADING_GRPC_BTCAXS_DEV_HOST: '10.0.142.21',
+  TRADING_GRPC_BTCAVAX_DEV_HOST: '10.0.130.168',
+  TRADING_GRPC_BTCAUDIO_DEV_HOST: '10.0.136.15',
+  TRADING_GRPC_BTCARB_DEV_HOST: '10.0.131.49',
+  TRADING_GRPC_BTCAPT_DEV_HOST: '10.0.135.25',
+  TRADING_GRPC_BTCXRP_DEV_HOST: '10.0.139.176',
+  TRADING_GRPC_BTCSBD_DEV_HOST: '10.0.134.131',
+  TRADING_GRPC_BTCMLK_DEV_HOST: '10.0.142.214',
+  TRADING_GRPC_BTCMATIC_DEV_HOST: '10.0.129.13',
+  TRADING_GRPC_BTCHIVE_DEV_HOST: '10.0.130.186',
+};
+const allowIps = Object.values(_allowIps);
+
+@Injectable()
+export class GrpcIpGuard implements CanActivate {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> | any {
+    const [, , implement] = context.getArgs();
+    const clientIp = implement.call.getPeer().split(':')[0];
+    console.log('clientIp : ', clientIp);
+    if (allowIps.includes(clientIp)) {
+      return true;
+    } else {
+      throw new RpcException('ip not allow');
+    }
+  }
+}

@@ -10,6 +10,7 @@ import {
 import { Response } from 'express';
 
 import { IServerResponse } from '../infra.zod.js';
+import { RpcException } from '@nestjs/microservices';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -21,6 +22,13 @@ export class AllExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest();
 
     if (!(exception instanceof HttpException)) {
+      exception = new InternalServerErrorException(exception.name, {
+        cause: exception,
+        description: exception.message,
+      });
+    }
+
+    if (!(exception instanceof RpcException)) {
       exception = new InternalServerErrorException(exception.name, {
         cause: exception,
         description: exception.message,
