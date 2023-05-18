@@ -30,19 +30,17 @@
           OrderBookSubscriber: 5,
           //호가창 front에 pub
           OrderBook: 6,
+          Ticker: 7,
         },
       };
       const uuid = uuidv4() && 'aaa';
       const regex = new RegExp(/\s+/g);
       // const host = '54.180.78.202';
-      // const host =
-      //   'cm-socket-server-nlb-dev-f296238fef22dc0d.elb.ap-northeast-2.amazonaws.com';
-      const host = '127.0.0.1';
+      const host = 'chart.finexblock.com';
+      // const host = '127.0.0.1';
       const chart = new WebSocket(`ws://${host}/chart`);
       // socket.binaryType = 'blob';
       chart.binaryType = 'arraybuffer';
-      const depth = new WebSocket(`ws://${host}/depth`);
-      depth.binaryType = 'arraybuffer';
 
       chart.onopen = () => {
         setInterval(() => {
@@ -81,7 +79,7 @@
                   str2ab(
                     JSON.stringify({
                       event: SocketEvent.pub.ChartSubscriber,
-                      data: 'BTCETH',
+                      data: 'BTCAUDIO',
                     }),
                   ),
                 );
@@ -89,58 +87,31 @@
                   str2ab(
                     JSON.stringify({
                       event: SocketEvent.pub.OrderBookSubscriber,
-                      data: 'BTCETH',
+                      data: 'BTCAUDIO',
                     }),
                   ),
                 );
                 break;
-              case SocketEvent.sub.OrderMatching:
-                console.log(json[SocketEvent.sub.OrderMatching]);
-                console.log('OrderMatching!');
-                break;
-              case SocketEvent.sub.UpbitBTCPrice:
-                console.log(json[SocketEvent.sub.UpbitBTCPrice][0]);
-                console.log('UpbitBTCPrice!');
-                break;
-              case SocketEvent.sub.ChartSubscriber:
-                console.log(json[SocketEvent.sub.ChartSubscriber]);
-                console.log('ChartSubscriber!');
-                break;
-              case SocketEvent.sub.OrderBookSubscriber:
-                console.log(json[SocketEvent.sub.OrderBookSubscriber]);
-                console.log('OrderBookSubscriber!');
-                break;
+              // case SocketEvent.sub.OrderMatching:
+              //   console.log(json[SocketEvent.sub.OrderMatching]);
+              //   console.log('OrderMatching!');
+              //   break;
+              // case SocketEvent.sub.UpbitBTCPrice:
+              //   console.log(json[SocketEvent.sub.UpbitBTCPrice]);
+              //   console.log('UpbitBTCPrice!');
+              //   break;
+              // case SocketEvent.sub.ChartSubscriber:
+              //   console.log(json[SocketEvent.sub.ChartSubscriber]);
+              //   console.log('ChartSubscriber!');
+              //   break;
+              // case SocketEvent.sub.OrderBookSubscriber:
+              //   console.log(json[SocketEvent.sub.OrderBookSubscriber]);
+              //   console.log('OrderBookSubscriber!');
+              //   break;
               case SocketEvent.sub.OrderBook:
-                console.log(json[SocketEvent.sub.OrderBook]);
+                console.log(json[SocketEvent.sub.OrderBook][1].bid);
+                console.log(json[SocketEvent.sub.OrderBook][1].ask);
                 console.log('OrderBook!');
-                break;
-              default:
-                break;
-            }
-          });
-        };
-      };
-
-      depth.onopen = () => {
-        console.log('Connected');
-        depth.send(
-          str2ab(
-            JSON.stringify({
-              event: SocketEvent.pub.ping,
-              data: uuid,
-            }),
-          ),
-        );
-        depth.onmessage = function (event) {
-          const buffer = event.data; // 이진 데이터를 ArrayBuffer로 받음
-          const decoder = new TextDecoder();
-          const decodedData = decoder.decode(buffer);
-          const json = JSON.parse(decodedData);
-          Object.keys(json).forEach((channel) => {
-            switch (Number(channel)) {
-              case SocketEvent.sub.pong:
-                console.log(json[SocketEvent.sub.pong]);
-                console.log('pong!');
                 break;
               default:
                 break;
