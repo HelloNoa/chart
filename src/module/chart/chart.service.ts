@@ -47,7 +47,21 @@ export class ChartService {
     const lastTick = await this.chartService.getDailyTick();
     if (lastTick === null) {
       console.error('lastTick is null.');
-      return null;
+      return symvolList.map(
+        (
+          e: order_symbol & {
+            price?: number;
+            volume?: number;
+            updown?: number;
+            mark?: boolean;
+          },
+        ) => {
+          e.price = 0;
+          e.volume = 0;
+          e.updown = 0;
+          e.mark = false;
+        },
+      );
     }
     return await Promise.all(
       symvolList.map(
@@ -62,6 +76,13 @@ export class ChartService {
           const _tickId = lastTick.findIndex(
             (el) => el.order_symbol.id === e.id,
           );
+          if (_tickId === -1) {
+            e.price = 0;
+            e.volume = 0;
+            e.updown = 0;
+            e.mark = false;
+            return e;
+          }
           const tick = lastTick[_tickId];
           const price = await this.orderMatchingEventService.lastPrice(e.id);
           //TODO mark 구현
