@@ -60,6 +60,7 @@ export class ChartService {
           e.volume = 0;
           e.updown = 0;
           e.mark = false;
+          return e;
         },
       );
     }
