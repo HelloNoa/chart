@@ -1,10 +1,12 @@
 import {
-  SecretsManagerClient,
   GetSecretValueCommand,
+  SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
-import { STS, AssumeRoleCommand } from '@aws-sdk/client-sts';
+import { AssumeRoleCommand, STS } from '@aws-sdk/client-sts';
+import { KMSClient, DecryptCommand } from '@aws-sdk/client-kms';
 import process from 'process';
 import { randomUUID } from 'crypto';
+import { DecryptCommandInput } from '@aws-sdk/client-kms/dist-types/commands/DecryptCommand.js';
 
 export const getsetSecretString = async () => {
   const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY as string;
@@ -33,7 +35,9 @@ export const getsetSecretString = async () => {
       SECRET_NAME: string;
       ROLE_ARN: string;
       SESSION_NAME: string;
+      KEY_ID: string;
     } = JSON.parse(response.SecretString as string);
+    const KeyId = secret.KEY_ID;
 
     const command = new AssumeRoleCommand({
       RoleArn: secret.ROLE_ARN,
@@ -47,7 +51,6 @@ export const getsetSecretString = async () => {
       },
     });
     const { Credentials } = await sts.send(command);
-
     if (!Credentials) {
       console.error('INVALID_AWS_OPERATION');
       return null;
@@ -66,11 +69,46 @@ export const getsetSecretString = async () => {
       VersionStage: 'AWSCURRENT', // VersionStage defaults to AWSCURRENT if unspecified
     });
     try {
-      const { SecretString } = await secretManagerClient.send(
+      const { SecretBinary } = await secretManagerClient.send(
         secretManagerCommand,
       );
-      if (!SecretString) return '';
-      const secret = JSON.parse(SecretString);
+      const client = new KMSClient({
+        region: process.env.AWS_REGION,
+        credentials: {
+          accessKeyId: Credentials.AccessKeyId!,
+          secretAccessKey: Credentials.SecretAccessKey!,
+          sessionToken: Credentials?.SessionToken,
+          expiration: Credentials?.Expiration,
+        },
+      });
+      const input: DecryptCommandInput = {
+        // DecryptRequest
+        CiphertextBlob: SecretBinary, // required
+        // EncryptionContext: {
+        //   // EncryptionContextType
+        //   '<keys>': 'STRING_VALUE',
+        // },
+        // GrantTokens: [
+        //   // GrantTokenList
+        //   'STRING_VALUE',
+        // ],
+        KeyId: KeyId,
+        EncryptionAlgorithm: 'SYMMETRIC_DEFAULT',
+        // Recipient: {
+        //   // RecipientInfo
+        //   KeyEncryptionAlgorithm: 'RSAES_OAEP_SHA_256',
+        //   AttestationDocument: 'BLOB_VALUE',
+        // },
+      };
+      const command = new DecryptCommand(input);
+      const response = await client.send(command);
+      const plainText = response.Plaintext;
+      const decoder = new TextDecoder();
+      const decodedData = decoder.decode(plainText);
+      const json = JSON.parse(decodedData);
+
+      if (!json) return '';
+      const secret = json;
       const isDev = process.env.USE_SSH_TUNNEL === 'true';
       Object.keys(secret).forEach((key: string) => {
         process.env[key] = secret[key];
@@ -80,7 +118,7 @@ export const getsetSecretString = async () => {
         process.env.REDIS_HOST = '127.0.0.1';
         process.env.USE_SSH_TUNNEL = 'true';
       }
-      return SecretString;
+      return json;
     } catch (error) {
       console.log(error);
       return null;
