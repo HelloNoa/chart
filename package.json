@@ -44,6 +44,7 @@
   "dependencies": {
     "@anatine/zod-nestjs": "^1.9.2",
     "@anatine/zod-openapi": "^1.12.0",
+    "@aws-sdk/client-kms": "^3.335.0",
     "@aws-sdk/client-secrets-manager": "^3.303.0",
     "@aws-sdk/client-sts": "^3.309.0",
     "@grpc/grpc-js": "^1.8.14",
