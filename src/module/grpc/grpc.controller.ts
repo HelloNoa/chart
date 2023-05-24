@@ -6,10 +6,10 @@ import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
 import { OrderType, SymbolType } from './interface/message.js';
 import { TickerService } from '../inMemory/ticker/ticker.service.js';
-import { GrpcIpGuard } from './grpcIpGuard.js';
+import { GrpcGuard } from './grpc.guard.js';
 
 @Controller()
-@UseGuards(GrpcIpGuard)
+@UseGuards(GrpcGuard)
 export class GrpcController {
   constructor(
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,

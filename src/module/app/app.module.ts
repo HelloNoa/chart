@@ -35,6 +35,7 @@ import { order_matching_eventModule } from '../typeorm/order_matching_event/orde
 import { order_intervalModule } from '../typeorm/order_interval/order_interval.module.js';
 import { GrpcModule } from '../grpc/grpc.module.js';
 import { TickerModule } from '../inMemory/ticker/ticker.module.js';
+import { FinexblockModule } from '../finexblock/finexblock.module.js';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { TickerModule } from '../inMemory/ticker/ticker.module.js';
     }),
     RedisPubSubModule,
     SocketModule,
+    FinexblockModule,
     ChartModule,
     UpbitSocketModule,
     OrderBookModule,
