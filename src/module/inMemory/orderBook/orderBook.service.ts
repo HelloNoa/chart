@@ -222,6 +222,8 @@ export class OrderBookService {
 
   puborderBook(symbol: string) {
     // const askLength = this.orderBook[symbol].ask.length;
+    this.orderBook[symbol].ask.filter((e) => !isNaN(e.volume));
+    this.orderBook[symbol].bid.filter((e) => !isNaN(e.volume));
     const ask = this.orderBook[symbol].ask.slice(-MAXROW);
     const bid = this.orderBook[symbol].bid.slice(0, MAXROW);
     this.chartSocketService.OrderBook(symbol, {
