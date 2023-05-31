@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { order_bookService } from '../../typeorm/order_book/order_book.service.js';
 import { order_symbolService } from '../../typeorm/order_symbol/order_symbol.service.js';
 import { ChartGateway } from '../../socket/gateway/chart.gateway.js';
+import { DECIMAL } from '../../../dto/redis.dto.js';
 
 export interface OrderBookDto {
   price: number;
@@ -120,7 +121,10 @@ export class OrderBookService {
             // 여기 왜 터짐??
           } else {
             this.orderBook[req.symbol].ask[index].volume -= req.quantity;
-            if (this.orderBook[req.symbol].ask[index].volume <= 0) {
+            if (
+              this.orderBook[req.symbol].ask[index].volume <
+              1 / DECIMAL.BTC
+            ) {
               this.orderBook[req.symbol].ask.splice(index, 1);
             }
           }
@@ -133,7 +137,10 @@ export class OrderBookService {
             // 여기 왜 터짐??
           } else {
             this.orderBook[req.symbol].bid[index].volume -= req.quantity;
-            if (this.orderBook[req.symbol].bid[index].volume <= 0) {
+            if (
+              this.orderBook[req.symbol].bid[index].volume <
+              1 / DECIMAL.BTC
+            ) {
               this.orderBook[req.symbol].bid.splice(index, 1);
             }
           }
@@ -180,7 +187,10 @@ export class OrderBookService {
             // 여기 왜 터짐??
           } else {
             this.orderBook[req.symbol].bid[index].volume -= req.quantity;
-            if (this.orderBook[req.symbol].bid[index].volume <= 0) {
+            if (
+              this.orderBook[req.symbol].bid[index].volume <
+              1 / DECIMAL.BTC
+            ) {
               this.orderBook[req.symbol].bid.splice(index, 1);
             }
           }
@@ -193,7 +203,10 @@ export class OrderBookService {
             // 여기 왜 터짐??
           } else {
             this.orderBook[req.symbol].ask[index].volume -= req.quantity;
-            if (this.orderBook[req.symbol].ask[index].volume <= 0) {
+            if (
+              this.orderBook[req.symbol].ask[index].volume <
+              1 / DECIMAL.BTC
+            ) {
               this.orderBook[req.symbol].ask.splice(index, 1);
             }
           }
