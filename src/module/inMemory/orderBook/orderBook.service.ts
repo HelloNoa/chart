@@ -123,7 +123,7 @@ export class OrderBookService {
             this.orderBook[req.symbol].ask[index].volume -= req.quantity;
             if (
               this.orderBook[req.symbol].ask[index].volume <
-              1 / DECIMAL.BTC
+              100_000 / DECIMAL.BTC
             ) {
               this.orderBook[req.symbol].ask.splice(index, 1);
             }
@@ -139,7 +139,7 @@ export class OrderBookService {
             this.orderBook[req.symbol].bid[index].volume -= req.quantity;
             if (
               this.orderBook[req.symbol].bid[index].volume <
-              1 / DECIMAL.BTC
+              100_000 / DECIMAL.BTC
             ) {
               this.orderBook[req.symbol].bid.splice(index, 1);
             }
@@ -189,7 +189,7 @@ export class OrderBookService {
             this.orderBook[req.symbol].bid[index].volume -= req.quantity;
             if (
               this.orderBook[req.symbol].bid[index].volume <
-              1 / DECIMAL.BTC
+              100_000 / DECIMAL.BTC
             ) {
               this.orderBook[req.symbol].bid.splice(index, 1);
             }
@@ -205,7 +205,7 @@ export class OrderBookService {
             this.orderBook[req.symbol].ask[index].volume -= req.quantity;
             if (
               this.orderBook[req.symbol].ask[index].volume <
-              1 / DECIMAL.BTC
+              100_000 / DECIMAL.BTC
             ) {
               this.orderBook[req.symbol].ask.splice(index, 1);
             }
