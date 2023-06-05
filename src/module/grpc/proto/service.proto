@@ -29,6 +29,10 @@ service Event {
 	rpc BalanceUpdateEvent (BalanceUpdate) returns (Ack);
 }
 
+service OrderBook {
+	rpc GetOrderBook(GetOrderBookInput) returns(GetOrderBookOutput);
+}
+
 service LifeCycle {
 	rpc StartEngine(StartEngineInput) returns(StartEngineOutput);
 	rpc StopEngine(StopEngineInput) returns(StopEngineOutput);

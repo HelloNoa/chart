@@ -271,3 +271,11 @@ message StartEngineInput {
 message StartEngineOutput {
 
 }
+
+message GetOrderBookInput {
+}
+
+message GetOrderBookOutput {
+	repeated Order bids = 1 [json_name = "bids"];
+	repeated Order asks = 2 [json_name = "asks"];
+}
