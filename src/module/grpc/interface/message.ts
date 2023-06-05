@@ -30,6 +30,8 @@ export enum SymbolType {
   BTCSTEEM = 20,
 }
 
+export const SymbolLength = Object.keys(SymbolType).length / 2 - 2;
+
 export const CurrencyLength = 21;
 
 export enum Currency {
@@ -264,3 +266,11 @@ export interface StartEngineInput {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface StartEngineOutput {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface GetOrderBookInput {}
+
+export interface GetOrderBookOutput {
+  bids: Order[];
+  asks: Order[];
+}

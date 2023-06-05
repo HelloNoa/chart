@@ -2,6 +2,8 @@ import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 import {
   Ack,
+  GetOrderBookInput,
+  GetOrderBookOutput,
   LimitOrderInput,
   MarketOrderInput,
   OrderCancellation,
@@ -98,6 +100,14 @@ export interface Event {
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+}
+
+export interface OrderBook {
+  GetOrderBook(
+    data: GetOrderBookInput,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<GetOrderBookOutput>;
 }
 
 export interface LifeCycle {
