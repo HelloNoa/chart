@@ -66,12 +66,12 @@ export class OrderBookService {
       ob.subscribe({
         next: (aa) => {
           // console.log(aa);
-          res(aa);
           this.queue.push({
             symbol: symbolName,
             type: 3,
             bidask: aa,
           });
+          res(aa);
         },
         error: (error) => {
           console.log(error);
@@ -181,6 +181,7 @@ export class OrderBookService {
               })
               .sort((a, b) => b.price - a.price);
           }
+          this.incomeUpdata[req.symbol] = new Date().getTime();
         }
       }
 
