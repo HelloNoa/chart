@@ -27,8 +27,8 @@ type T_QUEUE = {
   unitPrice?: number;
   orderType?: string;
   bidask?: {
-    bids: bidask[];
-    asks: bidask[];
+    bids?: bidask[];
+    asks?: bidask[];
   };
 };
 
