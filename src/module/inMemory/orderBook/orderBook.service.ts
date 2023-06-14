@@ -157,18 +157,22 @@ export class OrderBookService {
         } else {
           console.log('//bidask가 있을때');
           //bidask가 있을때
-          this.orderBook[req.symbol].ask = req.bidask.asks.map((e) => {
-            return {
-              price: e.Price,
-              volume: e.Volume,
-            };
-          });
-          this.orderBook[req.symbol].bid = req.bidask.bids.map((e) => {
-            return {
-              price: e.Price,
-              volume: e.Volume,
-            };
-          });
+          this.orderBook[req.symbol].ask = req.bidask.asks
+            .map((e) => {
+              return {
+                price: e.Price,
+                volume: e.Volume,
+              };
+            })
+            .sort((a, b) => b.price - a.price);
+          this.orderBook[req.symbol].bid = req.bidask.bids
+            .map((e) => {
+              return {
+                price: e.Price,
+                volume: e.Volume,
+              };
+            })
+            .sort((a, b) => b.price - a.price);
         }
       }
 
