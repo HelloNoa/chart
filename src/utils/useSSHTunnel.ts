@@ -12,7 +12,8 @@ export async function useSSHTunnel(
 ) {
   console.log(host, port, localPort);
   const key = fs.readFileSync(
-    `${__dirname}/../config/coin-market-engine-prod.pem`,
+    `${__dirname}/../config/coin-market-engine-dev.pem`,
+    // `${__dirname}/../config/coin-market-engine-prod.pem`,
   );
   const sshConfig = {
     username: process.env.SSH_USERNAME,
