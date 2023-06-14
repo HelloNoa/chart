@@ -4,6 +4,7 @@ export * from './sleep.util.js';
 export * from './str2ab.js';
 export * from './port.js';
 export * from './useSSHTunnel.js';
+export * from './ssh-tunnel.js';
 
 export function handleError<T>(...promiseResults: PromiseSettledResult<T>[]) {
   for (const result of promiseResults) {
