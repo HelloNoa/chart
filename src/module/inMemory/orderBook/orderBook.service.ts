@@ -3,6 +3,7 @@ import { order_bookService } from '../../typeorm/order_book/order_book.service.j
 import { order_symbolService } from '../../typeorm/order_symbol/order_symbol.service.js';
 import { ChartGateway } from '../../socket/gateway/chart.gateway.js';
 import { DECIMAL } from '../../../dto/redis.dto.js';
+import { OrderClientService } from '../../grpc/client/order.client.service.js';
 
 export interface OrderBookDto {
   price: number;
@@ -15,13 +16,20 @@ export interface BidAskDto {
 }
 
 const MAXROW = 20;
-
+type bidask = {
+  Price: number;
+  Volume: number;
+};
 type T_QUEUE = {
   symbol: string;
   type: number;
-  quantity: number;
-  unitPrice: number;
-  orderType: string;
+  quantity?: number;
+  unitPrice?: number;
+  orderType?: string;
+  bidask?: {
+    bids: bidask[];
+    asks: bidask[];
+  };
 };
 
 @Injectable()
@@ -34,9 +42,12 @@ export class OrderBookService {
     [key: string]: BidAskDto;
   } = {};
 
+  private refreshOrderBookIdx: number;
+
   constructor(
     private readonly orderSymbolService: order_symbolService,
     private readonly orderBookService: order_bookService,
+    private readonly OrderClientService: OrderClientService,
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
   ) {
     this.queue = [];
@@ -48,16 +59,38 @@ export class OrderBookService {
     return this.initialize;
   }
 
+  async getRefreshObrderBook(symbolName: string) {
+    // console.log(symbolName);
+    await new Promise(async (res) => {
+      const [ob] = await this.OrderClientService.enguineOrderBook(symbolName);
+      ob.subscribe({
+        next: (aa) => {
+          // console.log(aa);
+          res(aa);
+          this.queue.push({
+            symbol: symbolName,
+            type: 3,
+            bidask: aa,
+          });
+        },
+        error: (error) => {
+          console.log(error);
+          res(null);
+        },
+      });
+    });
+  }
+
   async onModuleInit() {
     const list = await this.orderSymbolService.findAll();
     // const list = [{ id: 4, name: 'BTCADA' }];
-
     await Promise.all(
       list.map(async (e) => {
         const bidask = await this.orderBookService.getAllBidAsk(e.name);
+        console.log(e.name);
+        // console.log(bidask)
         if (bidask === null) {
           console.error('get bidask null!');
-          console.log(e.name);
           if (!this.orderBook.hasOwnProperty(e.name)) {
             this.orderBook[e.name] = {
               ask: [],
@@ -74,18 +107,18 @@ export class OrderBookService {
     );
 
     this.initialize = true;
+    this.refreshOrderBookIdx = 0;
     const cycle = async () => {
       const length = this.queue.length;
       for (let i = 0; i < length; i++) {
         await this.RooopUpdate(this.queue[0]);
         this.queue.shift();
       }
-
       setTimeout(cycle, 200);
     };
     cycle();
-    setInterval(() => {
-      list.map((e) => {
+    setInterval(async () => {
+      list.map(async (e) => {
         if (this.incomeUpdata[e.name] > this.outputUpdate[e.name]) {
           console.log('hello');
           this.puborderBook(e.name);
@@ -93,21 +126,54 @@ export class OrderBookService {
         }
       });
     }, 200);
+    setInterval(async () => {
+      console.log(list[this.refreshOrderBookIdx].name);
+      try {
+        await this.getRefreshObrderBook(list[this.refreshOrderBookIdx].name);
+      } catch (e) {
+        console.log(e);
+      }
+      if (++this.refreshOrderBookIdx >= list.length) {
+        this.refreshOrderBookIdx = 0;
+      }
+    }, 5000 / list.length);
   }
 
-  async RooopUpdate(q: any) {
+  async RooopUpdate(q: T_QUEUE) {
     await new Promise((res) => {
       res(this.updateOrderBook(q));
     });
   }
 
-  updateOrderBook(req: {
-    symbol: string;
-    type: number;
-    quantity: number;
-    unitPrice: number;
-    orderType: string;
-  }) {
+  updateOrderBook(req: T_QUEUE) {
+    if (!req.quantity || !req.unitPrice || !req.orderType) {
+      if (req.type === 3 && req.bidask) {
+        //refreshOrderBook
+        if (Object.keys(req.bidask).length === 0) {
+          console.log('//bidask가 텅 비어있을때');
+          //bidask가 텅 비어있을때
+          this.orderBook[req.symbol].ask = [];
+          this.orderBook[req.symbol].bid = [];
+        } else {
+          console.log('//bidask가 있을때');
+          //bidask가 있을때
+          this.orderBook[req.symbol].ask = req.bidask.asks.map((e) => {
+            return {
+              price: e.Price,
+              volume: e.Volume,
+            };
+          });
+          this.orderBook[req.symbol].bid = req.bidask.bids.map((e) => {
+            return {
+              price: e.Price,
+              volume: e.Volume,
+            };
+          });
+        }
+      }
+
+      return;
+    }
     console.log('before', this.orderBook[req.symbol]);
     switch (req.type) {
       case 0:
