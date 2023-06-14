@@ -4,9 +4,16 @@ import { order_bookModule } from '../../typeorm/order_book/order_book.module.js'
 import { order_symbolModule } from '../../typeorm/order_symbol/order_symbol.module.js';
 import { SocketModule } from '../../socket/socket.module.js';
 import { chartModule } from '../../typeorm/chart/chart.module.js';
+import { OrderClientModule } from '../../grpc/client/order.client.module.js';
 
 @Module({
-  imports: [order_bookModule, SocketModule, chartModule, order_symbolModule],
+  imports: [
+    OrderClientModule,
+    order_bookModule,
+    SocketModule,
+    chartModule,
+    order_symbolModule,
+  ],
   providers: [OrderBookService],
   exports: [OrderBookService],
 })
