@@ -59,7 +59,7 @@ export class order_bookService {
     try {
       const values: status[] = ['PLACED', 'PARTIAL_FILLED'];
       const orderBookIdList = await this.order_bookRepository.find({
-        select: ['id', 'unit_price', 'order_type', 'quantity'],
+        select: ['id', 'unit_price', 'order_type', 'quantity', 'status'],
         where: {
           order_symbol_id: orderSymbolId,
           status: In(values),
@@ -73,10 +73,17 @@ export class order_bookService {
       const bid: OrderBookDto[] = [];
       await Promise.all(
         orderBookIdList.map(async (e) => {
-          const diff =
-            (await this.orderBookDifferenceService.getDifferBiOrderBookId(
-              e.id,
-            )) ?? 0;
+          const diff = await (async () => {
+            if (e.status === 'PLACED') {
+              return 0;
+            } else {
+              return (
+                (await this.orderBookDifferenceService.getDifferBiOrderBookId(
+                  e.id,
+                )) ?? 0
+              );
+            }
+          })();
           if (e.order_type === 'ASK') {
             if (
               ask.findIndex((el) => el.price === Number(e.unit_price)) === -1
@@ -117,6 +124,7 @@ export class order_bookService {
   }
 
   async getBidAsk(orderSymbolName: string): Promise<BidAskDto | null> {
+    console.log(orderSymbolName);
     const MAXROW = 20;
 
     const orderSymbolId = await this.orderSymbolService.getSymbolId(
@@ -166,10 +174,17 @@ export class order_bookService {
       const bid: OrderBookDto[] = [];
       await Promise.all(
         filterOrderBookIdList.map(async (e) => {
-          const diff =
-            (await this.orderBookDifferenceService.getDifferBiOrderBookId(
-              e.id,
-            )) ?? 0;
+          const diff = await (async () => {
+            if (e.status === 'PLACED') {
+              return 0;
+            } else {
+              return (
+                (await this.orderBookDifferenceService.getDifferBiOrderBookId(
+                  e.id,
+                )) ?? 0
+              );
+            }
+          })();
           if (
             e.order_type === 'ASK' &&
             askList.includes(Number(e.unit_price))

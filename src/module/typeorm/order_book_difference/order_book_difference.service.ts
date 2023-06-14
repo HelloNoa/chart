@@ -24,7 +24,7 @@ export class order_book_differenceService {
       };
       const diff = await this.orderBookDifferenceRepository.find(option);
       if (diff.length === 0) {
-        console.error('orderBookDifference is null');
+        // console.error('orderBookDifference is null');
         return null;
       }
       let sumDiffAll = 0;
