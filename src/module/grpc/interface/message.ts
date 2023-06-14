@@ -270,7 +270,21 @@ export interface StartEngineOutput {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface GetOrderBookInput {}
 
+export interface BidAsk {
+  bid: Order;
+  ask: Order;
+}
+
+export interface OrderBookData {
+  Price: number;
+  Volume: number;
+}
+
 export interface GetOrderBookOutput {
-  bids: Order[];
-  asks: Order[];
+  bids: OrderBookData[];
+  asks: OrderBookData[];
+}
+
+export interface PushOrderBookInput {
+  symbol: SymbolType;
 }
