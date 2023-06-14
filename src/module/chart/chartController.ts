@@ -49,7 +49,7 @@ export class ChartController {
   //Ticker
   @Get('ticker')
   @ApiOperation({ summary: 'ticker' })
-  @ApiQuery({ name: 'symbol', example: 'KRW-BTC' })
+  @ApiQuery({ name: 'symbol', example: 'BTCETH' })
   async ticker(@Query('symbol') symbol: string): Promise<any> {
     return await this.tradingService.ticker(symbol);
   }
