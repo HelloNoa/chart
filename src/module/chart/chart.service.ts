@@ -4,7 +4,6 @@ import { chartService } from '../typeorm/chart/chart.service.js';
 import { order_bookService } from '../typeorm/order_book/order_book.service.js';
 import { order_symbolService } from '../typeorm/order_symbol/order_symbol.service.js';
 import { ChartReqDto } from './chart.dto.js';
-import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
 import { order_symbol } from '../typeorm/order_symbol/order_symbol.entity.js';
 import { order_matching_eventService } from '../typeorm/order_matching_event/order_matching_event.service.js';
 import { TickerService } from '../inMemory/ticker/ticker.service.js';
@@ -17,7 +16,6 @@ export class ChartService {
     private readonly orderBookService: order_bookService,
     private readonly orderSymbolService: order_symbolService,
     private readonly orderMatchingEventService: order_matching_eventService,
-    private readonly OrderBookService: OrderBookService,
     private readonly tickerService: TickerService,
   ) {}
 
