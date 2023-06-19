@@ -36,6 +36,7 @@ import { order_intervalModule } from '../typeorm/order_interval/order_interval.m
 import { GrpcModule } from '../grpc/grpc.module.js';
 import { TickerModule } from '../inMemory/ticker/ticker.module.js';
 import { FinexblockModule } from '../finexblock/finexblock.module.js';
+import { BalanceModule } from '../balance/balance.module.js';
 
 @Module({
   imports: [
@@ -54,9 +55,10 @@ import { FinexblockModule } from '../finexblock/finexblock.module.js';
         return redisClusterOptions();
       },
     }),
+    FinexblockModule,
     RedisPubSubModule,
     SocketModule,
-    FinexblockModule,
+    BalanceModule,
     ChartModule,
     UpbitSocketModule,
     OrderBookModule,

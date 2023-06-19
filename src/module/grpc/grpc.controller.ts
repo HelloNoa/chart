@@ -4,59 +4,20 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
-import { OrderType, SymbolType } from './interface/message.js';
+import { BalanceUpdate, OrderType, SymbolType } from './interface/message.js';
 import { TickerService } from '../inMemory/ticker/ticker.service.js';
 import { GrpcGuard } from './grpc.guard.js';
+import { BalanceGateway } from '../socket/gateway/balance.gateway.js';
 
 @Controller()
 @UseGuards(GrpcGuard)
 export class GrpcController {
   constructor(
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
+    @Inject(BalanceGateway) private readonly balanceGateway: BalanceGateway,
     private readonly orderBookService: OrderBookService,
     private readonly tickerService: TickerService,
-  ) {
-    //   setTimeout(() => {
-    //     setInterval(() => {
-    //       const req = {
-    //         UserUUID: 'aaa',
-    //         OrderUUID: 'aaa',
-    //         Quantity: Math.floor(Math.random() * 100000000),
-    //         UnitPrice: Math.floor(Math.random() * 100000000),
-    //         Symbol: 0,
-    //         OrderType: Math.random() > 0.5 ? 0 : 1,
-    //       };
-    //       this.OrderPlacementEvent(req);
-    //     }, 10);
-    //   }, 5000);
-    //
-    //   setTimeout(() => {
-    //     setInterval(() => {
-    //       const req = {
-    //         UserUUID: 'aaa',
-    //         OrderUUID: 'aaa',
-    //         Quantity: Math.floor(Math.random() * 100000000),
-    //         UnitPrice: Math.floor(Math.random() * 100000000),
-    //         Symbol: 0,
-    //         OrderType: Math.random() > 0.5 ? 0 : 1,
-    //       };
-    //       this.OrderCancellationEvent(req);
-    //     }, 10);
-    //   }, 5000);
-    //   setTimeout(() => {
-    //     setInterval(() => {
-    //       const req = {
-    //         UserUUID: 'aaa',
-    //         OrderUUID: 'aaa',
-    //         Quantity: Math.floor(Math.random() * 100000000),
-    //         UnitPrice: Math.floor(Math.random() * 100000000),
-    //         Symbol: 0,
-    //         OrderType: Math.random() > 0.5 ? 0 : 1,
-    //       };
-    //       this.OrderMatchingEvent(req);
-    //     }, 10);
-    //   }, 5000);
-  }
+  ) {}
 
   @GrpcMethod('Health', 'Check')
   async Check(
@@ -159,4 +120,18 @@ export class GrpcController {
     // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
+
+  // START ACCOUNT
+  @GrpcMethod('Event', 'BalanceUpdateEvent')
+  async OrderPlacementEventmessages(messages: BalanceUpdate) {
+    console.log('BalanceUpdateEvent');
+    console.log(messages);
+    const request = {
+      UserUUID: messages.UserUUID,
+      Currency: messages.Currency,
+    };
+    this.balanceGateway.BalanceUpdate(request);
+    return { Success: true };
+  }
+  // END ACCOUNT
 }

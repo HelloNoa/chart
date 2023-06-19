@@ -1,5 +1,6 @@
 // eslint-disable @typescript-eslint/ban-types
 import { ApiProperty } from '@nestjs/swagger';
+import { Currency } from '../module/grpc/interface/message.js';
 
 export class CreateCatDto {
   @ApiProperty({
@@ -24,6 +25,23 @@ export const channel = {
   //주문 취소 요청 성공
   OrderCancellationChannel: 'OrderCancellationChannel',
 };
+export const BalanceSocketEvent = {
+  sub: {
+    //ping pong
+    ping: 0,
+    //uuid
+    uuid: 1,
+  },
+  pub: {
+    //ping pong
+    pong: 0,
+    //uuid
+    uuid: 1,
+    //유저 잔고 변경 이벤트
+    BalanceUpdate: 2,
+  },
+};
+
 export const socketEvent = {
   sub: {
     //ping pong
@@ -79,11 +97,21 @@ export type OrderMatching = {
   Symbol: Symbol;
 };
 
+export enum E_BalanceUpdate {
+  UserUUID = 0,
+  Diff = 1,
+  Currency = 2,
+}
+
+export type BalanceUpdate = {
+  UserUUID: string;
+  Currency: Currency;
+};
+
 type Side = string;
 type Symbol = string;
 type Reason = string;
 type Status = string;
-type Currency = string;
 // type Interval = string;
 type Fee = {
   Amount: number;
