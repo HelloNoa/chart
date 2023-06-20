@@ -37,6 +37,8 @@ import { GrpcModule } from '../grpc/grpc.module.js';
 import { TickerModule } from '../inMemory/ticker/ticker.module.js';
 import { FinexblockModule } from '../finexblock/finexblock.module.js';
 import { BalanceModule } from '../balance/balance.module.js';
+import { OrderModule } from '../order/order.module.js';
+import { FirebaseModule } from '../firebase/firebase.module.js';
 
 @Module({
   imports: [
@@ -60,6 +62,8 @@ import { BalanceModule } from '../balance/balance.module.js';
     SocketModule,
     BalanceModule,
     ChartModule,
+    OrderModule,
+    FirebaseModule,
     UpbitSocketModule,
     OrderBookModule,
     TickerModule,

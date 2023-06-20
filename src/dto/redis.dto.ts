@@ -25,6 +25,25 @@ export const channel = {
   //주문 취소 요청 성공
   OrderCancellationChannel: 'OrderCancellationChannel',
 };
+
+export const OrderFillSocketEvent = {
+  sub: {
+    //ping pong
+    ping: 0,
+    //uuid
+    uuid: 1,
+  },
+  pub: {
+    //ping pong
+    pong: 0,
+    //uuid
+    uuid: 1,
+    //부분 체결 이벤트
+    OrderPartialFill: 2,
+    //전체 체결 이벤트
+    OrderFulfillment: 3,
+  },
+};
 export const BalanceSocketEvent = {
   sub: {
     //ping pong
@@ -106,6 +125,59 @@ export enum E_BalanceUpdate {
 export type BalanceUpdate = {
   UserUUID: string;
   Currency: Currency;
+};
+//부분 체결 이벤트
+export enum E_OrderPartialFill {
+  UserUUID = 0,
+  OrderUUID = 1,
+  TotalQuantity = 2,
+  FilledQuantity = 3,
+  UnitPrice = 4,
+  Symbol = 5,
+  OrderType = 6,
+  MakeTime = 7,
+  TakeTime = 8,
+  Fee = 9,
+}
+
+//publish OrderPartialFill '{"quantity":"0","price":"1","filled_quantity":"2","filled_price":"3","user_id":"aaa","order_uuid":"5","side":"6","symbol":"7","timestamp":"8","fee":"9"}'
+export type OrderPartialFill = {
+  UserUUID: string;
+  OrderUUID: string;
+  TotalQuantity: number;
+  FilledQuantity: number;
+  UnitPrice: number;
+  Symbol: Symbol;
+  OrderType: Side;
+  MakeTime: Date;
+  TakeTime: Date;
+  Fee: Fee;
+};
+
+//체결 이벤트
+export enum E_OrderFulfillment {
+  UserUUID = 0,
+  OrderUUID = 1,
+  FilledQuantity = 3,
+  UnitPrice = 4,
+  Symbol = 5,
+  OrderType = 6,
+  MakeTime = 7,
+  TakeTime = 8,
+  Fee = 9,
+}
+
+//publish OrderFulfillment '{"quantity":"0","price":"1","filled_quantity":"2","filled_price":"3","user_id":"aaa","order_uuid":"5","side":"6","symbol":"7","timestamp":"8","fee":"9"}'
+export type OrderFulfillment = {
+  UserUUID: string;
+  OrderUUID: string;
+  FilledQuantity: number;
+  UnitPrice: number;
+  Symbol: Symbol;
+  OrderType: Side;
+  MakeTime: Date;
+  TakeTime: Date;
+  Fee: Fee;
 };
 
 type Side = string;

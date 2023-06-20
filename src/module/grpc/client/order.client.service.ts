@@ -30,7 +30,6 @@ export class OrderClientService implements OnModuleInit {
     @Inject(PACKAGE[17]) private clientBTCMLK: ClientGrpc,
     @Inject(PACKAGE[18]) private clientBTCMATIC: ClientGrpc,
     @Inject(PACKAGE[19]) private clientBTCHIVE: ClientGrpc,
-    @Inject('HERO_PACKAGE') private test: ClientGrpc,
   ) {
     // Object.values(grpcEndPoint).map((e) => e.market + '_PACKAGE');
   }
@@ -135,12 +134,5 @@ export class OrderClientService implements OnModuleInit {
       await this.EnguineOrderBookService[symbol].GetOrderBook(request),
       request,
     ];
-  }
-
-  async _test() {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return await this.test.getService('Health').Check({});
-    // return await this.test.getService('Health').Check;
   }
 }

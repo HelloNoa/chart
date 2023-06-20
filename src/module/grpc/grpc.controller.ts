@@ -4,10 +4,16 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
-import { BalanceUpdate, OrderType, SymbolType } from './interface/message.js';
+import {
+  BalanceUpdate,
+  OrderPartialFill,
+  OrderType,
+  SymbolType,
+} from './interface/message.js';
 import { TickerService } from '../inMemory/ticker/ticker.service.js';
 import { GrpcGuard } from './grpc.guard.js';
 import { BalanceGateway } from '../socket/gateway/balance.gateway.js';
+import { OrderFillGateway } from '../socket/gateway/orderFill.gateway.js';
 
 @Controller()
 @UseGuards(GrpcGuard)
@@ -15,6 +21,8 @@ export class GrpcController {
   constructor(
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
     @Inject(BalanceGateway) private readonly balanceGateway: BalanceGateway,
+    @Inject(OrderFillGateway)
+    private readonly orderFillGateway: OrderFillGateway,
     private readonly orderBookService: OrderBookService,
     private readonly tickerService: TickerService,
   ) {}
@@ -133,5 +141,32 @@ export class GrpcController {
     this.balanceGateway.BalanceUpdate(request);
     return { Success: true };
   }
+
   // END ACCOUNT
+  // START ORDERFILL
+  @GrpcMethod('Event', 'OrderMatchingFailedEvent')
+  async OrderMatchingFailedEvent(messages: any) {
+    console.log('OrderMatchingFailedEvent');
+    console.log(messages);
+    // TODO
+    return { Success: true };
+  }
+
+  @GrpcMethod('Event', 'OrderPartialFillEvent')
+  async OrderPartialFillEvent(messages: OrderPartialFill) {
+    console.log('OrderPartialFillEvent');
+    console.log(messages);
+    this.orderFillGateway.OrderPartialFill(messages);
+    return { Success: true };
+  }
+
+  @GrpcMethod('Event', 'OrderFulfillmentEvent')
+  async OrderFulfillmentEvent(messages: any) {
+    console.log('OrderFulfillmentEvent');
+    console.log(messages);
+    this.orderFillGateway.OrderFulfillment(messages);
+    return { Success: true };
+  }
+
+  // END ORDERFILL
 }
