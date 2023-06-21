@@ -30,7 +30,7 @@ export enum SymbolType {
   BTCSTEEM = 20,
 }
 
-export const SymbolLength = Object.keys(SymbolType).length / 2 - 2;
+export const SymbolLength = Object.keys(SymbolType).length / 2 - 1;
 
 export const CurrencyLength = 21;
 

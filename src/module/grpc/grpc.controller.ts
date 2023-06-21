@@ -7,6 +7,7 @@ import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
 import {
   BalanceUpdate,
   OrderPartialFill,
+  OrderPlacement,
   OrderType,
   SymbolType,
 } from './interface/message.js';
@@ -14,6 +15,7 @@ import { TickerService } from '../inMemory/ticker/ticker.service.js';
 import { GrpcGuard } from './grpc.guard.js';
 import { BalanceGateway } from '../socket/gateway/balance.gateway.js';
 import { OrderFillGateway } from '../socket/gateway/orderFill.gateway.js';
+import { OrderGateway } from '../socket/gateway/order.gateway.js';
 
 @Controller()
 @UseGuards(GrpcGuard)
@@ -23,6 +25,8 @@ export class GrpcController {
     @Inject(BalanceGateway) private readonly balanceGateway: BalanceGateway,
     @Inject(OrderFillGateway)
     private readonly orderFillGateway: OrderFillGateway,
+    @Inject(OrderGateway)
+    private readonly tradeSocketService: OrderGateway,
     private readonly orderBookService: OrderBookService,
     private readonly tickerService: TickerService,
   ) {}
@@ -62,7 +66,7 @@ export class GrpcController {
   // }
 
   @GrpcMethod('Event', 'OrderPlacementEvent')
-  async OrderPlacementEvent(messages: any) {
+  async OrderPlacementEvent(messages: OrderPlacement) {
     console.log('OrderPlacementEvent');
     console.log(messages);
     console.log(messages.OrderType);
@@ -76,7 +80,7 @@ export class GrpcController {
       unitPrice: messages.UnitPrice,
       orderType: OrderType[messages.OrderType],
     };
-    this.orderBookService.queue.push(req);
+    this.orderBookService.queue.push(req as any);
     // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
@@ -97,6 +101,7 @@ export class GrpcController {
       orderType: OrderType[messages.OrderType],
     };
     this.orderBookService.queue.push(req);
+    this.tradeSocketService.OrderCancellation(messages);
     // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
@@ -131,7 +136,7 @@ export class GrpcController {
 
   // START ACCOUNT
   @GrpcMethod('Event', 'BalanceUpdateEvent')
-  async OrderPlacementEventmessages(messages: BalanceUpdate) {
+  async BalanceUpdateEventmessages(messages: BalanceUpdate) {
     console.log('BalanceUpdateEvent');
     console.log(messages);
     const request = {
@@ -169,4 +174,23 @@ export class GrpcController {
   }
 
   // END ORDERFILL
+  // START ORDER
+
+  @GrpcMethod('Event', 'OrderPlacementFailedEvent')
+  async OrderPlacementFailedEvent(messages: any) {
+    console.log('OrderPlacementFailedEvent');
+    console.log(messages);
+    this.tradeSocketService.OrderPlacementFailed(messages);
+    return { Success: true };
+  }
+
+  @GrpcMethod('Event', 'OrderCancellationFailedEvent')
+  async OrderCancellationFailedEvent(messages: any) {
+    console.log('OrderCancellationFailedEvent');
+    console.log(messages);
+    this.tradeSocketService.OrderCancellationFailed(messages);
+    return { Success: true };
+  }
+
+  // END ORDER
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { order_symbolModule } from '../../typeorm/order_symbol/order_symbol.module.js';
 import { SocketModule } from '../../socket/socket.module.js';
 import { chartModule } from '../../typeorm/chart/chart.module.js';
@@ -7,7 +7,7 @@ import { order_intervalModule } from '../../typeorm/order_interval/order_interva
 
 @Module({
   imports: [
-    SocketModule,
+    forwardRef(() => SocketModule),
     chartModule,
     order_symbolModule,
     order_intervalModule,
