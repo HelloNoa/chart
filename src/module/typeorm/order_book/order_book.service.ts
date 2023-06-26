@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { In, Repository } from 'typeorm';
 import { order_book, status } from './order_book.entity.js';
-import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere.js';
 import { userService } from '../user/user.service.js';
 import { order_symbolService } from '../order_symbol/order_symbol.service.js';
 import { order_book_differenceService } from '../order_book_difference/order_book_difference.service.js';
@@ -24,28 +23,136 @@ export class order_bookService {
     return this.order_bookRepository.find();
   }
 
-  async getOrderList(uuid: string, status: status[], orderSymbolName?: string) {
-    if (!Array.isArray(status)) status = [status];
+  async getOrderList(
+    uuid: string,
+    isPending: boolean,
+    orderSymbolName?: string,
+  ) {
     const userId = await this.userService.getUserId(uuid);
     if (userId === null) {
       console.log('User uuid is null');
       return null;
     }
-    const option: FindOptionsWhere<order_book> = {
-      user_id: userId,
-      status: In(status),
-    };
-    if (orderSymbolName) {
-      const orderSymbolId = await this.orderSymbolService.getSymbolId(
-        orderSymbolName,
-      );
-      if (orderSymbolId === null) {
-        console.error('orderSymbolId is null');
-        return null;
+
+    if (isPending) {
+      const query = await this.order_bookRepository
+        .createQueryBuilder('order_book')
+        .leftJoin('order_book.order_symbol', 'order_symbol')
+        .select('order_uuid', 'order_uuid')
+        .addSelect('order_book.id', 'order_book_id')
+        .addSelect('status', 'status')
+        .addSelect('unit_price', 'unit_price')
+        .addSelect('quantity', 'quantity')
+        .addSelect('order_type', 'order_type')
+        .addSelect('created_at', 'created_at')
+        .addSelect('updated_at', 'updated_at')
+        .addSelect('name', 'order_symbol')
+        .where('order_book.user_id = :userId', { userId })
+        .andWhere('order_book.status in (:...status)', {
+          status: ['PLACED', 'PARTIAL_FILLED'],
+        });
+
+      if (orderSymbolName !== undefined) {
+        query.andWhere('order_symbol.name = :orderSymbolName', {
+          orderSymbolName,
+        });
       }
-      option.order_symbol_id = orderSymbolId;
+      query.orderBy('order_book.updated_at', 'ASC');
+      const data = await query.getRawMany();
+      const arr: {
+        status: string;
+        order_uuid: any;
+        created_at: any;
+        order_symbol: any;
+        order_type: any;
+        unit_price: number;
+        quantity: number;
+      }[] = [];
+      await Promise.all(
+        data.map(async (e) => {
+          const diff = await (async () => {
+            if (e.status === 'PARTIAL_FILLED') {
+              return (
+                (await this.orderBookDifferenceService.getDifferBiOrderBookId(
+                  e.order_book_id,
+                )) ?? 0
+              );
+            } else {
+              return 0;
+            }
+          })();
+          arr.push({
+            status: e.status,
+            order_uuid: e.order_uuid,
+            created_at: e.created_at,
+            order_symbol: e.order_symbol,
+            order_type: e.order_type,
+            unit_price: Number(e.unit_price),
+            quantity: Number(e.quantity) - diff,
+          });
+        }),
+      );
+      arr.sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+      return arr;
+    } else {
+      const query = await this.order_bookRepository
+        .createQueryBuilder('order_book')
+        .leftJoin('order_book.order_symbol', 'order_symbol')
+        .select('order_uuid', 'order_uuid')
+        .addSelect('order_book.id', 'order_book_id')
+        .addSelect('status', 'status')
+        .addSelect('unit_price', 'unit_price')
+        .addSelect('quantity', 'quantity')
+        .addSelect('order_type', 'order_type')
+        .addSelect('created_at', 'created_at')
+        .addSelect('updated_at', 'updated_at')
+        .addSelect('name', 'order_symbol')
+        .where('order_book.user_id = :userId', { userId })
+        .andWhere('order_book.status in (:...status)', {
+          status: ['FULFILLED', 'PARTIAL_FILLED'],
+        });
+
+      if (orderSymbolName !== undefined) {
+        query.andWhere('order_symbol.name = :orderSymbolName', {
+          orderSymbolName,
+        });
+      }
+      query.orderBy('order_book.updated_at', 'ASC');
+      const data = await query.getRawMany();
+      const arr: {
+        status: string;
+        order_uuid: any;
+        created_at: any;
+        order_symbol: any;
+        order_type: any;
+        unit_price: number;
+        quantity: number;
+      }[] = [];
+      await Promise.all(
+        data.map(async (e) => {
+          const orders = await this.orderBookDifferenceService.getDifferOrders(
+            e.order_book_id,
+          );
+          if (orders === null) {
+            console.log('orders is null');
+          } else {
+            orders.map((el) => {
+              arr.push({
+                status: e.status,
+                order_uuid: e.order_uuid,
+                created_at: e.created_at,
+                order_symbol: e.order_symbol,
+                order_type: e.order_type,
+                unit_price: Number(e.unit_price),
+                quantity: Number(el.diff),
+              });
+            });
+          }
+        }),
+      );
+      arr.sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+      return arr;
     }
-    return this.order_bookRepository.findBy(option);
   }
 
   async getAllBidAsk(orderSymbolName: string): Promise<BidAskDto | null> {

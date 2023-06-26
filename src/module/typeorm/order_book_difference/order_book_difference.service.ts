@@ -24,7 +24,7 @@ export class order_book_differenceService {
       };
       const diff = await this.orderBookDifferenceRepository.find(option);
       if (diff.length === 0) {
-        // console.error('orderBookDifference is null');
+        console.error('orderBookDifference is null');
         return null;
       }
       let sumDiffAll = 0;
@@ -32,6 +32,27 @@ export class order_book_differenceService {
         sumDiffAll += Number(e.diff);
       });
       return sumDiffAll;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  }
+
+  async getDifferOrders(oderBookId: number) {
+    try {
+      const option: FindManyOptions<order_book_difference> = {
+        select: ['diff'],
+        where: {
+          order_book_id: oderBookId,
+          reason: 'FILL',
+        },
+      };
+      const diff = await this.orderBookDifferenceRepository.find(option);
+      if (diff.length === 0) {
+        console.error('orderBookDifference is null');
+        return null;
+      }
+      return diff;
     } catch (e) {
       console.error(e);
       return null;

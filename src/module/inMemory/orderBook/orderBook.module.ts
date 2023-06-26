@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { OrderBookService } from './orderBook.service.js';
 import { order_bookModule } from '../../typeorm/order_book/order_book.module.js';
 import { order_symbolModule } from '../../typeorm/order_symbol/order_symbol.module.js';
@@ -10,9 +10,9 @@ import { OrderClientModule } from '../../grpc/client/order.client.module.js';
   imports: [
     OrderClientModule,
     order_bookModule,
-    SocketModule,
     chartModule,
     order_symbolModule,
+    forwardRef(() => SocketModule),
   ],
   providers: [OrderBookService],
   exports: [OrderBookService],

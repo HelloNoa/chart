@@ -87,7 +87,7 @@ export class OrderBookService {
     await Promise.all(
       list.map(async (e) => {
         const bidask = await this.orderBookService.getAllBidAsk(e.name);
-        console.log(e.name);
+        // console.log(e.name);
         // console.log(bidask)
         if (bidask === null) {
           console.error('get bidask null!');
@@ -118,16 +118,16 @@ export class OrderBookService {
     };
     cycle();
     setInterval(async () => {
+      //0.2초 마다 socket으로 서빙
       list.map(async (e) => {
         if (this.incomeUpdata[e.name] > this.outputUpdate[e.name]) {
-          console.log('hello');
           this.puborderBook(e.name);
           this.outputUpdate[e.name] = new Date().getTime();
         }
       });
     }, 200);
     setInterval(async () => {
-      console.log(list[this.refreshOrderBookIdx].name);
+      // console.log(list[this.refreshOrderBookIdx].name);
       try {
         await this.getRefreshObrderBook(list[this.refreshOrderBookIdx].name);
       } catch (e) {
@@ -150,12 +150,12 @@ export class OrderBookService {
       if (req.type === 3 && req.bidask) {
         //refreshOrderBook
         if (Object.keys(req.bidask).length === 0) {
-          console.log('//bidask가 텅 비어있을때');
+          // console.log('//bidask가 텅 비어있을때');
           //bidask가 텅 비어있을때
           this.orderBook[req.symbol].ask = [];
           this.orderBook[req.symbol].bid = [];
         } else {
-          console.log('//bidask가 있을때');
+          // console.log('//bidask가 있을때');
           //bidask가 있을때
           if (req.bidask?.asks === undefined) {
             this.orderBook[req.symbol].ask = [];

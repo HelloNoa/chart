@@ -5,11 +5,8 @@ import { RedisClusterService } from 'nestjs-redis-cluster';
 @Injectable()
 export class RedisPubSubService {
   private client: IORedis.Cluster;
-
   constructor(private readonly redisService: RedisClusterService) {
     this.client = this.redisService.getCluster('REDIS_SERVICE');
-    // console.log(this.client);
-    // console.log(redisService.clientName);
   }
 
   onModuleInit() {
@@ -38,6 +35,16 @@ export class RedisPubSubService {
   }
 
   async getValue(key: string) {
+    const value = await this.client.get(key);
+    try {
+      return JSON.parse(value as string);
+    } catch (e) {
+      return value;
+    }
+  }
+
+  async getBalance(uuid: string, symbol: string) {
+    const key = `${uuid}:${symbol}:balance`;
     const value = await this.client.get(key);
     try {
       return JSON.parse(value as string);

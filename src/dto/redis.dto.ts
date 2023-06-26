@@ -1,5 +1,6 @@
 // eslint-disable @typescript-eslint/ban-types
 import { ApiProperty } from '@nestjs/swagger';
+import { Currency } from '../module/grpc/interface/message.js';
 
 export class CreateCatDto {
   @ApiProperty({
@@ -24,6 +25,71 @@ export const channel = {
   //주문 취소 요청 성공
   OrderCancellationChannel: 'OrderCancellationChannel',
 };
+
+export const OrderSocketEvent = {
+  sub: {
+    //ping pong
+    ping: 0,
+    //uuid
+    uuid: 1,
+    //지정가 주문 등록 요청
+    LimitOrder: 2,
+    //시장가 주문 등록 요청
+    MarketOrder: 3,
+    //주문 등록 취소 요쳥
+    CancelOrder: 4,
+  },
+  pub: {
+    //ping pong
+    pong: 0,
+    //uuid
+    uuid: 1,
+    //주문 등록 실패
+    OrderPlacementFailed: 2,
+    //주문 등록 요청 성공
+    OrderPlacement: 3,
+    //주문 취소 실패
+    OrderCancellationFailed: 4,
+    //주문 실패 요청 성공
+    OrderCancellation: 5,
+  },
+};
+
+export const OrderFillSocketEvent = {
+  sub: {
+    //ping pong
+    ping: 0,
+    //uuid
+    uuid: 1,
+  },
+  pub: {
+    //ping pong
+    pong: 0,
+    //uuid
+    uuid: 1,
+    //부분 체결 이벤트
+    OrderPartialFill: 2,
+    //전체 체결 이벤트
+    OrderFulfillment: 3,
+  },
+};
+export const BalanceSocketEvent = {
+  sub: {
+    //ping pong
+    ping: 0,
+    //uuid
+    uuid: 1,
+  },
+  pub: {
+    //ping pong
+    pong: 0,
+    //uuid
+    uuid: 1,
+    //유저 잔고 변경 이벤트
+    BalanceUpdate: 2,
+  },
+};
+
 export const socketEvent = {
   sub: {
     //ping pong
@@ -79,11 +145,136 @@ export type OrderMatching = {
   Symbol: Symbol;
 };
 
+export enum E_BalanceUpdate {
+  UserUUID = 0,
+  Diff = 1,
+  Currency = 2,
+}
+
+export type BalanceUpdate = {
+  UserUUID: string;
+  Currency: Currency;
+};
+//부분 체결 이벤트
+export enum E_OrderPartialFill {
+  UserUUID = 0,
+  OrderUUID = 1,
+  TotalQuantity = 2,
+  FilledQuantity = 3,
+  UnitPrice = 4,
+  Symbol = 5,
+  OrderType = 6,
+  MakeTime = 7,
+  TakeTime = 8,
+  Fee = 9,
+}
+
+//publish OrderPartialFill '{"quantity":"0","price":"1","filled_quantity":"2","filled_price":"3","user_id":"aaa","order_uuid":"5","side":"6","symbol":"7","timestamp":"8","fee":"9"}'
+export type OrderPartialFill = {
+  UserUUID: string;
+  OrderUUID: string;
+  TotalQuantity: number;
+  FilledQuantity: number;
+  UnitPrice: number;
+  Symbol: Symbol;
+  OrderType: Side;
+  MakeTime: Date;
+  TakeTime: Date;
+  Fee: Fee;
+};
+
+//체결 이벤트
+export enum E_OrderFulfillment {
+  UserUUID = 0,
+  OrderUUID = 1,
+  FilledQuantity = 3,
+  UnitPrice = 4,
+  Symbol = 5,
+  OrderType = 6,
+  MakeTime = 7,
+  TakeTime = 8,
+  Fee = 9,
+}
+
+//publish OrderFulfillment '{"quantity":"0","price":"1","filled_quantity":"2","filled_price":"3","user_id":"aaa","order_uuid":"5","side":"6","symbol":"7","timestamp":"8","fee":"9"}'
+export type OrderFulfillment = {
+  UserUUID: string;
+  OrderUUID: string;
+  FilledQuantity: number;
+  UnitPrice: number;
+  Symbol: Symbol;
+  OrderType: Side;
+  MakeTime: Date;
+  TakeTime: Date;
+  Fee: Fee;
+};
+
+//주문 등록 실패
+export enum E_OrderPlacementFailed {
+  UserUUID = 0,
+  OrderUUID = 1,
+  Msg = 2,
+}
+
+//publish OrderPlacementFailed '{"UserID":"aaa","OrderUUID":"bbbb","Reason":"idk","Status":"helathy","Timestamp":"123"}'
+export type OrderPlacementFailed = {
+  UserUUID: string;
+  OrderUUID: string;
+  Msg: Reason;
+};
+
+//주문 등록 요청 성공
+export enum E_OrderPlacement {
+  UserUUID = 0,
+  OrderUUID = 1,
+  Quantity = 2,
+  UnitPrice = 3,
+  Symbol = 4,
+  OrderType = 5,
+  MakeTime = 6,
+}
+
+// //publish OrderPlacement '{"quantity":"0","price":"1","user_id":"aaa","order_uuid":"3","is_market":"4","timestamp":"5","side":"6","symbol":"7"}'
+// export type OrderPlacement = {
+//   UserUUID: string;
+//   OrderUUID: string;
+//   Quantity: number;
+//   UnitPrice: number;
+//   Symbol: Symbol;
+//   OrderType: Side;
+//   MakeTime: Date;
+// };
+
+//주문 취소 실패
+export enum E_OrderCancellationFailed {
+  UserUUID = 0,
+  OrderUUID = 1,
+  Msg = 2,
+}
+
+//publish OrderCancellationFailed '{"user_id":"aaa","order_uuid":"1","reason":"2","status":"3","timestamp":"4"}'
+export type OrderCancellationFailed = {
+  UserUUID: string;
+  OrderUUID: string;
+  Msg: Reason;
+};
+
+//주문 취소 요청 성공
+export enum E_OrderCancellation {
+  UserUUID = 0,
+  OrderUUID = 1,
+}
+
+//publish OrderCancellation '{"user_id":"aaa","order_uuid":"1","timestamp":"2"}'
+export type OrderCancellation = {
+  UserUUID: string;
+  OrderUUID: string;
+};
+
 type Side = string;
 type Symbol = string;
 type Reason = string;
 type Status = string;
-type Currency = string;
 // type Interval = string;
 type Fee = {
   Amount: number;

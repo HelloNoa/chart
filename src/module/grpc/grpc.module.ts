@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { GrpcController } from './grpc.controller.js';
 import { SocketModule } from '../socket/socket.module.js';
 import { OrderBookModule } from '../inMemory/orderBook/orderBook.module.js';
@@ -10,9 +10,9 @@ import { OrderClientModule } from './client/order.client.module.js';
   imports: [
     OrderBookModule,
     TickerModule,
-    SocketModule,
     FinexblockModule,
     OrderClientModule,
+    forwardRef(() => SocketModule),
   ],
   controllers: [GrpcController],
 })

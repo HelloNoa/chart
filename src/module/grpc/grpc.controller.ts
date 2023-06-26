@@ -4,59 +4,32 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { ChartGateway } from '../socket/gateway/chart.gateway.js';
 import { OrderBookService } from '../inMemory/orderBook/orderBook.service.js';
-import { OrderType, SymbolType } from './interface/message.js';
+import {
+  BalanceUpdate,
+  OrderPartialFill,
+  OrderPlacement,
+  OrderType,
+  SymbolType,
+} from './interface/message.js';
 import { TickerService } from '../inMemory/ticker/ticker.service.js';
 import { GrpcGuard } from './grpc.guard.js';
+import { BalanceGateway } from '../socket/gateway/balance.gateway.js';
+import { OrderFillGateway } from '../socket/gateway/orderFill.gateway.js';
+import { OrderGateway } from '../socket/gateway/order.gateway.js';
 
 @Controller()
 @UseGuards(GrpcGuard)
 export class GrpcController {
   constructor(
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
+    @Inject(BalanceGateway) private readonly balanceGateway: BalanceGateway,
+    @Inject(OrderFillGateway)
+    private readonly orderFillGateway: OrderFillGateway,
+    @Inject(OrderGateway)
+    private readonly tradeSocketService: OrderGateway,
     private readonly orderBookService: OrderBookService,
     private readonly tickerService: TickerService,
-  ) {
-    //   setTimeout(() => {
-    //     setInterval(() => {
-    //       const req = {
-    //         UserUUID: 'aaa',
-    //         OrderUUID: 'aaa',
-    //         Quantity: Math.floor(Math.random() * 100000000),
-    //         UnitPrice: Math.floor(Math.random() * 100000000),
-    //         Symbol: 0,
-    //         OrderType: Math.random() > 0.5 ? 0 : 1,
-    //       };
-    //       this.OrderPlacementEvent(req);
-    //     }, 10);
-    //   }, 5000);
-    //
-    //   setTimeout(() => {
-    //     setInterval(() => {
-    //       const req = {
-    //         UserUUID: 'aaa',
-    //         OrderUUID: 'aaa',
-    //         Quantity: Math.floor(Math.random() * 100000000),
-    //         UnitPrice: Math.floor(Math.random() * 100000000),
-    //         Symbol: 0,
-    //         OrderType: Math.random() > 0.5 ? 0 : 1,
-    //       };
-    //       this.OrderCancellationEvent(req);
-    //     }, 10);
-    //   }, 5000);
-    //   setTimeout(() => {
-    //     setInterval(() => {
-    //       const req = {
-    //         UserUUID: 'aaa',
-    //         OrderUUID: 'aaa',
-    //         Quantity: Math.floor(Math.random() * 100000000),
-    //         UnitPrice: Math.floor(Math.random() * 100000000),
-    //         Symbol: 0,
-    //         OrderType: Math.random() > 0.5 ? 0 : 1,
-    //       };
-    //       this.OrderMatchingEvent(req);
-    //     }, 10);
-    //   }, 5000);
-  }
+  ) {}
 
   @GrpcMethod('Health', 'Check')
   async Check(
@@ -93,7 +66,7 @@ export class GrpcController {
   // }
 
   @GrpcMethod('Event', 'OrderPlacementEvent')
-  async OrderPlacementEvent(messages: any) {
+  async OrderPlacementEvent(messages: OrderPlacement) {
     console.log('OrderPlacementEvent');
     console.log(messages);
     console.log(messages.OrderType);
@@ -107,7 +80,7 @@ export class GrpcController {
       unitPrice: messages.UnitPrice,
       orderType: OrderType[messages.OrderType],
     };
-    this.orderBookService.queue.push(req);
+    this.orderBookService.queue.push(req as any);
     // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
@@ -128,6 +101,7 @@ export class GrpcController {
       orderType: OrderType[messages.OrderType],
     };
     this.orderBookService.queue.push(req);
+    this.tradeSocketService.OrderCancellation(messages);
     // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
@@ -159,4 +133,64 @@ export class GrpcController {
     // this.orderBookService.updateOrderBook(req);
     return { Success: true };
   }
+
+  // START ACCOUNT
+  @GrpcMethod('Event', 'BalanceUpdateEvent')
+  async BalanceUpdateEventmessages(messages: BalanceUpdate) {
+    console.log('BalanceUpdateEvent');
+    console.log(messages);
+    const request = {
+      UserUUID: messages.UserUUID,
+      Currency: messages.Currency,
+    };
+    this.balanceGateway.BalanceUpdate(request);
+    return { Success: true };
+  }
+
+  // END ACCOUNT
+  // START ORDERFILL
+  @GrpcMethod('Event', 'OrderMatchingFailedEvent')
+  async OrderMatchingFailedEvent(messages: any) {
+    console.log('OrderMatchingFailedEvent');
+    console.log(messages);
+    // TODO
+    return { Success: true };
+  }
+
+  @GrpcMethod('Event', 'OrderPartialFillEvent')
+  async OrderPartialFillEvent(messages: OrderPartialFill) {
+    console.log('OrderPartialFillEvent');
+    console.log(messages);
+    this.orderFillGateway.OrderPartialFill(messages);
+    return { Success: true };
+  }
+
+  @GrpcMethod('Event', 'OrderFulfillmentEvent')
+  async OrderFulfillmentEvent(messages: any) {
+    console.log('OrderFulfillmentEvent');
+    console.log(messages);
+    this.orderFillGateway.OrderFulfillment(messages);
+    return { Success: true };
+  }
+
+  // END ORDERFILL
+  // START ORDER
+
+  @GrpcMethod('Event', 'OrderPlacementFailedEvent')
+  async OrderPlacementFailedEvent(messages: any) {
+    console.log('OrderPlacementFailedEvent');
+    console.log(messages);
+    this.tradeSocketService.OrderPlacementFailed(messages);
+    return { Success: true };
+  }
+
+  @GrpcMethod('Event', 'OrderCancellationFailedEvent')
+  async OrderCancellationFailedEvent(messages: any) {
+    console.log('OrderCancellationFailedEvent');
+    console.log(messages);
+    this.tradeSocketService.OrderCancellationFailed(messages);
+    return { Success: true };
+  }
+
+  // END ORDER
 }
