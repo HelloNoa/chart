@@ -1,0 +1,13 @@
+syntax = "proto3";
+package polygon;
+//option go_package = "./polygon";
+
+import "polygon/transaction.message.proto";
+
+service PolygonTransaction {
+	rpc GetReceipt(GetReceiptInput) returns (GetReceiptOutput);
+	rpc SendRawTransaction(SendRawTransactionInput) returns (SendRawTransactionOutput);
+	rpc Transfer(TransferInput) returns (TransferOutput);
+	rpc GetBlockNumber(GetBlockNumberInput) returns (GetBlockNumberOutput);
+	rpc GetBlocks(GetBlocksInput) returns (GetBlocksOutput);
+}

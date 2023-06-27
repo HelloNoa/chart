@@ -1,0 +1,11 @@
+syntax = "proto3";
+package polygon;
+//option go_package = "./polygon";
+
+
+import "polygon/wallet.message.proto";
+
+service PolygonWallet {
+	rpc CreateWallet(CreateWalletInput) returns (CreateWalletOutput);
+	rpc GetBalance(GetBalanceInput) returns (GetBalanceOutput);
+}

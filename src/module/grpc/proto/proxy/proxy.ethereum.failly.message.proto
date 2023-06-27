@@ -1,0 +1,93 @@
+syntax = "proto3";
+package proxy;
+//option go_package = "./proxy";
+
+message MyEnum {
+	enum Coin {
+		ETH = 0;
+		MATIC = 1;
+	}
+}
+
+message SendTransactionInput {
+	MyEnum.Coin Coin = 1 [json_name = "coin"];
+	string To = 2 [json_name = "to"];
+	string Amount = 3 [json_name = "account"];
+}
+
+message SendTransactionOutput {
+	bool Success = 1 [json_name = "success"];
+	string TxHash = 2 [json_name = "tx_hash"];
+}
+
+message TransferInput {
+	string UserID = 1 [json_name = "user_id"];
+	string From = 2 [json_name = "from"];
+	string Amount = 3 [json_name = "success"];
+	MyEnum.Coin coin = 4 [json_name = "coin"];
+}
+
+message TransferOutput {
+	bool Success = 1 [json_name = "success"];
+	string TxHash = 2 [json_name = "tx_hash"];
+}
+
+message GetReceiptInput {
+	string TxHash = 1 [json_name = "tx_hash"];
+	MyEnum.Coin coin = 2 [json_name = "coin"];
+}
+
+message GetReceiptOutput {
+	string TxHash = 1 [json_name = "tx_hash"];
+	uint64 Status = 2 [json_name = "status"];
+	string BlockHash = 3 [json_name = "block_hash"];
+	string BlockNumber = 4 [json_name = "block_number"];
+	uint64 gas_used = 5 [json_name = "gas_used"];
+	uint64 transaction_index = 6 [json_name = "transaction_index"];
+}
+
+message GetBlockNumberInput {
+	MyEnum.Coin coin = 3 [json_name = "coin"];
+}
+
+message GetBlockNumberOutput {
+	uint64 BlockNumber = 1 [json_name = "block_number"];
+}
+
+message GetBlocksInput {
+	uint64 Start = 1 [json_name = "start"];
+	uint64 End = 2 [json_name = "end"];
+	MyEnum.Coin coin = 3 [json_name = "coin"];
+}
+
+message GetBlocksOutput {
+	repeated string Result = 1 [json_name = "result"];
+}
+
+message CreateWalletInput {
+	uint64 UserID = 1 [json_name = "user_id"];
+	MyEnum.Coin coin = 2 [json_name = "coin"];
+}
+
+message CreateWalletOutput {
+	string Address = 1 [json_name = "address"];
+}
+
+message GetBalanceInput {
+	string Address = 1 [json_name = "address"];
+	MyEnum.Coin coin = 2 [json_name = "coin"];
+}
+
+message GetBalanceOutput {
+	string Balance = 1 [json_name = "balance"];
+}
+
+message GetWalletInput {
+	uint64 UserID = 1 [json_name = "user_id"];
+	MyEnum.Coin coin = 2 [json_name = "coin"];
+}
+
+message GetWalletOutput {
+	string PublicKey = 1 [json_name = "public_key"];
+	string Address = 2 [json_name = "address"];
+}
