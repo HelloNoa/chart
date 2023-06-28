@@ -40,6 +40,7 @@ import { BalanceModule } from '../balance/balance.module.js';
 import { OrderModule } from '../order/order.module.js';
 import { FirebaseModule } from '../firebase/firebase.module.js';
 import { walletModule } from '../typeorm/wallet/wallet.module.js';
+import { coinModule } from '../typeorm/coin/coin.module.js';
 
 @Module({
   imports: [
@@ -75,8 +76,9 @@ import { walletModule } from '../typeorm/wallet/wallet.module.js';
     order_matching_eventModule,
     order_symbolModule,
     userModule,
-    GrpcModule,
     walletModule,
+    coinModule,
+    GrpcModule,
   ],
   controllers: [AppController],
   providers: [
