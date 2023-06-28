@@ -20,7 +20,6 @@ export interface Unspent {
 }
 
 export interface GetPrivateKeyRequest {
-  Mode: string;
   UserId: number;
 }
 
@@ -29,7 +28,6 @@ export interface GetPrivateKeyResponse {
 }
 
 export interface GetPubKeyHashRequest {
-  Mode: string;
   UserId: number;
 }
 
@@ -38,7 +36,6 @@ export interface GetPubKeyHashResponse {
 }
 
 export interface CreateWalletRequest {
-  Mode: string;
   UserId: number;
 }
 
@@ -64,7 +61,6 @@ export interface ListUnspentResponse {
 }
 
 export interface SendToAddressRequest {
-  Mode: string;
   ToAddress: string;
   Amount: number;
 }
