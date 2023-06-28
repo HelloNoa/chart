@@ -1,18 +1,22 @@
 syntax = "proto3";
-package proxy;
-//option go_package = "./proxy";
+package ethereum_proxy;
+//option go_package = "./ethereum_proxy";
 
-message MyEnum {
-	enum Coin {
-		ETH = 0;
-		MATIC = 1;
-	}
+
+service EthereumProxy {
+	rpc GetReceipt(GetReceiptInput) returns (GetReceiptOutput);
+	rpc SendTransaction(SendTransactionInput) returns (SendTransactionOutput);
+	rpc Transfer(TransferInput) returns (TransferOutput);
+	rpc GetBlockNumber(GetBlockNumberInput) returns (GetBlockNumberOutput);
+	rpc GetBlocks(GetBlocksInput) returns (GetBlocksOutput);
+	rpc CreateWallet(CreateWalletInput) returns (CreateWalletOutput);
+	rpc GetBalance(GetBalanceInput) returns (GetBalanceOutput);
 }
 
+
 message SendTransactionInput {
-	MyEnum.Coin Coin = 1 [json_name = "coin"];
-	string To = 2 [json_name = "to"];
-	string Amount = 3 [json_name = "account"];
+	string To = 1 [json_name = "to"];
+	string Amount = 2 [json_name = "account"];
 }
 
 message SendTransactionOutput {
@@ -24,7 +28,6 @@ message TransferInput {
 	string UserID = 1 [json_name = "user_id"];
 	string From = 2 [json_name = "from"];
 	string Amount = 3 [json_name = "success"];
-	MyEnum.Coin coin = 4 [json_name = "coin"];
 }
 
 message TransferOutput {
@@ -34,7 +37,6 @@ message TransferOutput {
 
 message GetReceiptInput {
 	string TxHash = 1 [json_name = "tx_hash"];
-	MyEnum.Coin coin = 2 [json_name = "coin"];
 }
 
 message GetReceiptOutput {
@@ -42,12 +44,11 @@ message GetReceiptOutput {
 	uint64 Status = 2 [json_name = "status"];
 	string BlockHash = 3 [json_name = "block_hash"];
 	string BlockNumber = 4 [json_name = "block_number"];
-	uint64 gas_used = 5 [json_name = "gas_used"];
-	uint64 transaction_index = 6 [json_name = "transaction_index"];
+	uint64 GasUsed = 5 [json_name = "gas_used"];
+	uint64 TransactionIndex = 6 [json_name = "transaction_index"];
 }
 
 message GetBlockNumberInput {
-	MyEnum.Coin coin = 3 [json_name = "coin"];
 }
 
 message GetBlockNumberOutput {
@@ -57,16 +58,14 @@ message GetBlockNumberOutput {
 message GetBlocksInput {
 	uint64 Start = 1 [json_name = "start"];
 	uint64 End = 2 [json_name = "end"];
-	MyEnum.Coin coin = 3 [json_name = "coin"];
 }
 
 message GetBlocksOutput {
-	repeated string Result = 1 [json_name = "result"];
+	repeated bytes Result = 1 [json_name = "result"];
 }
 
 message CreateWalletInput {
 	uint64 UserID = 1 [json_name = "user_id"];
-	MyEnum.Coin coin = 2 [json_name = "coin"];
 }
 
 message CreateWalletOutput {
@@ -75,7 +74,6 @@ message CreateWalletOutput {
 
 message GetBalanceInput {
 	string Address = 1 [json_name = "address"];
-	MyEnum.Coin coin = 2 [json_name = "coin"];
 }
 
 message GetBalanceOutput {
@@ -84,7 +82,6 @@ message GetBalanceOutput {
 
 message GetWalletInput {
 	uint64 UserID = 1 [json_name = "user_id"];
-	MyEnum.Coin coin = 2 [json_name = "coin"];
 }
 
 message GetWalletOutput {
