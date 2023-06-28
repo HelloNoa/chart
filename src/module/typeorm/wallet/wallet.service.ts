@@ -13,7 +13,7 @@ export class walletService {
     return this.walletRepository.find();
   }
 
-  async getWalletByUsrId(
+  async getWalletByUserId(
     user_id: number,
     coin_id: number,
   ): Promise<wallet | null> {
@@ -28,7 +28,7 @@ export class walletService {
   async upsertWalletInfo(walletDto: wallet): Promise<boolean> {
     let updateResult = false;
     try {
-      let walletResult = await this.getWalletByUsrId(
+      const walletResult = await this.getWalletByUserId(
         walletDto.user_id,
         walletDto.coin_id,
       );
