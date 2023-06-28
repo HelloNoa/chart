@@ -17,7 +17,7 @@ import {
   LoggerMiddleware,
   ResponseTransformerInterceptor,
 } from '../../infra/index.js';
-import { dbConfig } from '../../config/db.config.js';
+import { dbConfig, dbWriterConfig } from '../../config/db.config.js';
 // import { cacheConfig } from '../../config/cache.config.js';
 import { SocketModule } from '../socket/socket.module.js';
 import { ChartModule } from '../chart/chart.module.js';
@@ -43,7 +43,7 @@ import { FirebaseModule } from '../firebase/firebase.module.js';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [dbConfig],
+      load: [dbConfig, dbWriterConfig],
       envFilePath: [
         `${dirname(
           fileURLToPath(import.meta.url),
