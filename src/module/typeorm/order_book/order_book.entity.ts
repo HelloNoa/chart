@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+} from 'typeorm';
+import { order_symbol } from '../order_symbol/order_symbol.entity.js';
 
 export type status = 'CANCELLED' | 'PLACED' | 'FULFILLED' | 'PARTIAL_FILLED';
 export type OrderType = 'BID' | 'ASK';
@@ -34,4 +42,7 @@ export class order_book {
 
   @Column('timestamp')
   updated_at: string;
+  @ManyToOne(() => order_symbol)
+  @JoinColumn({ name: 'order_symbol_id' })
+  order_symbol: Relation<order_symbol>;
 }
