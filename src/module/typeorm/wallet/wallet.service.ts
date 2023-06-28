@@ -41,6 +41,6 @@ export class walletService {
     } catch (e) {
       updateResult = false;
     }
-    return updateResult;
+    return updateResult
   }
 }
