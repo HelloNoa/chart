@@ -17,7 +17,7 @@ export class userService {
     try {
       const user = await this.userRepository.findOne({
         where: {
-          uuid, 
+          uuid,
         },
       });
       if (user === null) {

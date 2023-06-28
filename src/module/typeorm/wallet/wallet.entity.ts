@@ -11,7 +11,7 @@ export class wallet {
   @Column('varchar')
   coin_id: number;
 
-  @Column('varchar')
+  @Column('longtext')
   address: string;
 
   @Column('timestamp')

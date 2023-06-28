@@ -76,7 +76,7 @@ import { walletModule } from '../typeorm/wallet/wallet.module.js';
     order_symbolModule,
     userModule,
     GrpcModule,
-    walletModule
+    walletModule,
   ],
   controllers: [AppController],
   providers: [
