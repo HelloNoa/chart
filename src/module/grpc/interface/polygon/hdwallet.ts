@@ -7,7 +7,7 @@ import {
   GetBalanceOutput,
 } from './wallet.message.js';
 
-export interface PolygonWallet {
+export interface HDWallet {
   CreateWallet(
     data: CreateWalletInput,
     metadata?: Metadata,

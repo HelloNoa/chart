@@ -28,8 +28,8 @@ export interface GetReceiptOutput {
   Status: number;
   BlockHash: string;
   BlockNumber: string;
-  gas_used: number;
-  transaction_index: number;
+  GasUsed: number;
+  TransactionIndex: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
