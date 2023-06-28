@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { proxyClientsName } from '../../../proxy.clients.options.js';
+import { proxyClients } from '../../../proxy.clients.options.js';
 import {
   BitcoinProxy,
   CreateWalletRequest,
@@ -21,9 +21,9 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class WalletClientService implements OnModuleInit {
   constructor(
-    @Inject(proxyClientsName.bitcoin) private bitcoinProxy: ClientGrpc,
-    @Inject(proxyClientsName.ethereum) private ethereumProxy: ClientGrpc,
-    @Inject(proxyClientsName.polygon) private polygonProxy: ClientGrpc,
+    @Inject(proxyClients.bitcoin.clientName) private bitcoinProxy: ClientGrpc,
+    @Inject(proxyClients.ethereum.clientName) private ethereumProxy: ClientGrpc,
+    @Inject(proxyClients.polygon.clientName) private polygonProxy: ClientGrpc,
   ) {}
 
   onModuleInit() {
