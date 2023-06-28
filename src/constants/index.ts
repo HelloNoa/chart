@@ -1,6 +1,7 @@
 export const USER_REPOSITORY_KEY = 'repository.user';
 export const ORDER_REPOSITORY_KEY = 'repository.order';
 export const MYSQL_DATASOURCE_KEY = 'datasource.mysql';
+export const MYSQL_WRITE_DATASOURCE_KEY = 'datasource.mysql';
 export const DB_CONFIG_KEY = 'config.database';
 export const DB_WRITER_CONFIG_KEY = 'write.config.database';
 export const CACHE_CONFIG_KEY = 'config.cache';
