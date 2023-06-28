@@ -33,8 +33,8 @@ message GetReceiptOutput {
 	uint64 Status = 2 [json_name = "status"];
 	string BlockHash = 3 [json_name = "block_hash"];
 	string BlockNumber = 4 [json_name = "block_number"];
-	uint64 gas_used = 5 [json_name = "gas_used"];
-	uint64 transaction_index = 6 [json_name = "transaction_index"];
+	uint64 GasUsed = 5 [json_name = "gas_used"];
+	uint64 TransactionIndex = 6 [json_name = "transaction_index"];
 }
 
 message GetBlockNumberInput {
@@ -50,5 +50,5 @@ message GetBlocksInput {
 }
 
 message GetBlocksOutput {
-	repeated string Result = 1 [json_name = "result"];
+	repeated bytes Result = 1 [json_name = "result"];
 }

@@ -4,7 +4,7 @@ package polygon;
 
 import "polygon/transaction.message.proto";
 
-service PolygonTransaction {
+service Transaction {
 	rpc GetReceipt(GetReceiptInput) returns (GetReceiptOutput);
 	rpc SendRawTransaction(SendRawTransactionInput) returns (SendRawTransactionOutput);
 	rpc Transfer(TransferInput) returns (TransferOutput);
