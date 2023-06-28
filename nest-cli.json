@@ -13,6 +13,11 @@
         "include": "./module/grpc/proto/*.proto",
         "outDir": "./dist",
         "watchAssets": true
+      },
+      {
+        "include": "./module/grpc/proto/*/*.proto",
+        "outDir": "./dist",
+        "watchAssets": true
       }
     ],
     "watchAssets": true
