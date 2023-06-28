@@ -39,6 +39,7 @@ import { FinexblockModule } from '../finexblock/finexblock.module.js';
 import { BalanceModule } from '../balance/balance.module.js';
 import { OrderModule } from '../order/order.module.js';
 import { FirebaseModule } from '../firebase/firebase.module.js';
+import { walletModule } from '../typeorm/wallet/wallet.module.js';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { FirebaseModule } from '../firebase/firebase.module.js';
     order_symbolModule,
     userModule,
     GrpcModule,
+    walletModule
   ],
   controllers: [AppController],
   providers: [
