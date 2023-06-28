@@ -1,11 +1,11 @@
 syntax = "proto3";
 package ethereum;
-//option go_package = "./ethereum";
+option go_package = "./ethereum";
 
 
-import "ethereum/wallet.message.proto";
+import "ethereum/hdwallet.message.proto";
 
-service EthereumWallet {
+service HDWallet {
 	rpc CreateWallet(CreateWalletInput) returns (CreateWalletOutput);
 	rpc GetBalance(GetBalanceInput) returns (GetBalanceOutput);
 }

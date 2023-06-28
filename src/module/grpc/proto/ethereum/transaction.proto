@@ -1,11 +1,11 @@
 syntax = "proto3";
 package ethereum;
-//option go_package = "./ethereum";
+option go_package = "./ethereum";
 
 
 import "ethereum/transaction.message.proto";
 
-service EthereumTransaction {
+service Transaction {
 	rpc GetReceipt(GetReceiptInput) returns (GetReceiptOutput);
 	rpc SendRawTransaction(SendRawTransactionInput) returns (SendRawTransactionOutput);
 	rpc Transfer(TransferInput) returns (TransferOutput);
