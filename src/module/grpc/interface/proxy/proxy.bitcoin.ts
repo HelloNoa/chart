@@ -1,3 +1,80 @@
+import { Metadata } from '@grpc/grpc-js';
+import { Observable } from 'rxjs';
+
+export interface BitcoinProxy {
+  GetBlockCount(
+    data: GetBlockCountRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<GetBlockCountResponse>;
+
+  GetBlock(
+    data: GetBlockRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<GetBlockResponse>;
+
+  GetRawTransaction(
+    data: GetRawTransactionRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<GetRawTransactionResponse>;
+
+  CreateRawTransaction(
+    data: CreateRawTransactionRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<CreateRawTransactionResponse>;
+
+  ListUnspent(
+    data: ListUnspentRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<ListUnspentResponse>;
+
+  SignRawTransaction(
+    data: SignRawTransactionRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<SignRawTransactionResponse>;
+
+  SendRawTransaction(
+    data: SendRawTransactionRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<SendRawTransactionResponse>;
+
+  SendToAddress(
+    data: SendToAddressRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<SendToAddressResponse>;
+
+  CreateWalletAddress(
+    data: CreateWalletRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<CreateWalletResponse>;
+
+  GetNewAddress(
+    data: GetNewAddressRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<GetNewAddressResponse>;
+
+  GetPrivateKey(
+    data: GetPrivateKeyRequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<GetPrivateKeyResponse>;
+
+  GetAddressUTXO(
+    data: GetAddressUTXORequest,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<GetAddressUTXOResponse>;
+}
+
 export interface BlockHeader {
   Version: number;
   PrevBlock: string;
@@ -74,7 +151,6 @@ export interface GetNewAddressResponse {
 }
 
 export interface CreateWalletRequest {
-  Mode: string;
   UserId: number;
 }
 
@@ -171,7 +247,7 @@ export interface CreateRawTransactionResponse {
 //export interface CreateRawTransactionResponse {
 //  repeated TxIn TxIn
 //  repeated TxOut TxOut
-//   Version :number
+//   Version:number
 //   LockTime:number
 //}
 export interface SignRawTransactionRequest {
@@ -194,7 +270,6 @@ export interface SendRawTransactionResponse {
 }
 
 export interface SendToAddressRequest {
-  Mode: string;
   ToAddress: string;
   Amount: number;
 }
@@ -204,7 +279,6 @@ export interface SendToAddressResponse {
 }
 
 export interface GetPrivateKeyRequest {
-  Mode: string;
   UserId: number;
 }
 
