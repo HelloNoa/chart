@@ -1,5 +1,5 @@
 syntax = "proto3";
-package bitcoin.hdwallet;
+package bitcoin;
 //option go_package = "./bitcoin";
 
 message UnspentOutput {
@@ -13,6 +13,7 @@ message UnspentOutput {
 	int64 Confirmations = 8 [json_name = "confirmations"];
 	bool Spendable = 9 [json_name = "spendable"];
 }
+
 message Unspent {
 	string TxId = 1 [json_name = "txid"];
 	uint32 Vout = 2 [json_name = "vout"];
@@ -22,22 +23,19 @@ message Unspent {
 	uint32 Height = 6 [json_name = "height"];
 }
 message GetPrivateKeyRequest {
-	string Mode = 1 [json_name = "mode"];
-	uint32 UserId = 2 [json_name = "user_id"];
+	uint32 UserId = 1 [json_name = "user_id"];
 }
 message GetPrivateKeyResponse {
 	string PrivateKey = 1 [json_name = "private_key"];
 }
 message GetPubKeyHashRequest {
-	string Mode = 1 [json_name = "mode"];
-	uint32 UserId = 2 [json_name = "user_id"];
+	uint32 UserId = 1 [json_name = "user_id"];
 }
 message GetPubKeyHashResponse {
 	string PublicKey = 1 [json_name = "public_key"];
 }
 message CreateWalletRequest {
-	string Mode = 1 [json_name = "mode"];
-	uint32 UserId = 2 [json_name = "user_id"];
+	uint32 UserId = 1 [json_name = "user_id"];
 }
 message CreateWalletResponse {
 	string Address = 1 [json_name = "address"];
@@ -56,9 +54,8 @@ message ListUnspentResponse {
 	repeated UnspentOutput UnspentOutputs = 1 [json_name = "unspent_outputs"];
 }
 message SendToAddressRequest {
-	string Mode = 1 [json_name = "mode"];
-	string ToAddress = 2 [json_name = "to_address"];
-	double Amount = 3 [json_name = "amount"];
+	string ToAddress = 1 [json_name = "to_address"];
+	double Amount = 2 [json_name = "amount"];
 }
 message SendToAddressResponse {
 	string TxHash = 1 [json_name = "tx_hash"];

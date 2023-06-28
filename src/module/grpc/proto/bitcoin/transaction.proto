@@ -1,5 +1,5 @@
 syntax = "proto3";
-package bitcoin.transaction;
+package bitcoin;
 //option go_package = "./bitcoin";
 
 import "bitcoin/transaction.message.proto";

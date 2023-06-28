@@ -1,5 +1,5 @@
 syntax = "proto3";
-package bitcoin.transaction;
+package bitcoin;
 //option go_package = "./bitcoin";
 
 
@@ -78,13 +78,6 @@ message CreateRawTransactionRequest {
 message CreateRawTransactionResponse {
 	string RawHex = 1 [json_name = "raw_hex"];
 }
-
-//message CreateRawTransactionResponse {
-//  repeated TxIn TxIn = 1 [json_name = "tx_in"];
-//  repeated TxOut TxOut = 2 [json_name = "tx_out"];
-//  int32 Version = 3 [json_name = "version"];
-//  uint32 LockTime = 4 [json_name = "lock_time"];
-//}
 
 message SendRawTransactionRequest {
 	string SignedTx = 1 [json_name = "signed_tx"];
