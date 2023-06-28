@@ -13,7 +13,7 @@ import {
   TransferOutput,
 } from './transaction.message.js';
 
-export interface EthereumTransaction {
+export interface Transaction {
   GetReceipt(
     data: GetReceiptInput,
     metadata?: Metadata,

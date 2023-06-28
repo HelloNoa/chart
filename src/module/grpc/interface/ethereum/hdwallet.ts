@@ -5,9 +5,9 @@ import {
   CreateWalletOutput,
   GetBalanceInput,
   GetBalanceOutput,
-} from './wallet.message.js';
+} from './hdwallet.message.js';
 
-export interface EthereumWallet {
+export interface HDWallet {
   CreateWallet(
     data: CreateWalletInput,
     metadata?: Metadata,
