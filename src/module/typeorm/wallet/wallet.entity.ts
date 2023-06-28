@@ -5,10 +5,10 @@ export class wallet {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
+  @Column('bigint')
   user_id: number;
 
-  @Column('varchar')
+  @Column('bigint')
   coin_id: number;
 
   @Column('longtext')
