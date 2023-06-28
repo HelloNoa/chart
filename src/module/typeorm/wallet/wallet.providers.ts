@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { wallet } from './wallet.entity.js';
-import { MYSQL_DATASOURCE_KEY } from '../../../constants/index.js'
+import { MYSQL_DATASOURCE_KEY } from '../../../constants/index.js';
 
 export const walletProviders = [
   {

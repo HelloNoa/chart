@@ -18,5 +18,5 @@ export class wallet {
   created_at: string;
 
   @Column('timestamp')
-  updated_at: string
+  updated_at: string;
 }
