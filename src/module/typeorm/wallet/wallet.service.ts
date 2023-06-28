@@ -7,6 +7,8 @@ export class walletService {
   constructor(
     @Inject('WALLET_REPOSITORY')
     private walletRepository: Repository<wallet>,
+    @Inject('WALLET_WRITE_REPOSITORY')
+    private walletWriteRepository: Repository<wallet>,
   ) {}
 
   async findAll(): Promise<wallet[]> {
@@ -34,7 +36,7 @@ export class walletService {
       );
       if (walletResult) {
         walletDto.id = walletResult.id;
-        await this.walletRepository.save(walletDto).then(() => {
+        await this.walletWriteRepository.save(walletDto).then(() => {
           updateResult = true;
         });
       }

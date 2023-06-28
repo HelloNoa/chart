@@ -1,4 +1,11 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Inject,
+  Patch,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -7,19 +14,40 @@ import {
 } from '@nestjs/swagger';
 import { SymbolType } from '../interface/message.js';
 import { WalletClientService } from './wallet.client.service.js';
-import { IpGuard } from '../../../decorators/ip-guard.service.js';
 import { JWTGuard, User } from '../../../decorators/jwt-guard.service.js';
+import { walletService } from '../../typeorm/wallet/wallet.service.js';
+import { coinService } from '../../typeorm/coin/coin.service.js';
+import { userService } from '../../typeorm/user/user.service.js';
+import { CreateWalletResponse } from '../interface/proxy/proxy.bitcoin.js';
+import { CreateWalletOutput } from '../interface/proxy/proxy.polygon.js';
 
 @Controller('wallet')
-@UseGuards(IpGuard)
 @ApiBearerAuth()
 @UseGuards(JWTGuard)
-@ApiTags('GRPC')
+@ApiTags('wallet')
 export class WalletClientController {
-  constructor(private readonly walletClientService: WalletClientService) {}
+  constructor(
+    private readonly walletClientService: WalletClientService,
+    @Inject(walletService) private readonly walletService: walletService,
+    @Inject(userService) private readonly userService: userService,
+    @Inject(coinService) private readonly coinService: coinService,
+  ) {}
 
-  //체결엔진 OrderBook
   @Get('/wallet')
+  @ApiQuery({ name: 'symbol', example: 'BTC' })
+  @ApiOperation({ summary: '지갑 정보' })
+  async GetWallet(
+    @User() user: any,
+    @Query('symbol') symbol: string,
+  ): Promise<any> {
+    const userId = await this.userService.getUserId(user.uuid);
+    if (userId === null) return 'User not found';
+    const coin = await this.coinService.getCoinByName(symbol);
+    if (coin === null) return 'Coin Name not found';
+    return await this.walletService.getWalletByUserId(userId, coin.id);
+  }
+
+  @Patch('/wallet')
   @ApiQuery({ name: 'symbol', example: 'BTC' })
   @ApiOperation({ summary: '지갑 생성' })
   async MakeWallet(
@@ -29,18 +57,30 @@ export class WalletClientController {
     if (SymbolType[symbol as any] === undefined) {
       return 'wrong SymbolType';
     }
+    const userId = await this.userService.getUserId(user.uuid);
+    if (userId === null) return 'User not found';
+    const coin = await this.coinService.getCoinByName(symbol);
+    if (coin === null) return 'Coin Name not found';
+    const wallet = await this.walletService.getWalletByUserId(userId, coin.id);
+    if (wallet === null) return 'not found wallet';
     const observable = await this.walletClientService.CreateWallet(
       symbol,
-      user.uuid,
+      userId,
     );
     if (observable === null) {
       return 'fail';
     }
     return new Promise((res, rej) => {
       observable.subscribe({
-        next: (e) => {
+        next: async (e: CreateWalletResponse | CreateWalletOutput) => {
           console.log(e);
-          res(e);
+          wallet.address = e.Address;
+          const isComplete = await this.walletService.upsertWalletInfo(wallet);
+          if (isComplete) {
+            res(e);
+          } else {
+            rej('wallet address update fail');
+          }
         },
         error: (error) => {
           console.error(error);
