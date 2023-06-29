@@ -12,7 +12,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { SymbolType } from '../interface/message.js';
+import { Currency } from '../interface/message.js';
 import { WalletClientService } from './wallet.client.service.js';
 import { JWTGuard, User } from '../../../decorators/jwt-guard.service.js';
 import { walletService } from '../../typeorm/wallet/wallet.service.js';
@@ -40,6 +40,9 @@ export class WalletClientController {
     @User() user: any,
     @Query('symbol') symbol: string,
   ): Promise<any> {
+    if (Currency[symbol as any] === undefined) {
+      return 'wrong Currency';
+    }
     const userId = await this.userService.getUserId(user.uuid);
     if (userId === null) return 'User not found';
     const coin = await this.coinService.getCoinByName(symbol);
@@ -54,8 +57,8 @@ export class WalletClientController {
     @User() user: any,
     @Query('symbol') symbol: string,
   ): Promise<any> {
-    if (SymbolType[symbol as any] === undefined) {
-      return 'wrong SymbolType';
+    if (Currency[symbol as any] === undefined) {
+      return 'wrong Currency';
     }
     const userId = await this.userService.getUserId(user.uuid);
     if (userId === null) return 'User not found';
@@ -75,7 +78,8 @@ export class WalletClientController {
         next: async (e: CreateWalletResponse | CreateWalletOutput) => {
           console.log(e);
           wallet.address = e.Address;
-          const isComplete = await this.walletService.upsertWalletInfo(wallet);
+          // const isComplete = await this.walletService.upsertWalletInfo(wallet);
+          const isComplete = true;
           if (isComplete) {
             res(e);
           } else {
