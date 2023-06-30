@@ -155,6 +155,7 @@ export type BalanceUpdate = {
   UserUUID: string;
   Currency: Currency;
 };
+
 //부분 체결 이벤트
 export enum E_OrderPartialFill {
   UserUUID = 0,
@@ -305,4 +306,20 @@ export const DECIMAL: { [key: string]: number } = {
   MLK: 1_000_000_000_000_000_000,
   MATIC: 1_000_000_000_000_000_000,
   HIVE: 1_000,
+  // ETH: 1,
+  // ETC: 1,
+  // MATIC: 1,
+  LPT: 1_000_000_000_000_000_000,
+  // MANA: 1,
+  // AXS: 1,
+  // AUDIO: 1,
+  // SAND: 1,
+  COMP: 1_000_000_000_000_000_000,
+  LINK: 1_000_000_000_000_000_000,
+  DYDX: 1_000_000_000_000_000_000,
+  BNB: 1_000_000_000_000_000_000,
+  OP: 1_000_000_000_000_000_000,
+  // AVAX: 1,
+  // ARB: 1,
+  // BTC: 1,
 };
