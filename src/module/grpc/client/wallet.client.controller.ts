@@ -83,10 +83,8 @@ export class WalletClientController {
     return new Promise((res, rej) => {
       observable.subscribe({
         next: async (e: CreateWalletResponse | CreateWalletOutput) => {
-          console.log(e);
           wallet.address = e.Address;
-          // const isComplete = await this.walletService.upsertWalletInfo(wallet);
-          const isComplete = true;
+          const isComplete = await this.walletService.upsertWalletInfo(wallet);
           if (isComplete) {
             res(e);
           } else {

@@ -36,9 +36,14 @@ export class walletService {
       );
       if (walletResult) {
         walletDto.id = walletResult.id;
-        await this.walletWriteRepository.save(walletDto).then(() => {
-          updateResult = true;
-        });
+        await this.walletWriteRepository
+          .update(walletResult.id, walletDto)
+          .then(() => {
+            updateResult = true;
+          })
+          .catch((e) => {
+            console.error(e);
+          });
       }
     } catch (e) {
       updateResult = false;
