@@ -11,51 +11,41 @@ enum OrderType {
 
 enum SymbolType {
 	SYMBOL_NIL = 0;
-	BTCADA = 1;
-	BTCAPT = 2;
-	BTCARB = 3;
-	BTCAUDIO = 4;
-	BTCAVAX = 5;
+	BTCETH = 1;
+	BTCETC = 2;
+	BTCMATIC = 3;
+	BTCLPT = 4;
+	BTCMANA = 5;
 	BTCAXS = 6;
-	BTCETH = 7;
-	BTCETC = 8;
-	BTCDOGE = 9;
-	BTCHIVE = 10;
-	BTCMANA = 11;
-	BTCMATIC = 12;
-	BTCMLK = 13;
-	BTCSAND = 14;
-	BTCSBD = 15;
-	BTCSOL = 16;
-	BTCSTX = 17;
-	BTCSXP = 18;
-	BTCXRP = 19;
-	BTCSTEEM = 20;
+	BTCAUDIO = 7;
+	BTCSAND = 8;
+	BTCCOMP = 9;
+	BTCLINK = 10;
+	BTCDYDX = 11;
+	BTCBNB = 12;
+	BTCOP = 13;
+	BTCAVAX = 14;
+	BTCARB = 15;
 }
 
 enum Currency {
 	CURRENCY_NIL = 0;
-	BTC = 1;
-	ADA = 2;
-	APT = 3;
-	ARB = 4;
-	AUDIO = 5;
-	AVAX = 6;
-	AXS = 7;
-	ETH = 8;
-	ETC = 9;
-	DOGE = 10;
-	HIVE = 11;
-	MANA = 12;
-	MATIC = 13;
-	MLK = 14;
-	SAND = 15;
-	SBD = 16;
-	SOL = 17;
-	STX = 18;
-	SXP = 19;
-	XRP = 20;
-	STEEM = 21;
+	ETH = 1;
+	ETC = 2;
+	MATIC = 3;
+	LPT = 4;
+	MANA = 5;
+	AXS = 6;
+	AUDIO = 7;
+	SAND = 8;
+	COMP = 9;
+	LINK = 10;
+	DYDX = 11;
+	BNB = 12;
+	OP = 13;
+	AVAX = 14;
+	ARB = 15;
+	BTC = 16;
 }
 message Fee {
 	double Amount = 1;
