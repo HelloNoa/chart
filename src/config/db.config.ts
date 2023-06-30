@@ -28,11 +28,11 @@ export const dbWriterConfig = registerAs(
     if (process.env.NODE_ENV === EnvMode.Test) {
       const localPort = 6034;
       await useSSHTunnel(
-        process.env.DATABASE_HOST + '',
+        process.env.DATABASE_WRITE_HOST + '',
         Number(process.env.DATABASE_PORT),
         localPort,
         async () => {
-          console.log('mysql tunneling complete');
+          console.log('write mysql tunneling complete');
         },
       );
       dbConfig = {
