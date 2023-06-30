@@ -30,6 +30,12 @@ export class WalletClientService implements OnModuleInit {
     //onModuleInit
   }
 
+  async GetNewBTCAddress() {
+    return this.bitcoinProxy
+      .getService<BitcoinProxy>('BitcoinProxy')
+      .GetNewAddress({});
+  }
+
   async CreateWallet(
     symbol: string,
     userId: number,
@@ -74,6 +80,6 @@ export class WalletClientService implements OnModuleInit {
         res = null;
         break;
     }
-    return await res;
+    return res;
   }
 }
