@@ -61,24 +61,32 @@ export class OrderBookService {
 
   async getRefreshObrderBook(symbolName: string) {
     // console.log(symbolName);
-    await new Promise(async (res) => {
-      const [ob] = await this.OrderClientService.enguineOrderBook(symbolName);
-      ob.subscribe({
-        next: (aa) => {
-          // console.log(aa);
-          this.queue.push({
-            symbol: symbolName,
-            type: 3,
-            bidask: aa,
+    try {
+      await new Promise(async (res) => {
+        const [ob] = await this.OrderClientService.enguineOrderBook(symbolName);
+        if (ob === null) {
+          return null;
+        } else {
+          ob.subscribe({
+            next: (aa) => {
+              // console.log(aa);
+              this.queue.push({
+                symbol: symbolName,
+                type: 3,
+                bidask: aa,
+              });
+              res(aa);
+            },
+            error: (error) => {
+              console.log(error);
+              res(null);
+            },
           });
-          res(aa);
-        },
-        error: (error) => {
-          console.log(error);
-          res(null);
-        },
+        }
       });
-    });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async onModuleInit() {
@@ -127,14 +135,13 @@ export class OrderBookService {
       });
     }, 200);
     setInterval(async () => {
-      // console.log(list[this.refreshOrderBookIdx].name);
+      if (++this.refreshOrderBookIdx >= list.length) {
+        this.refreshOrderBookIdx = 0;
+      }
       try {
         await this.getRefreshObrderBook(list[this.refreshOrderBookIdx].name);
       } catch (e) {
         console.log(e);
-      }
-      if (++this.refreshOrderBookIdx >= list.length) {
-        this.refreshOrderBookIdx = 0;
       }
     }, 5000 / list.length);
   }
