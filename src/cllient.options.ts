@@ -88,8 +88,8 @@ export const grpcEndPoint = [
   },
   {
     id: 11,
-    kor: 'BTCENG',
-    market: 'BTCENG',
+    kor: 'BTCBNB',
+    market: 'BTCBNB',
     host: '',
     port: 8880,
   },
