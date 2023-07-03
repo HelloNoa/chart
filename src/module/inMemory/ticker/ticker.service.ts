@@ -115,6 +115,14 @@ export class TickerService {
 
   updateTicker(req: { symbol: string; volume: number; unitPrice: number }) {
     console.log('before Ticker', this.ticker[req.symbol]);
+
+    // TODO: null check
+    // FIXME: Decorator 혹은 Parsing용 함수 제작해서 validation
+    if (this.ticker[req.symbol] === undefined) {
+      //...
+    }
+
+    // FIXME: Safe math 도입해야함.
     this.ticker[req.symbol].currentPrice = req.unitPrice;
     this.ticker[req.symbol].lowPrice = Math.min(
       this.ticker[req.symbol].lowPrice,
@@ -127,10 +135,14 @@ export class TickerService {
     this.ticker[req.symbol].volume += req.volume;
     const _updown =
       Number(req.unitPrice) - Number(this.ticker[req.symbol].openPrice);
+
+    // FIXME: `* 100` 같은 구문은 Constant값 적용하던지 변수로 따로 선언
     this.ticker[req.symbol].updown =
       (_updown / Number(this.ticker[req.symbol].openPrice)) * 100;
+
     this.incomeUpdata[req.symbol] = new Date().getTime();
     console.log('after Ticker', this.ticker[req.symbol]);
+
     return true;
   }
 
