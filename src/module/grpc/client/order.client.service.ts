@@ -255,7 +255,7 @@ export class OrderClientService implements OnModuleInit {
       const ob = this.EnguineOrderBookService[symbol].GetOrderBook(request);
       return [ob, request];
     } catch (e) {
-      console.log('aasd');
+      console.error(e);
       return [null, request];
     }
   }
