@@ -158,7 +158,7 @@ export const grpcClientOptions = async (
     transport: Transport.GRPC,
     options: {
       credentials: false,
-      package: 'finexblock',
+      package: 'grpc_order',
       url: `${host}:${port}`,
       protoPath: [
         join(__dirname, '/module/grpc/proto/message.proto'),

@@ -1,5 +1,6 @@
 syntax = "proto3";
-package finexblock;
+package grpc_order;
+//option go_package = "./grpc_order";
 
 import "message.proto";
 
@@ -31,28 +32,35 @@ service Event {
 
 service OrderBook {
 	rpc GetOrderBook(GetOrderBookInput) returns(GetOrderBookOutput);
+	//	rpc PushOrderBook(PushOrderBookInput) returns (Ack);
 }
 
-service LifeCycle {
-	rpc StartEngine(StartEngineInput) returns(StartEngineOutput);
-	rpc StopEngine(StopEngineInput) returns(StopEngineOutput);
+service PlacementProcess {
+	rpc Placement(Order) returns (Ack);
 }
 
-service Health {
-	rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
-	rpc Watch(HealthCheckRequest) returns (stream HealthCheckResponse);
+service RefundProcess {
+	rpc MarketAskRefund(Order) returns (Ack);
+	rpc MarketBidRefund(Order) returns (Ack);
+	rpc LimitAskRefund(Order) returns (Ack);
+	rpc LimitBidRefund(Order) returns (Ack);
 }
 
-message HealthCheckRequest {
-	string service = 1;
+service MatchProcess {
+	rpc LimitBidBigger(BidAsk) returns (Ack);
+	rpc LimitBidEqual(BidAsk) returns (Ack);
+	rpc LimitBidSmaller(BidAsk) returns (Ack);
+	rpc MarketBidBigger(BidAsk) returns (Ack);
+	rpc MarketBidEqual(BidAsk) returns (Ack);
+	rpc MarketBidSmaller(BidAsk) returns (Ack);
+	rpc LimitAskBigger(BidAsk) returns (Ack);
+	rpc LimitAskEqual(BidAsk) returns (Ack);
+	rpc LimitAskSmaller(BidAsk) returns (Ack);
+	rpc MarketAskBigger(BidAsk) returns (Ack);
+	rpc MarketAskEqual(BidAsk) returns (Ack);
+	rpc MarketAskSmaller(BidAsk) returns (Ack);
 }
 
-message HealthCheckResponse {
-	enum ServingStatus {
-		UNKNOWN = 0;
-		SERVING = 1;
-		NOT_SERVING = 2;
-		SERVICE_UNKNOWN = 3;
-	}
-	ServingStatus status = 1;
+service ErrorProcess {
+	rpc Error(ErrorInput) returns(Ack);
 }

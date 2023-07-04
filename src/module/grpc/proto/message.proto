@@ -1,12 +1,21 @@
 syntax = "proto3";
-package finexblock;
+package grpc_order;
+//option go_package = "./grpc_order";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
 
 enum OrderType {
 	ORDER_NIL = 0;
 	BID = 1; // 구매 매수
 	ASK = 2; // 판매 매도
+}
+
+enum Priority {
+	PRIORITY_NIL = 0;
+	LOW = 1;
+	MEDIUM = 2;
+	HIGH = 3;
 }
 
 enum SymbolType {
@@ -47,12 +56,24 @@ enum Currency {
 	ARB = 15;
 	BTC = 16;
 }
+
+enum Reason {
+	ADVANCE_PAYMENT = 0;
+	DEPOSIT = 1;
+	WITHDRAWAL = 2;
+	MAKE = 3;
+	TAKE = 4;
+	REFUND = 5;
+}
+
 message Fee {
 	double Amount = 1;
 }
+
 message Ack {
 	bool Success = 1 [json_name = "success"];
 }
+
 message Order {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
@@ -62,44 +83,12 @@ message Order {
 	SymbolType Symbol = 6 [json_name = "symbol"];
 	google.protobuf.Timestamp MakeTime = 7 [json_name = "make_time"];
 }
-message LimitOrderBid {
-	string UserUUID = 1 [json_name = "user_uuid"];
-	string OrderUUID = 2 [json_name = "order_uuid"];
-	double Quantity = 3 [json_name = "quantity"];
-	double UnitPrice = 4 [json_name = "unit_price"];
-	OrderType OrderType = 5 [json_name = "order_type"];
-	SymbolType Symbol = 6 [json_name = "symbol"];
-	google.protobuf.Timestamp MakeTime = 7 [json_name = "make_time"];
-}
-message LimitOrderAsk {
-	string UserUUID = 1 [json_name = "user_uuid"];
-	string OrderUUID = 2 [json_name = "order_uuid"];
-	double Quantity = 3 [json_name = "quantity"];
-	double UnitPrice = 4 [json_name = "unit_price"];
-	OrderType OrderType = 5 [json_name = "order_type"];
-	SymbolType Symbol = 6 [json_name = "symbol"];
-	google.protobuf.Timestamp MakeTime = 7 [json_name = "make_time"];
-}
-message MarketOrderBid {
-	string UserUUID = 1 [json_name = "user_uuid"];
-	string OrderUUID = 2 [json_name = "order_uuid"];
-	double Quantity = 3 [json_name = "quantity"];
-	OrderType OrderType = 4 [json_name = "order_type"];
-	SymbolType Symbol = 5 [json_name = "symbol"];
-	google.protobuf.Timestamp MakeTime = 6 [json_name = "make_time"];
-}
-message MarketOrderAsk {
-	string UserUUID = 1 [json_name = "user_uuid"];
-	string OrderUUID = 2 [json_name = "order_uuid"];
-	double Quantity = 3 [json_name = "quantity"];
-	OrderType OrderType = 4 [json_name = "order_type"];
-	SymbolType Symbol = 5 [json_name = "symbol"];
-	google.protobuf.Timestamp MakeTime = 6 [json_name = "make_time"];
-}
+
 message OrderCancellation {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
 }
+
 message OrderCancelled {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
@@ -108,11 +97,13 @@ message OrderCancelled {
 	OrderType OrderType = 5 [json_name = "order_type"];
 	SymbolType Symbol = 6 [json_name = "symbol"];
 }
+
 message OrderCancellationFailed {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
 	string Msg = 3 [json_name = "msg"];
 }
+
 message OrderFulfillment {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
@@ -124,6 +115,7 @@ message OrderFulfillment {
 	google.protobuf.Timestamp TakeTime = 8 [json_name = "take_time"];
 	Fee Fee = 9 [json_name = "fee"];
 }
+
 message OrderInitialize {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
@@ -133,6 +125,7 @@ message OrderInitialize {
 	OrderType OrderType = 6 [json_name = "order_type"];
 	google.protobuf.Timestamp MakeTime = 7 [json_name = "make_time"];
 }
+
 message OrderMatching {
 	double UnitPrice = 1 [json_name = "unit_price"];
 	double Quantity = 2 [json_name = "quantity"];
@@ -140,6 +133,7 @@ message OrderMatching {
 	OrderType OrderType = 4 [json_name = "order_type"];
 	SymbolType Symbol = 5 [json_name = "symbol"];
 }
+
 message OrderMatchingFailed {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
@@ -149,6 +143,7 @@ message OrderMatchingFailed {
 	google.protobuf.Timestamp MakeTime = 6 [json_name = "make_time"];
 	string Msg = 7 [json_name = "msg"];
 }
+
 message OrderPartialFill {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
@@ -161,6 +156,7 @@ message OrderPartialFill {
 	google.protobuf.Timestamp TakeTime = 9 [json_name = "take_time"];
 	Fee Fee = 10 [json_name = "fee"];
 }
+
 message OrderPlacement {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
@@ -170,11 +166,13 @@ message OrderPlacement {
 	OrderType OrderType = 6 [json_name = "order_type"];
 	google.protobuf.Timestamp MakeTime = 7 [json_name = "make_time"];
 }
+
 message OrderPlacementFailed {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
 	string Msg = 3 [json_name = "msg"];
 }
+
 message MarketOrderInput {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
@@ -183,9 +181,11 @@ message MarketOrderInput {
 	SymbolType Symbol = 5 [json_name = "symbol"];
 	google.protobuf.Timestamp MakeTime = 6 [json_name = "make_time"];
 }
+
 message MarketOrderOutput {
 	bool Success = 1;
 }
+
 message LimitOrderInput {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	string OrderUUID = 2 [json_name = "order_uuid"];
@@ -195,25 +195,11 @@ message LimitOrderInput {
 	SymbolType Symbol = 6 [json_name = "symbol"];
 	google.protobuf.Timestamp MakeTime = 7 [json_name = "make_time"];
 }
+
 message LimitOrderOutput {
 	bool Success = 1 [json_name = "success"];
 }
 
-message OrderMatchingEvent {
-	double UnitPrice = 1 [json_name = "unit_price"];
-	double Quantity = 2 [json_name = "quantity"];
-	google.protobuf.Timestamp Timestamp = 3 [json_name = "timestamp"];
-	OrderType OrderType = 4 [json_name = "order_type"];
-	SymbolType Symbol = 5 [json_name = "symbol"];
-}
-enum Reason {
-	ADVANCE_PAYMENT = 0;
-	DEPOSIT = 1;
-	WITHDRAWAL = 2;
-	MAKE = 3;
-	TAKE = 4;
-	REFUND = 5;
-}
 message BalanceUpdate {
 	string UserUUID = 1 [json_name = "user_uuid"];
 	double Diff = 2 [json_name = "diff"];
@@ -221,35 +207,32 @@ message BalanceUpdate {
 	Reason Reason = 4 [json_name = "reason"];
 }
 
-message StopEngineInput {
-
-}
-
-message StopEngineOutput {
-
-}
-
-message StartEngineInput {
-
-}
-
-message StartEngineOutput {
-
-}
-message GetOrderBookInput {
-}
 message BidAsk {
 	Order bid = 1 [json_name = "bid"];
 	Order ask = 2 [json_name = "ask"];
 }
+
+message GetOrderBookInput {
+}
+
 message OrderBookData {
 	double Price = 1 [json_name = "price"];
 	double Volume = 2 [json_name = "quantity"];
 }
+
 message GetOrderBookOutput {
 	repeated OrderBookData bids = 1 [json_name = "bids"];
 	repeated OrderBookData asks = 2 [json_name = "asks"];
 }
+
 message PushOrderBookInput {
 	SymbolType symbol = 1 [json_name = "symbol"];
+}
+
+message ErrorInput {
+	string process = 1 [json_name = "process"];
+	string msg = 2 [json_name = "msg"];
+	string err = 3 [json_name = "err"];
+	Priority priority = 4 [json_name = "priority"];
+	google.protobuf.Struct metadata = 5 [json_name = "data"];
 }

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { grpcEndPoint, PACKAGE } from '../../../cllient.options.js';
 import {
   CancelOrder,
-  LifeCycle,
   LimitOrder,
   MarketOrder,
   OrderBook,
@@ -16,10 +15,6 @@ import {
   LimitOrderInput,
   MarketOrderInput,
   OrderCancellation,
-  StartEngineInput,
-  StartEngineOutput,
-  StopEngineInput,
-  StopEngineOutput,
 } from '../interface/message.js';
 import { randomUUID } from 'crypto';
 import {
@@ -34,7 +29,6 @@ export class OrderClientService implements OnModuleInit {
   private LimitOrderService: { [key: string]: LimitOrder } = {};
   private MarketOrderService: { [key: string]: MarketOrder } = {};
   private CancelOrderService: { [key: string]: CancelOrder } = {};
-  private LifecycleService: { [key: string]: LifeCycle } = {};
   private EnguineOrderBookService: { [key: string]: any } = {};
 
   constructor(
@@ -69,8 +63,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCETH.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCETH.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCETH.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCETH.getService<OrderBook>('OrderBook');
             break;
@@ -81,8 +73,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCETC.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCETC.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCETC.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCETC.getService<OrderBook>('OrderBook');
             break;
@@ -93,8 +83,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCMATIC.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCMATIC.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCMATIC.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCMATIC.getService<OrderBook>('OrderBook');
             break;
@@ -105,8 +93,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCLPT.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCLPT.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCLPT.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCLPT.getService<OrderBook>('OrderBook');
             break;
@@ -117,8 +103,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCMANA.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCMANA.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCMANA.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCMANA.getService<OrderBook>('OrderBook');
             break;
@@ -129,8 +113,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCAXS.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCAXS.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCAXS.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCAXS.getService<OrderBook>('OrderBook');
             break;
@@ -141,8 +123,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCAUDIO.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCAUDIO.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCAUDIO.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCAUDIO.getService<OrderBook>('OrderBook');
             break;
@@ -153,8 +133,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCSAND.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCSAND.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCSAND.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCSAND.getService<OrderBook>('OrderBook');
             break;
@@ -165,8 +143,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCCOMP.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCCOMP.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCCOMP.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCCOMP.getService<OrderBook>('OrderBook');
             break;
@@ -177,8 +153,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCLINK.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCLINK.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCLINK.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCLINK.getService<OrderBook>('OrderBook');
             break;
@@ -189,8 +163,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCDYDX.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCDYDX.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCDYDX.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCDYDX.getService<OrderBook>('OrderBook');
             break;
@@ -201,8 +173,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCBNB.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCBNB.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCBNB.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCBNB.getService<OrderBook>('OrderBook');
             break;
@@ -213,8 +183,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCOP.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCOP.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCOP.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCOP.getService<OrderBook>('OrderBook');
             break;
@@ -225,8 +193,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCAVAX.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCAVAX.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCAVAX.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCAVAX.getService<OrderBook>('OrderBook');
             break;
@@ -237,8 +203,6 @@ export class OrderClientService implements OnModuleInit {
               this.clientBTCARB.getService<MarketOrder>('MarketOrder');
             this.CancelOrderService[e] =
               this.clientBTCARB.getService<CancelOrder>('CancelOrder');
-            this.LifecycleService[e] =
-              this.clientBTCARB.getService<LifeCycle>('LifeCycle');
             this.EnguineOrderBookService[e] =
               this.clientBTCARB.getService<OrderBook>('OrderBook');
             break;
@@ -331,13 +295,6 @@ export class OrderClientService implements OnModuleInit {
     ];
   }
 
-  async _test() {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return await this.test.getService('Health').Check({});
-    // return await this.test.getService('Health').Check;
-  }
-
   async CancelOrder(req: OrderCancellationInputDto): Promise<Observable<Ack>> {
     const request: OrderCancellation = {
       UserUUID: req.UserUUID,
@@ -345,13 +302,5 @@ export class OrderClientService implements OnModuleInit {
     };
     console.log('CancelOrder', request);
     return await this.CancelOrderService[req.Symbol].CancelOrder(request);
-  }
-
-  async StartEngine(req: StartEngineInput): Promise<StartEngineOutput> {
-    return await this.LifecycleService['BTCADA'].StartEngine(req);
-  }
-
-  async StopEngine(req: StopEngineInput): Promise<StopEngineOutput> {
-    return await this.LifecycleService['BTCADA'].StopEngine(req);
   }
 }

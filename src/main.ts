@@ -54,7 +54,7 @@ async function bootstrap() {
   // app.connectMicroservice<MicroserviceOptions>({
   //   transport: Transport.GRPC,
   //   options: {
-  //     package: ['finexblock'],
+  //     package: ['grpc_order'],
   //     url: `localhost:50051`,
   //     protoPath: [
   //       join(__dirname, '/module/grpc/proto/order_cancellation.proto'),
@@ -99,7 +99,7 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       credentials: false,
-      package: ['finexblock'],
+      package: ['grpc_order'],
       url:
         process.env.USE_SSH_TUNNEL === 'true'
           ? '127.0.0.1:50051'
