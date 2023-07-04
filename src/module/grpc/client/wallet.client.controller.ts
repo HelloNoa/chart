@@ -30,6 +30,9 @@ import { CreateWalletResponse } from '../interface/proxy/proxy.bitcoin.js';
 import { CreateWalletOutput } from '../interface/proxy/proxy.polygon.js';
 import {
   E_CoinId,
+  GetWithdrawListInputDto,
+  GetWithdrawListOutputDto,
+  status,
   WithdrawInputDto,
   WithdrawOutputDto,
 } from '../../../dto/wallet.client.dro.js';
@@ -38,6 +41,7 @@ import { coin_transferService } from '../../typeorm/coin_transfer/coin_transfer.
 import { coin_transfer } from '../../typeorm/coin_transfer/coin_transfer.entity.js';
 import { withdrawal_requestService } from '../../typeorm/withdrawal_request/withdrawal_request.service.js';
 import { withdrawal_request } from '../../typeorm/withdrawal_request/withdrawal_request.entity.js';
+import { wallet } from '../../typeorm/wallet/wallet.entity.js';
 
 @Controller('wallet')
 @ApiBearerAuth()
@@ -118,6 +122,31 @@ export class WalletClientController {
         },
       });
     });
+  }
+
+  @Get('/withdraw')
+  @ApiQuery({
+    name: 'status',
+    type: GetWithdrawListInputDto,
+  })
+  @ApiResponse({
+    type: GetWithdrawListOutputDto,
+    isArray: true,
+    description: '요청 완료',
+    status: 200,
+  })
+  @ApiOperation({ summary: '출금 현황' })
+  async GetWithdrawList(
+    @User() user: any,
+    @Query('status') status: status[],
+  ): Promise<any> {
+    console.log(status);
+    const userId = await this.userService.getUserId(user.uuid);
+    if (userId === null) return new BadRequestException('User not found');
+    return this.withdrawalRequestService.GetWithdrawalRequestListByUserId(
+      userId,
+      status,
+    );
   }
 
   @Post('/withdraw')

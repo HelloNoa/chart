@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum } from 'class-validator';
 
 export class WithdrawInputDto {
   @ApiProperty({
@@ -19,6 +20,72 @@ export class WithdrawInputDto {
     required: true,
   })
   amount: string;
+}
+
+export enum status {
+  SUBMITTED = 'SUBMITTED',
+  APPROVED = 'APPROVED',
+  CANCELED = 'CANCELED',
+  REJECTED = 'REJECTED',
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+}
+
+export class GetWithdrawListInputDto {
+  @ApiProperty({
+    example: Object.values(status),
+    type: 'array',
+    items: {
+      type: typeof status,
+    },
+  })
+  @IsEnum(status)
+  status: string[];
+}
+
+export class GetWithdrawListOutputDto {
+  @ApiProperty({
+    example: 'COIN_ADDRESS',
+    type: 'string',
+  })
+  to_address: string;
+
+  @ApiProperty({
+    example: '100',
+    type: 'string',
+  })
+  amount: string;
+
+  @ApiProperty({
+    example: '0',
+    type: 'string',
+  })
+  fee: string;
+
+  @ApiProperty({
+    example: 'SUBMITTED',
+    type: 'string',
+  })
+  status: string;
+
+  @ApiProperty({
+    example: '2023-07-04T12:57:44.000Z',
+    type: 'string',
+  })
+  created_at: string;
+
+  @ApiProperty({
+    example: '2023-07-04T12:57:44.000Z',
+    type: 'string',
+  })
+  updated_at: string;
+
+  @ApiProperty({
+    example: 'WITHDRAWAL',
+    type: 'string',
+  })
+  transfer_type: string;
 }
 
 export class WithdrawOutputDto {
