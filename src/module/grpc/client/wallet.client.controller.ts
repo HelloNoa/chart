@@ -71,12 +71,12 @@ export class WalletClientController {
     return await this.walletService.getWalletByUserId(userId, coin.id);
   }
 
-  @Get('/newBTCWallet')
-  @ApiQuery({ name: 'symbol', example: 'BTC' })
-  @ApiOperation({ summary: '지갑 정보' })
-  async GetNewAddress(): Promise<any> {
-    return this.walletClientService.GetNewBTCAddress();
-  }
+  // @Get('/newBTCWallet')
+  // @ApiQuery({ name: 'symbol', example: 'BTC' })
+  // @ApiOperation({ summary: '지갑 정보' })
+  // async GetNewAddress(): Promise<any> {
+  //   return this.walletClientService.GetNewBTCAddress();
+  // }
 
   @Patch('/wallet')
   @ApiQuery({ name: 'symbol', example: 'BTC' })

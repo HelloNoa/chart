@@ -46,11 +46,11 @@ export class WalletClientService implements OnModuleInit {
     //onModuleInit
   }
 
-  async GetNewBTCAddress() {
-    return this.bitcoinProxy
-      .getService<BitcoinProxy>('BitcoinProxy')
-      .GetNewAddress({});
-  }
+  // async GetNewBTCAddress() {
+  //   return this.bitcoinProxy
+  //     .getService<BitcoinProxy>('BitcoinProxy')
+  //     .GetNewAddress({});
+  // }
 
   async CreateWallet(
     symbol: string,
