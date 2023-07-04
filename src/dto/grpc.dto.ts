@@ -96,6 +96,7 @@ export class MarketOrderInputDto {
   // })
   // public MakeTime: Timestamp;
 }
+
 export class MarketOrderOutputDto {
   @ApiProperty({
     example: true,
