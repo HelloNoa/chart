@@ -99,12 +99,10 @@ export class OrderBookService {
         // console.log(bidask)
         if (bidask === null) {
           console.error('get bidask null!');
-          if (!this.orderBook.hasOwnProperty(e.name)) {
-            this.orderBook[e.name] = {
-              ask: [],
-              bid: [],
-            };
-          }
+          this.orderBook[e.name] = {
+            ask: [],
+            bid: [],
+          };
         } else {
           this.orderBook[e.name] = bidask;
         }
@@ -193,12 +191,6 @@ export class OrderBookService {
       }
 
       return;
-    }
-    if (!this.orderBook[req.symbol]?.ask) {
-      this.orderBook[req.symbol].ask = [];
-    }
-    if (!this.orderBook[req.symbol]?.bid) {
-      this.orderBook[req.symbol].bid = [];
     }
 
     console.log('before', this.orderBook[req.symbol]);
