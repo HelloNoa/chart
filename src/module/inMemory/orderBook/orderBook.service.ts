@@ -194,6 +194,13 @@ export class OrderBookService {
 
       return;
     }
+    if (!this.orderBook[req.symbol]?.ask) {
+      this.orderBook[req.symbol].ask = [];
+    }
+    if (!this.orderBook[req.symbol]?.bid) {
+      this.orderBook[req.symbol].bid = [];
+    }
+
     console.log('before', this.orderBook[req.symbol]);
     switch (req.type) {
       case 0:
