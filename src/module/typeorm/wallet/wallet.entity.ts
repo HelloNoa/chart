@@ -1,6 +1,16 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  JoinColumn,
+  Relation,
+  ManyToOne,
+} from 'typeorm';
+import { coin_transfer } from '../coin_transfer/coin_transfer.entity.js';
+import { coin } from '../coin/coin.entity.js';
 
-@Entity()
+@Entity('wallet')
 export class wallet {
   @PrimaryGeneratedColumn()
   id: number;
@@ -8,7 +18,7 @@ export class wallet {
   @Column('bigint')
   user_id: number;
 
-  @Column('bigint')
+  @Column({ name: 'coin_id', type: 'bigint' })
   coin_id: number;
 
   @Column('longtext')
@@ -19,4 +29,12 @@ export class wallet {
 
   @Column('timestamp')
   updated_at: string;
+
+  @OneToMany(() => coin_transfer, (coin_transfer) => coin_transfer.wallet_id)
+  @JoinColumn({ name: 'coin_transfer' })
+  coin_transfer: Relation<coin_transfer>[];
+
+  @ManyToOne(() => coin)
+  @JoinColumn({ name: 'coin_id' })
+  coin: Relation<coin>;
 }

@@ -1,6 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  JoinColumn,
+  Relation,
+} from 'typeorm';
+import { coin } from '../coin/coin.entity.js';
 
-@Entity()
+@Entity('blockchain')
 export class blockchain {
   @PrimaryGeneratedColumn()
   id: number;
@@ -13,4 +21,8 @@ export class blockchain {
 
   @Column('timestamp')
   updated_at: string;
+
+  @OneToMany(() => coin, (coin) => coin.blockchain)
+  @JoinColumn({ name: 'coin' })
+  coin: Relation<coin>[];
 }
