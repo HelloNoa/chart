@@ -6,9 +6,11 @@ type T_balance = {
   symbol: keyof typeof Currency;
   balance: number;
 };
+
 @Injectable()
 export class BalanceService {
   constructor(private readonly redisPubSubService: RedisPubSubService) {}
+
   //내 자산 목록
   async balance(uuid: string, symbol?: string) {
     if (symbol === undefined) {

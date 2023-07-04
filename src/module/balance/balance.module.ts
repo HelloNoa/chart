@@ -9,5 +9,6 @@ import { JwtService } from '@nestjs/jwt';
   controllers: [BalanceController],
   imports: [RedisPubSubModule],
   providers: [BalanceService, JWTGuard, JwtService],
+  exports: [BalanceService],
 })
 export class BalanceModule {}
