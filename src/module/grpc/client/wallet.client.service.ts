@@ -139,7 +139,8 @@ export class WalletClientService implements OnModuleInit {
     try {
       const coinTransferIsComplete = await queryRunner.manager
         .insert(coin_transfer, req.coinTransfer)
-        .then(() => {
+        .then((e) => {
+          req.withdrawalRequest.coin_transfer_id = e.identifiers[0].id;
           return true;
         })
         .catch((e) => {
@@ -157,11 +158,11 @@ export class WalletClientService implements OnModuleInit {
         });
       if (!coinTransferIsComplete || !withdrawalRequsetIsComplete) {
         await queryRunner.rollbackTransaction();
+        return new BadRequestException(`fail transaction`);
       } else {
-        await queryRunner.rollbackTransaction();
-        // await queryRunner.commitTransaction();
+        await queryRunner.commitTransaction();
+        return 'ok';
       }
-      return 'a';
     } catch (e) {
       console.error(e);
       const restoreBalanceSetIsComplete = this.redisService.Client.set(
