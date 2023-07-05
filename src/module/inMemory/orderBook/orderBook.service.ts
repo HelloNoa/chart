@@ -186,8 +186,8 @@ export class OrderBookService {
               })
               .sort((a, b) => b.price - a.price);
           }
-          this.incomeUpdata[req.symbol] = new Date().getTime();
         }
+        this.incomeUpdata[req.symbol] = new Date().getTime();
       }
 
       return;
