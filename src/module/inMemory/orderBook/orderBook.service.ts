@@ -60,7 +60,6 @@ export class OrderBookService {
   }
 
   async getRefreshObrderBook(symbolName: string) {
-    // console.log(symbolName);
     try {
       await new Promise(async (res) => {
         const [ob] = await this.OrderClientService.enguineOrderBook(symbolName);
@@ -69,7 +68,6 @@ export class OrderBookService {
         } else {
           ob.subscribe({
             next: (aa) => {
-              // console.log(aa);
               this.queue.push({
                 symbol: symbolName,
                 type: 3,

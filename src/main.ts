@@ -86,9 +86,7 @@ async function bootstrap() {
   app.setGlobalPrefix(`api/v${version}`, {
     exclude: [{ path: '', method: RequestMethod.GET }],
   });
-  // // app.use(helmet());
-  // console.log('dsad');
-  //
+  // app.use(helmet());
   if (['prod', 'dev', 'test'].includes(process.env.NODE_ENV + '')) {
     initSwaggerDocs(app);
   }

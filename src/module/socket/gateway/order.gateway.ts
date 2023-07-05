@@ -97,22 +97,6 @@ export class OrderGateway
           console.log('todayOpenPrice rest 파싱에러');
           return [];
         });
-      // this.OpenPrice = await fetch(
-      //   `https://chart${
-      //     isDev ? '-dev' : ''
-      //   }.finexblock.com/api/v1/chart/todayOpenPrice`,
-      // )
-      //   .then((e) => {
-      //     if (!e.ok) {
-      //       throw new Error('todayOpenPrice 400 or 500 에러');
-      //     }
-      //     return e.json();
-      //   })
-      //   .then((e) => e.output)
-      //   .catch(() => {
-      //     console.log('todayOpenPrice rest 파싱에러');
-      //     return [];
-      //   });
     })();
     setInterval(async () => {
       this.OpenPrice = await this.chartService
@@ -126,29 +110,10 @@ export class OrderGateway
           console.log('todayOpenPrice rest 파싱에러');
           return [];
         });
-      // this.OpenPrice = await fetch(
-      //   `https://chart${
-      //     isDev ? '-dev' : ''
-      //   }.finexblock.com/api/v1/chart/todayOpenPrice`,
-      // )
-      //   .then((e) => {
-      //     if (!e.ok) {
-      //       throw new Error('todayOpenPrice 400 or 500 에러');
-      //     }
-      //     return e.json();
-      //   })
-      //   .then((e) => e.output)
-      //   .catch(() => {
-      //     console.log('todayOpenPrice rest 파싱에러');
-      //     return [];
-      //   });
     }, 1000 * 60);
   }
 
   async getCurrnetPrice() {
-    // const isDev = (() => {
-    //   return process.env.NODE_ENV?.toLowerCase() !== 'prod';
-    // })();
     await Promise.all(
       new Array(SymbolLength).fill('a').map(async (_, i) => {
         const symbol = SymbolType[i + 1];
@@ -163,25 +128,6 @@ export class OrderGateway
             console.log('ticker rest 파싱에러');
             return 0;
           });
-        // this.CurrentPrice[symbol] = await fetch(
-        //   `https://chart${
-        //     isDev ? '-dev' : ''
-        //   }.finexblock.com/api/v1/chart/ticker?symbol=${symbol}`,
-        // )
-        //   .then((e) => {
-        //     if (!e.ok) {
-        //       throw new Error('ticker 400 or 500 에러');
-        //     }
-        //     return e.json();
-        //   })
-        //   .then((e) => e.output)
-        //   .then((e) => {
-        //     return Number(e.ticker?.currentPrice ?? 0);
-        //   })
-        //   .catch(() => {
-        //     console.log('ticker rest 파싱에러');
-        //     return 0;
-        //   });
       }),
     );
   }
@@ -747,17 +693,5 @@ export class OrderGateway
   afterInit(server: ws.Server) {
     console.log(server.options.path);
     console.log('Trade WebSocket server initialized');
-    // setInterval(() => {
-    //   const json = {
-    //     action: 'publish',
-    //     channel: 'trade',
-    //     pair: 'btc-usdt',
-    //     type: Math.random() > 0.5 ? 'bid' : 'ask',
-    //     price: Math.random() * 100 + 1000 + '',
-    //   };
-    //   const str = JSON.stringify(json).replace(regex, '');
-    //   const binaryData = str2ab(str);
-    //   this.sendAllClients(binaryData);
-    // }, 100);
   }
 }
