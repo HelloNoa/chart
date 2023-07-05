@@ -192,13 +192,11 @@ export class WalletClientController {
     coinTransfer.wallet_id = wallet.id;
     coinTransfer.amount = req.amount;
     coinTransfer.transfer_type = 'WITHDRAWAL';
-    console.log(coinTransfer);
     const withdrawalRequest = new withdrawal_request();
     withdrawalRequest.amount = req.amount;
     withdrawalRequest.to_address = req.to;
     withdrawalRequest.fee = '0';
     withdrawalRequest.status = 'SUBMITTED';
-    console.log(withdrawalRequest);
 
     const request = {
       userUuid: user.uuid,

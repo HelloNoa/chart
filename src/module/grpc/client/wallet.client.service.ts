@@ -123,6 +123,11 @@ export class WalletClientService implements OnModuleInit {
         `not enough ${E_CoinId[req.wallet.coin_id]} balance`,
       );
     }
+    if (isNaN(Number(UserBalance) - Number(minusBalance))) {
+      return new BadRequestException(
+        `${E_CoinId[req.wallet.coin_id]} balance is NaN`,
+      );
+    }
     const balanceSetIsComplete = this.redisService.Client.set(
       balanceKey,
       Number(UserBalance) - Number(minusBalance),
@@ -147,6 +152,8 @@ export class WalletClientService implements OnModuleInit {
           console.error(e);
           return false;
         });
+      console.log(req.coinTransfer);
+      console.log(req.withdrawalRequest);
       const withdrawalRequsetIsComplete = await queryRunner.manager
         .insert(withdrawal_request, req.withdrawalRequest)
         .then(() => {
