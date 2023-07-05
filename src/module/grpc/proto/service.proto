@@ -28,11 +28,11 @@ service Event {
 	rpc OrderFulfillmentEvent (OrderFulfillment) returns (Ack);
 	rpc OrderInitializeEvent (OrderInitialize) returns (Ack);
 	rpc BalanceUpdateEvent (BalanceUpdate) returns (Ack);
+	rpc MarketOrderMatchingEvent (MarketOrderMatching) returns (Ack);
 }
 
 service OrderBook {
 	rpc GetOrderBook(GetOrderBookInput) returns(GetOrderBookOutput);
-	//	rpc PushOrderBook(PushOrderBookInput) returns (Ack);
 }
 
 service PlacementProcess {
