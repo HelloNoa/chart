@@ -9,6 +9,7 @@ export class UpbitSocketService {
   constructor(
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
   ) {}
+
   onModuleInit() {
     this.socket = new ws('wss://api.upbit.com/websocket/v1');
     this.socket.binaryType = 'arraybuffer';
