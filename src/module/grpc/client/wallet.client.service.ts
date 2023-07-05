@@ -117,7 +117,7 @@ export class WalletClientService implements OnModuleInit {
     }
     const minusBalance =
       Number(req.withdrawalRequest.amount) + Number(req.withdrawalRequest.fee);
-    const UserBalance = this.redisService.Client.get(balanceKey) ?? 0;
+    const UserBalance = (await this.redisService.Client.get(balanceKey)) ?? 0;
     if (Number(UserBalance) <= Number(minusBalance)) {
       return new BadRequestException(
         `not enough ${E_CoinId[req.wallet.coin_id]} balance`,

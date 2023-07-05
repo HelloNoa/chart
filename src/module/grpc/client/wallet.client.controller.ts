@@ -174,6 +174,9 @@ export class WalletClientController {
       user.uuid,
       E_CoinId[req.coinId],
     );
+    if (isNaN(balance)) {
+      return new BadRequestException('not enough balance');
+    }
     if (!balance || Number(balance) < Number(req.amount))
       return new BadRequestException('not enough balance');
     if (!isFinite(Number(req.amount))) {
