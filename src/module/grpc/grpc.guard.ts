@@ -22,11 +22,11 @@ export class GrpcGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> | any {
     const [, , implement] = context.getArgs();
     const clientIp = implement.call.getPeer().split(':')[0];
-    console.log('clientIp : ', clientIp);
-    console.log(this.whiteList);
     if (this.whiteList.includes(clientIp)) {
       return true;
     } else {
+      console.log('clientIp : ', clientIp);
+      console.log(this.whiteList);
       throw new RpcException('ip not allow');
     }
   }
