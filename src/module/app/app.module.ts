@@ -44,6 +44,7 @@ import { coinModule } from '../typeorm/coin/coin.module.js';
 import { blockchainModule } from '../typeorm/blockchain/blockchain.module.js';
 import { coin_transferModule } from '../typeorm/coin_transfer/coin_transfer.module.js';
 import { withdrawal_requestModule } from '../typeorm/withdrawal_request/withdrawal_request.module.js';
+import { order_matching_historyModule } from '../typeorm/order_matching_history/order_matching_history.module.js';
 
 @Module({
   imports: [
@@ -84,6 +85,7 @@ import { withdrawal_requestModule } from '../typeorm/withdrawal_request/withdraw
     blockchainModule,
     coin_transferModule,
     withdrawal_requestModule,
+    order_matching_historyModule,
     GrpcModule,
   ],
   controllers: [AppController],
