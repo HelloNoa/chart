@@ -8,8 +8,8 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { proxyClients } from '../../../proxy.clients.options.js';
 import {
   BitcoinProxy,
-  CreateWalletRequest,
   CreateWalletResponse,
+  GetNewAddressRequest,
 } from '../interface/proxy/proxy.bitcoin.js';
 import {
   CreateWalletInput as Ethereum_CreateWalletInput,
@@ -46,12 +46,6 @@ export class WalletClientService implements OnModuleInit {
     //onModuleInit
   }
 
-  // async GetNewBTCAddress() {
-  //   return this.bitcoinProxy
-  //     .getService<BitcoinProxy>('BitcoinProxy')
-  //     .GetNewAddress({});
-  // }
-
   async CreateWallet(
     symbol: string,
     userId: number,
@@ -64,12 +58,10 @@ export class WalletClientService implements OnModuleInit {
     switch (symbol.toUpperCase()) {
       case 'BTC': //BITCOIN
         {
-          const request: CreateWalletRequest = {
-            UserId: userId,
-          };
+          const request: GetNewAddressRequest = {};
           res = this.bitcoinProxy
             .getService<BitcoinProxy>('BitcoinProxy')
-            .CreateWalletAddress(request);
+            .GetNewAddress(request);
         }
         break;
       case 'ETH': //ETHEREUM
