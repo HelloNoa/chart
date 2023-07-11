@@ -42,6 +42,10 @@ import { coin_transfer } from '../../typeorm/coin_transfer/coin_transfer.entity.
 import { withdrawal_requestService } from '../../typeorm/withdrawal_request/withdrawal_request.service.js';
 import { withdrawal_request } from '../../typeorm/withdrawal_request/withdrawal_request.entity.js';
 import { wallet } from '../../typeorm/wallet/wallet.entity.js';
+import { MinWithdrawAmount, WithdrawFee } from '../../../constants/index.js';
+import { DECIMAL } from '../../../dto/redis.dto.js';
+import { SafeMath } from '../../../utils/safeMath.js';
+import { Big } from 'big.js';
 
 @Controller('wallet')
 @ApiBearerAuth()
@@ -167,28 +171,36 @@ export class WalletClientController {
       user.uuid,
       E_CoinId[req.coinId],
     );
-    if (isNaN(balance)) {
+    const decimal = DECIMAL[E_CoinId[req.coinId]];
+    const fee = Big(WithdrawFee[E_CoinId[req.coinId]]).mul(
+      DECIMAL[E_CoinId[req.coinId]],
+    );
+    if (
+      !SafeMath(Number(req.amount)) ||
+      !SafeMath(Number(balance)) ||
+      !SafeMath(fee.toNumber()) ||
+      !SafeMath(decimal)
+    ) {
+      return new BadRequestException('type is not safe');
+    }
+    if (Number(balance) < Number(req.amount) * decimal + fee.toNumber())
       return new BadRequestException('not enough balance');
-    }
-    if (!balance || Number(balance) < Number(req.amount))
-      return new BadRequestException('not enough balance');
-    if (!isFinite(Number(req.amount))) {
-      return new BadRequestException('type is Infinity');
-    }
-    if (isNaN(Number(req.amount))) {
-      return new BadRequestException('type is NaN');
-    }
-    if (Number(req.amount) < 0) {
-      return new BadRequestException('not allow minus balance');
+
+    if (
+      MinWithdrawAmount[E_CoinId[req.coinId]] * DECIMAL[E_CoinId[req.coinId]] >
+      Number(req.amount) * decimal
+    ) {
+      // 최소 출금 수량 체크
+      return new BadRequestException('Lower Withdrawal Quantity than Minimum');
     }
     const coinTransfer = new coin_transfer();
     coinTransfer.wallet_id = wallet.id;
-    coinTransfer.amount = req.amount;
+    coinTransfer.amount = `${Number(req.amount) * decimal}`;
     coinTransfer.transfer_type = 'WITHDRAWAL';
     const withdrawalRequest = new withdrawal_request();
-    withdrawalRequest.amount = req.amount;
+    withdrawalRequest.amount = `${Number(req.amount) * decimal}`;
     withdrawalRequest.to_address = req.to;
-    withdrawalRequest.fee = '0';
+    withdrawalRequest.fee = `${fee}`;
     withdrawalRequest.status = 'SUBMITTED';
 
     const request = {
