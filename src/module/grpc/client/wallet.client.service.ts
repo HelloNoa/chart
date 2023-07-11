@@ -105,18 +105,18 @@ export class WalletClientService implements OnModuleInit {
       },
     );
     if (!getAccountLock) {
-      return new BadRequestException('fail to get AccountLock');
+      throw new BadRequestException('fail to get AccountLock');
     }
     const minusBalance =
       Number(req.withdrawalRequest.amount) + Number(req.withdrawalRequest.fee);
     const UserBalance = (await this.redisService.Client.get(balanceKey)) ?? 0;
     if (Number(UserBalance) <= Number(minusBalance)) {
-      return new BadRequestException(
+      throw new BadRequestException(
         `not enough ${E_CoinId[req.wallet.coin_id]} balance`,
       );
     }
     if (isNaN(Number(UserBalance) - Number(minusBalance))) {
-      return new BadRequestException(
+      throw new BadRequestException(
         `${E_CoinId[req.wallet.coin_id]} balance is NaN`,
       );
     }
@@ -125,7 +125,7 @@ export class WalletClientService implements OnModuleInit {
       Number(UserBalance) - Number(minusBalance),
     );
     if (!balanceSetIsComplete) {
-      return new BadRequestException(
+      throw new BadRequestException(
         `fail to set ${E_CoinId[req.wallet.coin_id]} balance`,
       );
     }
@@ -157,7 +157,7 @@ export class WalletClientService implements OnModuleInit {
         });
       if (!coinTransferIsComplete || !withdrawalRequsetIsComplete) {
         await queryRunner.rollbackTransaction();
-        return new BadRequestException(`fail transaction`);
+        throw new BadRequestException(`fail transaction`);
       } else {
         await queryRunner.commitTransaction();
         return 'ok';
@@ -184,7 +184,7 @@ fee: ${req.withdrawalRequest.fee}\n
         ).then((data) => {
           console.log(data); // JSON data parsed by `data.json()` call
         });
-        return new BadRequestException(
+        throw new BadRequestException(
           `fail to restore ${E_CoinId[req.wallet.coin_id]} balances`,
         );
       }

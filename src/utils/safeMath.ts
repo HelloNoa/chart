@@ -12,8 +12,8 @@ export const SafeMath = (n: number) => {
   if (n <= 0) {
     return false;
   }
-  if (!(Number.isInteger(n) && Math.abs(n) <= Number.MAX_SAFE_INTEGER)) {
-    return false;
-  }
+  // if (!(Number.isInteger(n) && Math.abs(n) <= Number.MAX_SAFE_INTEGER)) {
+  //   return false;
+  // }
   return true;
 };

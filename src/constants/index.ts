@@ -1,3 +1,5 @@
+import { Currency } from '../module/grpc/interface/message.js';
+
 export const USER_REPOSITORY_KEY = 'repository.user';
 export const ORDER_REPOSITORY_KEY = 'repository.order';
 export const MYSQL_DATASOURCE_KEY = 'datasource.mysql';
@@ -32,3 +34,40 @@ export const DEFAULT_ISOLATION_LEVEL:
   | 'REPEATABLE READ'
   | 'SERIALIZABLE' =
   AppMode == EnvMode.Local ? 'SERIALIZABLE' : 'REPEATABLE READ';
+
+export const WithdrawFee: { [key: string]: number } = {
+  BTC: 0.0009,
+  ETH: 0.01,
+  ETC: 0.01,
+  MATIC: 0.05,
+  LPT: 0.1,
+  MANA: 1.9,
+  AXS: 0.1,
+  AUDIO: 9.0,
+  SAND: 2.0,
+  COMP: 0.1,
+  LINK: 0.3,
+  DYDX: 1.53,
+  BNB: 0.08,
+  OP: 0.09,
+  AVAX: 0.01,
+  ARB: 0.5,
+};
+export const MinWithdrawAmount: { [key: string]: number } = {
+  BTC: 0.001,
+  ETH: 0.02,
+  ETC: 0.02,
+  MATIC: 0.05,
+  LPT: 0.1,
+  MANA: 1.9,
+  AXS: 0.1,
+  AUDIO: 9.0,
+  SAND: 2.0,
+  COMP: 0.1,
+  LINK: 0.3,
+  DYDX: 1.53,
+  BNB: 0.08,
+  OP: 0.09,
+  AVAX: 0.01,
+  ARB: 0.37,
+};

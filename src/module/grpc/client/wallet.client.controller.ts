@@ -139,7 +139,7 @@ export class WalletClientController {
   ): Promise<any> {
     console.log(status);
     const userId = await this.userService.getUserId(user.uuid);
-    if (userId === null) return new BadRequestException('User not found');
+    if (userId === null) throw new BadRequestException('User not found');
     return this.withdrawalRequestService.GetWithdrawalRequestListByUserId(
       userId,
       status,
@@ -158,15 +158,24 @@ export class WalletClientController {
     @User() user: any,
     @Body() req: WithdrawInputDto,
   ): Promise<any> {
+    if (
+      req.to === undefined ||
+      req.coinId === undefined ||
+      req.amount === undefined
+    ) {
+      throw new BadRequestException('missing request param');
+    }
     const userId = await this.userService.getUserId(user.uuid);
-    if (userId === null) return new BadRequestException('User not found');
+    if (userId === null) throw new BadRequestException('User not found');
     const wallet = await this.walletService.getWalletByUserId(
       userId,
       req.coinId,
     );
-    if (!wallet) return new BadRequestException('not exist wallet');
-    if (wallet.address === '')
-      return new BadRequestException('not exist wallet address');
+    if (!wallet) throw new BadRequestException('not exist wallet');
+    if (wallet.address === '') {
+      throw new BadRequestException('not exist wallet address');
+    }
+
     const balance = await this.balanceService.balance(
       user.uuid,
       E_CoinId[req.coinId],
@@ -181,17 +190,17 @@ export class WalletClientController {
       !SafeMath(fee.toNumber()) ||
       !SafeMath(decimal)
     ) {
-      return new BadRequestException('type is not safe');
+      throw new BadRequestException('type is not safe');
     }
     if (Number(balance) < Number(req.amount) * decimal + fee.toNumber())
-      return new BadRequestException('not enough balance');
+      throw new BadRequestException('not enough balance');
 
     if (
       MinWithdrawAmount[E_CoinId[req.coinId]] * DECIMAL[E_CoinId[req.coinId]] >
       Number(req.amount) * decimal
     ) {
       // 최소 출금 수량 체크
-      return new BadRequestException('Lower Withdrawal Quantity than Minimum');
+      throw new BadRequestException('Lower Withdrawal Quantity than Minimum');
     }
     const coinTransfer = new coin_transfer();
     coinTransfer.wallet_id = wallet.id;
