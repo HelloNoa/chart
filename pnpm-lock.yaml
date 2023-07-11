@@ -67,6 +67,9 @@ dependencies:
   '@socket.io/redis-emitter':
     specifier: ^5.1.0
     version: 5.1.0
+  big.js:
+    specifier: ^6.2.1
+    version: 6.2.1
   cache-manager:
     specifier: ^5.2.0
     version: 5.2.0
@@ -168,6 +171,9 @@ devDependencies:
   '@nestjs/testing':
     specifier: ^9.3.12
     version: 9.3.12(@nestjs/common@9.3.12)(@nestjs/core@9.3.12)(@nestjs/microservices@9.3.12)(@nestjs/platform-express@9.3.12)
+  '@types/big.js':
+    specifier: ^6.1.6
+    version: 6.1.6
   '@types/chai':
     specifier: ^4.3.4
     version: 4.3.4
@@ -3554,6 +3560,10 @@ packages:
   /@tsconfig/node16@1.0.3:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
 
+  /@types/big.js@6.1.6:
+    resolution: {integrity: sha512-0r9J+Zz9rYm2hOTwiMAVkm3XFQ4u5uTK37xrQMhc9bysn/sf/okzovWMYYIBMFTn/yrEZ11pusgLEaoarTlQbA==}
+    dev: true
+
   /@types/body-parser@1.19.2:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
     dependencies:
@@ -4347,6 +4357,10 @@ packages:
     dependencies:
       tweetnacl: 0.14.5
     dev: true
+
+  /big.js@6.2.1:
+    resolution: {integrity: sha512-bCtHMwL9LeDIozFn+oNhhFoq+yQ3BNdnsLSASUxLciOb1vgvpHsIO1dsENiGMgbb4SkP5TrzWzRiLddn8ahVOQ==}
+    dev: false
 
   /bignumber.js@9.1.1:
     resolution: {integrity: sha512-pHm4LsMJ6lzgNGVfZHjMoO8sdoRhOzOH4MLmY65Jg70bpxCKu5iOHNJyfF6OyvYw7t8Fpf35RuzUyqnQsj8Vig==}
