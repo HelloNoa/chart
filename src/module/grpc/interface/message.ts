@@ -1,9 +1,17 @@
 import { Timestamp } from './google.protobuf.timestamp.js';
+import { Struct } from './google.protobuf.Struct.js';
 
 export enum OrderType {
   ORDER_NIL = 0,
   BID = 1, // 구매 매수
   ASK = 2, // 판매 매도
+}
+
+export enum Priority {
+  PRIORITY_NIL = 0,
+  LOW = 1,
+  MEDIUM = 2,
+  HIGH = 3,
 }
 
 export enum SymbolType {
@@ -49,6 +57,15 @@ export enum Currency {
 
 export const CurrencyLength = Object.keys(Currency).length / 2 - 1;
 
+export enum Reason {
+  ADVANCE_PAYMENT = 0,
+  DEPOSIT = 1,
+  WITHDRAWAL = 2,
+  MAKE = 3,
+  TAKE = 4,
+  REFUND = 5,
+}
+
 export interface Fee {
   Amount: number;
 }
@@ -62,44 +79,6 @@ export interface Order {
   OrderUUID: string;
   Quantity: number;
   UnitPrice: number;
-  OrderType: keyof typeof OrderType;
-  Symbol: keyof typeof SymbolType;
-  MakeTime?: Timestamp;
-}
-
-export interface LimitOrderBid {
-  UserUUID: string;
-  OrderUUID: string;
-  Quantity: number;
-  UnitPrice: number;
-  OrderType: keyof typeof OrderType;
-  Symbol: keyof typeof SymbolType;
-  MakeTime?: Timestamp;
-}
-
-export interface LimitOrderAsk {
-  UserUUID: string;
-  OrderUUID: string;
-  Quantity: number;
-  UnitPrice: number;
-  OrderType: keyof typeof OrderType;
-  Symbol: keyof typeof SymbolType;
-  MakeTime?: Timestamp;
-}
-
-export interface MarketOrderBid {
-  UserUUID: string;
-  OrderUUID: string;
-  Quantity: number;
-  OrderType: keyof typeof OrderType;
-  Symbol: keyof typeof SymbolType;
-  MakeTime?: Timestamp;
-}
-
-export interface MarketOrderAsk {
-  UserUUID: string;
-  OrderUUID: string;
-  Quantity: number;
   OrderType: keyof typeof OrderType;
   Symbol: keyof typeof SymbolType;
   MakeTime?: Timestamp;
@@ -153,6 +132,14 @@ export interface OrderMatching {
   Timestamp?: Timestamp;
   OrderType: keyof typeof OrderType;
   Symbol: keyof typeof SymbolType;
+}
+
+export interface OrderMatchingEvent {
+  UnitPrice: number;
+  Quantity: number;
+  Timestamp: Timestamp;
+  OrderType: OrderType;
+  Symbol: SymbolType;
 }
 
 export interface OrderMatchingFailed {
@@ -221,23 +208,6 @@ export interface LimitOrderOutput {
   Success: boolean;
 }
 
-export interface OrderMatchingEvent {
-  UnitPrice: number;
-  Quantity: number;
-  Timestamp: Timestamp;
-  OrderType: OrderType;
-  Symbol: SymbolType;
-}
-
-export enum Reason {
-  ADVANCE_PAYMENT = 0,
-  DEPOSIT = 1,
-  WITHDRAWAL = 2,
-  MAKE = 3,
-  TAKE = 4,
-  REFUND = 5,
-}
-
 export interface BalanceUpdate {
   UserUUID: string;
   Diff: number;
@@ -245,25 +215,13 @@ export interface BalanceUpdate {
   Reason: Reason;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StopEngineInput {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StopEngineOutput {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StartEngineInput {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StartEngineOutput {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface GetOrderBookInput {}
-
 export interface BidAsk {
   bid: Order;
   ask: Order;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface GetOrderBookInput {}
 
 export interface OrderBookData {
   Price: number;
@@ -277,4 +235,24 @@ export interface GetOrderBookOutput {
 
 export interface PushOrderBookInput {
   symbol: SymbolType;
+}
+
+export interface ErrorInput {
+  process: string;
+  msg: string;
+  err: string;
+  priority: Priority;
+  metadata: Struct;
+}
+
+export interface MarketOrderMatching {
+  UserUUID: string;
+  OrderUUID: string;
+  Quantity: number;
+  UnitPrice: number;
+  Symbol: SymbolType;
+  OrderType: OrderType;
+  MakeTime: Timestamp;
+  TakeTime: Timestamp;
+  Fee: Fee;
 }
