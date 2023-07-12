@@ -117,7 +117,6 @@ export class OrderGateway
     await Promise.all(
       new Array(SymbolLength).fill('a').map(async (_, i) => {
         const symbol = SymbolType[i + 1];
-        console.log('here');
         this.CurrentPrice[symbol] = await this.chartService
           .ticker(symbol)
           .then((e) => {

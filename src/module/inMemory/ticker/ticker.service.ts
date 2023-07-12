@@ -114,7 +114,7 @@ export class TickerService {
   }
 
   updateTicker(req: { symbol: string; volume: number; unitPrice: number }) {
-    console.log('before Ticker', this.ticker[req.symbol]);
+    // console.log('before Ticker', this.ticker[req.symbol]);
     this.ticker[req.symbol].currentPrice = req.unitPrice;
     this.ticker[req.symbol].lowPrice = Math.min(
       this.ticker[req.symbol].lowPrice,
@@ -130,7 +130,7 @@ export class TickerService {
     this.ticker[req.symbol].updown =
       (_updown / Number(this.ticker[req.symbol].openPrice)) * 100;
     this.incomeUpdata[req.symbol] = new Date().getTime();
-    console.log('after Ticker', this.ticker[req.symbol]);
+    // console.log('after Ticker', this.ticker[req.symbol]);
     return true;
   }
 

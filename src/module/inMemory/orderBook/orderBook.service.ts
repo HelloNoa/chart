@@ -191,7 +191,7 @@ export class OrderBookService {
       return;
     }
 
-    console.log('before', this.orderBook[req.symbol]);
+    // console.log('before', this.orderBook[req.symbol]);
     switch (req.type) {
       case 0:
         // OrderMatchingChannel;
@@ -299,7 +299,7 @@ export class OrderBookService {
         break;
     }
     this.incomeUpdata[req.symbol] = new Date().getTime();
-    console.log('after', this.orderBook[req.symbol]);
+    // console.log('after', this.orderBook[req.symbol]);
     return true;
   }
 
