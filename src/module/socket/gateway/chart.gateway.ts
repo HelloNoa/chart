@@ -109,6 +109,40 @@ export class ChartGateway
     client.send(data, { binary: true });
   }
 
+  @SubscribeMessage(socketEvent.sub.ClearChartSubscriber)
+  ClearChartSubscriberHandleMessage(client: any, payload: any): void {
+    if (client.chart === undefined) {
+      client.chart = [];
+    } else if (client.chart.includes(payload)) {
+      const index = client.chart.findIndex((e: any) => e === payload);
+      client.chart.splice(index, 1);
+    } else if (payload === '*') {
+      client.chart = [];
+    }
+    const json = {
+      [socketEvent.pub.ClearChartSubscriber]: client.chart,
+    };
+    const data = JSON.stringify(json).replace(regex, '');
+    client.send(data, { binary: true });
+  }
+
+  @SubscribeMessage(socketEvent.sub.ClearOrderBookSubscriber)
+  ClearOrderBookSubscriberHandleMessage(client: any, payload: any): void {
+    if (client.orderBook === undefined) {
+      client.orderBook = [];
+    } else if (client.orderBook.includes(payload)) {
+      const index = client.orderBook.findIndex((e: any) => e === payload);
+      client.orderBook.splice(index, 1);
+    } else if (payload === '*') {
+      client.orderBook = [];
+    }
+    const json = {
+      [socketEvent.pub.ClearOrderBookSubscriber]: client.orderBook,
+    };
+    const data = JSON.stringify(json).replace(regex, '');
+    client.send(data, { binary: true });
+  }
+
   Ticker(marketType: string, ticker: any) {
     this.server.clients.forEach((client: any) => {
       if (
