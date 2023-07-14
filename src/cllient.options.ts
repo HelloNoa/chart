@@ -161,8 +161,8 @@ export const grpcClientOptions = async (
       package: 'grpc_order',
       url: `${host}:${port}`,
       protoPath: [
-        join(__dirname, '/module/grpc/proto/message.proto'),
-        join(__dirname, '/module/grpc/proto/service.proto'),
+        join(__dirname, '/module/grpc/proto/grpc_order/message.proto'),
+        join(__dirname, '/module/grpc/proto/grpc_order/service.proto'),
       ],
     },
   };

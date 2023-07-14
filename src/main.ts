@@ -51,17 +51,6 @@ async function bootstrap() {
     }
   }
   const app = await NestFactory.create(AppModule);
-  // app.connectMicroservice<MicroserviceOptions>({
-  //   transport: Transport.GRPC,
-  //   options: {
-  //     package: ['grpc_order'],
-  //     url: `localhost:50051`,
-  //     protoPath: [
-  //       join(__dirname, '/module/grpc/proto/order_cancellation.proto'),
-  //       join(__dirname, '/module/grpc/proto/order_placement.proto'),
-  //     ],
-  //   },
-  // });
   const configService = app.get<ConfigService>(ConfigService);
 
   const version = configService.getOrThrow('APP_VERSION');
@@ -103,8 +92,8 @@ async function bootstrap() {
           ? '127.0.0.1:50051'
           : '0.0.0.0:50051',
       protoPath: [
-        join(__dirname, '/module/grpc/proto/message.proto'),
-        join(__dirname, '/module/grpc/proto/service.proto'),
+        join(__dirname, '/module/grpc/proto/grpc_order/message.proto'),
+        join(__dirname, '/module/grpc/proto/grpc_order/service.proto'),
       ],
     },
   });
