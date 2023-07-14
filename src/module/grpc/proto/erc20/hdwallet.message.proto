@@ -1,7 +1,6 @@
 syntax = "proto3";
-package polygon;
-option go_package = "/polygon";
-
+package erc20;
+option go_package = "/erc20";
 
 message CreateWalletInput {
   uint64 UserID = 1 [json_name = "user_id"];

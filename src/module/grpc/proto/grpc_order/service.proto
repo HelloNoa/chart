@@ -1,8 +1,8 @@
 syntax = "proto3";
 package grpc_order;
-//option go_package = "./grpc_order";
+option go_package = "./grpc_order";
 
-import "message.proto";
+import "grpc_order/message.proto";
 
 service MarketOrder {
 	rpc MarketOrderInit(MarketOrderInput) returns (Ack);

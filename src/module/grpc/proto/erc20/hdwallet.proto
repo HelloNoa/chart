@@ -1,9 +1,8 @@
 syntax = "proto3";
-package ethereum;
-option go_package = "/ethereum";
+package erc20;
+option go_package = "/erc20";
 
-
-import "ethereum/hdwallet.message.proto";
+import "erc20/hdwallet.message.proto";
 
 service HDWallet {
 	rpc CreateWallet(CreateWalletInput) returns (CreateWalletOutput);

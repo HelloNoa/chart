@@ -12,23 +12,47 @@ export const proxyClients = {
   bitcoin: {
     clientName: 'BITCOIN_PROXY_PACKAGE',
     protoPath: [
-      join(__dirname, '/module/grpc/proto/proxy/proxy.bitcoin.proto'),
+      join(__dirname, '/module/grpc/proto/bitcoin/bitcoin.proxy.proto'),
+      join(__dirname, '/module/grpc/proto/bitcoin/hdwallet.message.proto'),
+      join(__dirname, '/module/grpc/proto/bitcoin/hdwallet.proto'),
+      join(__dirname, '/module/grpc/proto/bitcoin/transaction.message.proto'),
+      join(__dirname, '/module/grpc/proto/bitcoin/transaction.proto'),
     ],
-    packageName: 'bitcoin_proxy',
+    packageName: 'bitcoin',
   },
   ethereum: {
     clientName: 'ETHEREUM_PROXY_PACKAGE',
     protoPath: [
-      join(__dirname, '/module/grpc/proto/proxy/proxy.ethereum.proto'),
+      join(__dirname, '/module/grpc/proto/ethereum/ethereum.proxy.proto'),
+      join(__dirname, '/module/grpc/proto/ethereum/hdwallet.message.proto'),
+      join(__dirname, '/module/grpc/proto/ethereum/hdwallet.proto'),
+      join(__dirname, '/module/grpc/proto/ethereum/transaction.message.proto'),
+      join(__dirname, '/module/grpc/proto/ethereum/transaction.proto'),
     ],
-    packageName: 'ethereum_proxy',
+    packageName: 'ethereum',
   },
   polygon: {
     clientName: 'POLYGON_PROXY_PACKAGE',
     protoPath: [
-      join(__dirname, '/module/grpc/proto/proxy/proxy.polygon.proto'),
+      join(__dirname, '/module/grpc/proto/polygon/polygon.proxy.proto'),
+      join(__dirname, '/module/grpc/proto/polygon/hdwallet.message.proto'),
+      join(__dirname, '/module/grpc/proto/polygon/hdwallet.proto'),
+      join(__dirname, '/module/grpc/proto/polygon/transaction.message.proto'),
+      join(__dirname, '/module/grpc/proto/polygon/transaction.proto'),
     ],
-    packageName: 'polygon_proxy',
+    packageName: 'polygon',
+  },
+  erc20: {
+    clientName: 'ERC20_PROXY_PACKAGE',
+    protoPath: [
+      join(__dirname, '/module/grpc/proto/erc20/blockchain.message.proto'),
+      join(__dirname, '/module/grpc/proto/erc20/blockchain.proto'),
+      join(__dirname, '/module/grpc/proto/erc20/hdwallet.message.proto'),
+      join(__dirname, '/module/grpc/proto/erc20/hdwallet.proto'),
+      join(__dirname, '/module/grpc/proto/erc20/transaction.message.proto'),
+      join(__dirname, '/module/grpc/proto/erc20/transaction.proto'),
+    ],
+    packageName: 'erc20',
   },
 };
 export const proxyGrpcClients = (): ClientsProviderAsyncOptions[] => {
