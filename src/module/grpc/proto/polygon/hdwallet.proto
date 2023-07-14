@@ -3,9 +3,9 @@ package polygon;
 option go_package = "/polygon";
 
 
-import "proto/polygon/hdwallet.message.proto";
+import "polygon/hdwallet.message.proto";
 
 service HDWallet {
-  rpc CreateWallet(CreateWalletInput) returns (CreateWalletOutput);
-  rpc GetBalance(GetBalanceInput) returns (GetBalanceOutput);
+	rpc CreateWallet(CreateWalletInput) returns (CreateWalletOutput);
+	rpc GetBalance(GetBalanceInput) returns (GetBalanceOutput);
 }

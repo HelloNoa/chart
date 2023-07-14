@@ -2,8 +2,8 @@ syntax = "proto3";
 package bitcoin;
 option go_package = "/bitcoin";
 
-import "proto/bitcoin/transaction.message.proto";
+import "bitcoin/transaction.message.proto";
 
 service Transaction {
-  rpc GetRawTransaction(GetRawTransactionInput) returns (GetRawTransactionOutput);
+	rpc GetRawTransaction(GetRawTransactionInput) returns (GetRawTransactionOutput);
 }

@@ -3,9 +3,9 @@ package ethereum;
 option go_package = "/ethereum";
 
 
-import "proto/ethereum/hdwallet.message.proto";
+import "ethereum/hdwallet.message.proto";
 
 service HDWallet {
-  rpc CreateWallet(CreateWalletInput) returns (CreateWalletOutput);
-  rpc GetBalance(GetBalanceInput) returns (GetBalanceOutput);
+	rpc CreateWallet(CreateWalletInput) returns (CreateWalletOutput);
+	rpc GetBalance(GetBalanceInput) returns (GetBalanceOutput);
 }
