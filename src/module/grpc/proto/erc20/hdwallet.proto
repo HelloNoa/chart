@@ -1,9 +1,8 @@
 syntax = "proto3";
-package polygon;
-option go_package = "/polygon";
+package erc20;
+option go_package = "/erc20";
 
-
-import "proto/polygon/hdwallet.message.proto";
+import "proto/erc20/hdwallet.message.proto";
 
 service HDWallet {
   rpc CreateWallet(CreateWalletInput) returns (CreateWalletOutput);
