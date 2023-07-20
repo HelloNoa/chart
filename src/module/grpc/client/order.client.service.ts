@@ -1,4 +1,9 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { grpcEndPoint, PACKAGE } from '../../../cllient.options.js';
@@ -23,6 +28,7 @@ import {
   OrderCancellationInputDto,
 } from '../../../dto/grpc.dto.js';
 import { DECIMAL } from '../../../dto/redis.dto.js';
+import { Big } from 'big.js';
 
 @Injectable()
 export class OrderClientService implements OnModuleInit {
@@ -248,7 +254,7 @@ export class OrderClientService implements OnModuleInit {
     };
     console.log('LimitOrder', request);
     return [
-      await this.LimitOrderService[req.Symbol].LimitOrderInit(request),
+      this.LimitOrderService[req.Symbol].LimitOrderInit(request),
       request,
     ];
     // return await this.LimitOrderService[req.Symbol].LimitOrderInit(request);
@@ -260,13 +266,13 @@ export class OrderClientService implements OnModuleInit {
   ): Promise<[Observable<Ack>, MarketOrderInput]> {
     const Quantity = (() => {
       if (req.OrderType === 'BID') {
-        return Number(req.Quantity) * DECIMAL.BTC;
+        return Big(req.Quantity).mul(DECIMAL.BTC);
       } else {
         const symbol = req.Symbol.split('BTC')[1] as keyof typeof Currency;
         if (symbol === 'CURRENCY_NIL') {
-          return Number(req.Quantity);
+          return Big(req.Quantity);
         } else {
-          return Number(req.Quantity) * DECIMAL[symbol];
+          return Big(req.Quantity).mul(DECIMAL[symbol]);
         }
       }
     })();
@@ -290,7 +296,7 @@ export class OrderClientService implements OnModuleInit {
     };
     console.log('MarketOrder', request);
     return [
-      await this.MarketOrderService[req.Symbol].MarketOrderInit(request),
+      this.MarketOrderService[req.Symbol].MarketOrderInit(request),
       request,
     ];
   }
@@ -301,6 +307,6 @@ export class OrderClientService implements OnModuleInit {
       OrderUUID: req.OrderUUID,
     };
     console.log('CancelOrder', request);
-    return await this.CancelOrderService[req.Symbol].CancelOrder(request);
+    return this.CancelOrderService[req.Symbol].CancelOrder(request);
   }
 }

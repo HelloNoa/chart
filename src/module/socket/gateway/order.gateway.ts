@@ -173,6 +173,8 @@ export class OrderGateway
     payload: LimitOrderReq,
   ): Promise<void> {
     console.log('socket LimitOrder', payload);
+
+    // FIXME: Filter decorator 적용
     if (client.uuid === undefined) {
       const json = {
         [OrderSocketEvent.pub.OrderPlacementFailed]: {
@@ -310,6 +312,9 @@ export class OrderGateway
         return;
       }
     }
+    // FIXME: 위의 구문 최적화해서 filter decorator로 정리
+
+    // FIXME: parsing 할거면 여기서 전부 다 해주는게 맞음
     const request: LimitOrderInputDto = {
       UserUUID: client.uuid,
       // orderUUID: '',
@@ -319,9 +324,12 @@ export class OrderGateway
       Symbol: payload[LimitOrder.Symbol],
       // timestamp: '',
     };
+
+    // 아래 로직 다른 함수로 이동
     const [observable, order] = await this.orderClientService.LimitOrder(
       request,
     );
+
     observable.subscribe({
       next: (e) => {
         console.log(e);
@@ -339,6 +347,8 @@ export class OrderGateway
           },
         };
         const data = str2ab(JSON.stringify(json));
+
+        // FIXME: this.send(data); 함수 작성
         client.send(data, { binary: true });
       },
       error: (e) => {
