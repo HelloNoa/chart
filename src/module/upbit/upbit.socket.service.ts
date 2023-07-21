@@ -5,10 +5,13 @@ import { Inject } from '@nestjs/common';
 export class UpbitSocketService {
   private socket: ws;
   private ping: any;
+  private lastBTCPrice: number;
 
   constructor(
     @Inject(ChartGateway) private readonly chartSocketService: ChartGateway,
-  ) {}
+  ) {
+    this.lastBTCPrice = 0;
+  }
 
   onModuleInit() {
     this.socket = new ws('wss://api.upbit.com/websocket/v1');
@@ -37,9 +40,11 @@ export class UpbitSocketService {
       const arr = new Uint8Array(e.data as Uint8Array);
       const str_d = enc.decode(arr);
       const d = JSON.parse(str_d);
-      console.log(d.code, d.trade_price);
-      this.chartSocketService.UpbitBTCPrice(d.trade_price as number);
-      // this.tradeSocketService.upbitBTCPrice(d.trade_price as number);
+      if (this.lastBTCPrice !== d.trade_price) {
+        this.lastBTCPrice = d.trade_price;
+        console.log(d.code, d.trade_price);
+        this.chartSocketService.UpbitBTCPrice(d.trade_price as number);
+      }
     };
   }
 }
