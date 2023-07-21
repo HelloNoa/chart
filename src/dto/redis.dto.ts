@@ -50,7 +50,7 @@ export const OrderSocketEvent = {
     OrderPlacement: 3,
     //주문 취소 실패
     OrderCancellationFailed: 4,
-    //주문 실패 요청 성공
+    //주문 취소 요청 성공
     OrderCancellation: 5,
   },
 };
