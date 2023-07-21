@@ -76,7 +76,7 @@ async function bootstrap() {
     exclude: [{ path: '', method: RequestMethod.GET }],
   });
   // app.use(helmet());
-  if (['prod', 'dev', 'test'].includes(process.env.NODE_ENV + '')) {
+  if (['dev', 'test'].includes(process.env.NODE_ENV + '')) {
     initSwaggerDocs(app);
   }
 
