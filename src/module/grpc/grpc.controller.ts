@@ -193,4 +193,11 @@ export class GrpcController {
   }
 
   // END ORDER
+  @GrpcMethod('Event', 'MarketOrderMatchingEvent')
+  async MarketOrderMatchingEvent(messages: any) {
+    console.log('MarketOrderMatchingEvent');
+    console.log(messages);
+    // this.tradeSocketService.OrderCancellationFailed(messages);
+    return { Success: true };
+  }
 }
