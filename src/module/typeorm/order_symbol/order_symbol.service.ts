@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { order_symbol } from './order_symbol.entity.js';
 
 @Injectable()
@@ -11,6 +11,14 @@ export class order_symbolService {
 
   async findAll(): Promise<order_symbol[]> {
     return this.orderSymbolRepository.find();
+  }
+
+  async findSymbols(names: string[]): Promise<order_symbol[]> {
+    return this.orderSymbolRepository.find({
+      where: {
+        name: In(names),
+      },
+    });
   }
 
   async getSymbolId(name: string) {

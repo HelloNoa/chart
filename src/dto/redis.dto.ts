@@ -50,7 +50,7 @@ export const OrderSocketEvent = {
     OrderPlacement: 3,
     //주문 취소 실패
     OrderCancellationFailed: 4,
-    //주문 실패 요청 성공
+    //주문 취소 요청 성공
     OrderCancellation: 5,
   },
 };
@@ -100,6 +100,10 @@ export const socketEvent = {
     ChartSubscriber: 2,
     //호가창 구독
     OrderBookSubscriber: 3,
+    //차트 구독 해제
+    ClearChartSubscriber: 4,
+    //호가창 구독 해제
+    ClearOrderBookSubscriber: 5,
   },
   pub: {
     //ping pong
@@ -117,6 +121,10 @@ export const socketEvent = {
     //호가창 front에 pub
     OrderBook: 6,
     Ticker: 7,
+    //차트 구독 해제
+    ClearChartSubscriber: 8,
+    //호가창 구독 해제
+    ClearOrderBookSubscriber: 9,
   },
 };
 

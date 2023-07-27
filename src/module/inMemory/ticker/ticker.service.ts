@@ -142,7 +142,6 @@ export class TickerService {
 
     this.incomeUpdata[req.symbol] = new Date().getTime();
     console.log('after Ticker', this.ticker[req.symbol]);
-
     return true;
   }
 

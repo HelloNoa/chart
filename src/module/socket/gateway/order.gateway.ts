@@ -97,22 +97,6 @@ export class OrderGateway
           console.log('todayOpenPrice rest 파싱에러');
           return [];
         });
-      // this.OpenPrice = await fetch(
-      //   `https://chart${
-      //     isDev ? '-dev' : ''
-      //   }.finexblock.com/api/v1/chart/todayOpenPrice`,
-      // )
-      //   .then((e) => {
-      //     if (!e.ok) {
-      //       throw new Error('todayOpenPrice 400 or 500 에러');
-      //     }
-      //     return e.json();
-      //   })
-      //   .then((e) => e.output)
-      //   .catch(() => {
-      //     console.log('todayOpenPrice rest 파싱에러');
-      //     return [];
-      //   });
     })();
     setInterval(async () => {
       this.OpenPrice = await this.chartService
@@ -126,33 +110,13 @@ export class OrderGateway
           console.log('todayOpenPrice rest 파싱에러');
           return [];
         });
-      // this.OpenPrice = await fetch(
-      //   `https://chart${
-      //     isDev ? '-dev' : ''
-      //   }.finexblock.com/api/v1/chart/todayOpenPrice`,
-      // )
-      //   .then((e) => {
-      //     if (!e.ok) {
-      //       throw new Error('todayOpenPrice 400 or 500 에러');
-      //     }
-      //     return e.json();
-      //   })
-      //   .then((e) => e.output)
-      //   .catch(() => {
-      //     console.log('todayOpenPrice rest 파싱에러');
-      //     return [];
-      //   });
     }, 1000 * 60);
   }
 
   async getCurrnetPrice() {
-    // const isDev = (() => {
-    //   return process.env.NODE_ENV?.toLowerCase() !== 'prod';
-    // })();
     await Promise.all(
       new Array(SymbolLength).fill('a').map(async (_, i) => {
         const symbol = SymbolType[i + 1];
-        console.log('here');
         this.CurrentPrice[symbol] = await this.chartService
           .ticker(symbol)
           .then((e) => {
@@ -163,25 +127,6 @@ export class OrderGateway
             console.log('ticker rest 파싱에러');
             return 0;
           });
-        // this.CurrentPrice[symbol] = await fetch(
-        //   `https://chart${
-        //     isDev ? '-dev' : ''
-        //   }.finexblock.com/api/v1/chart/ticker?symbol=${symbol}`,
-        // )
-        //   .then((e) => {
-        //     if (!e.ok) {
-        //       throw new Error('ticker 400 or 500 에러');
-        //     }
-        //     return e.json();
-        //   })
-        //   .then((e) => e.output)
-        //   .then((e) => {
-        //     return Number(e.ticker?.currentPrice ?? 0);
-        //   })
-        //   .catch(() => {
-        //     console.log('ticker rest 파싱에러');
-        //     return 0;
-        //   });
       }),
     );
   }
@@ -228,6 +173,8 @@ export class OrderGateway
     payload: LimitOrderReq,
   ): Promise<void> {
     console.log('socket LimitOrder', payload);
+
+    // FIXME: Filter decorator 적용
     if (client.uuid === undefined) {
       const json = {
         [OrderSocketEvent.pub.OrderPlacementFailed]: {
@@ -365,6 +312,9 @@ export class OrderGateway
         return;
       }
     }
+    // FIXME: 위의 구문 최적화해서 filter decorator로 정리
+
+    // FIXME: parsing 할거면 여기서 전부 다 해주는게 맞음
     const request: LimitOrderInputDto = {
       UserUUID: client.uuid,
       // orderUUID: '',
@@ -374,9 +324,12 @@ export class OrderGateway
       Symbol: payload[LimitOrder.Symbol],
       // timestamp: '',
     };
+
+    // 아래 로직 다른 함수로 이동
     const [observable, order] = await this.orderClientService.LimitOrder(
       request,
     );
+
     observable.subscribe({
       next: (e) => {
         console.log(e);
@@ -394,6 +347,8 @@ export class OrderGateway
           },
         };
         const data = str2ab(JSON.stringify(json));
+
+        // FIXME: this.send(data); 함수 작성
         client.send(data, { binary: true });
       },
       error: (e) => {
@@ -747,17 +702,5 @@ export class OrderGateway
   afterInit(server: ws.Server) {
     console.log(server.options.path);
     console.log('Trade WebSocket server initialized');
-    // setInterval(() => {
-    //   const json = {
-    //     action: 'publish',
-    //     channel: 'trade',
-    //     pair: 'btc-usdt',
-    //     type: Math.random() > 0.5 ? 'bid' : 'ask',
-    //     price: Math.random() * 100 + 1000 + '',
-    //   };
-    //   const str = JSON.stringify(json).replace(regex, '');
-    //   const binaryData = str2ab(str);
-    //   this.sendAllClients(binaryData);
-    // }, 100);
   }
 }

@@ -2,10 +2,12 @@ import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 import {
   Ack,
+  BalanceUpdate,
   GetOrderBookInput,
   GetOrderBookOutput,
   LimitOrderInput,
   MarketOrderInput,
+  MarketOrderMatching,
   OrderCancellation,
   OrderCancellationFailed,
   OrderCancelled,
@@ -16,10 +18,6 @@ import {
   OrderPartialFill,
   OrderPlacement,
   OrderPlacementFailed,
-  StartEngineInput,
-  StartEngineOutput,
-  StopEngineInput,
-  StopEngineOutput,
 } from './message.js';
 
 export interface MarketOrder {
@@ -100,6 +98,18 @@ export interface Event {
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<Ack>;
+
+  BalanceUpdateEvent(
+    data: BalanceUpdate,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<Ack>;
+
+  MarketOrderMatchingEvent(
+    data: MarketOrderMatching,
+    metadata?: Metadata,
+    ...rest: any[]
+  ): Observable<Ack>;
 }
 
 export interface OrderBook {
@@ -108,18 +118,4 @@ export interface OrderBook {
     metadata?: Metadata,
     ...rest: any[]
   ): Observable<GetOrderBookOutput>;
-}
-
-export interface LifeCycle {
-  StartEngine(
-    data: StartEngineInput,
-    metadata?: Metadata,
-    ...rest: any[]
-  ): Observable<StartEngineOutput>;
-
-  StopEngine(
-    data: StopEngineInput,
-    metadata?: Metadata,
-    ...rest: any[]
-  ): Observable<StopEngineOutput>;
 }

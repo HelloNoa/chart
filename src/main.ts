@@ -51,17 +51,6 @@ async function bootstrap() {
     }
   }
   const app = await NestFactory.create(AppModule);
-  // app.connectMicroservice<MicroserviceOptions>({
-  //   transport: Transport.GRPC,
-  //   options: {
-  //     package: ['finexblock'],
-  //     url: `localhost:50051`,
-  //     protoPath: [
-  //       join(__dirname, '/module/grpc/proto/order_cancellation.proto'),
-  //       join(__dirname, '/module/grpc/proto/order_placement.proto'),
-  //     ],
-  //   },
-  // });
   const configService = app.get<ConfigService>(ConfigService);
 
   const version = configService.getOrThrow('APP_VERSION');
@@ -86,10 +75,8 @@ async function bootstrap() {
   app.setGlobalPrefix(`api/v${version}`, {
     exclude: [{ path: '', method: RequestMethod.GET }],
   });
-  // // app.use(helmet());
-  // console.log('dsad');
-  //
-  if (['prod', 'dev', 'test'].includes(process.env.NODE_ENV + '')) {
+  // app.use(helmet());
+  if (['dev', 'test'].includes(process.env.NODE_ENV + '')) {
     initSwaggerDocs(app);
   }
 
@@ -99,14 +86,14 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       credentials: false,
-      package: ['finexblock'],
+      package: ['grpc_order'],
       url:
         process.env.USE_SSH_TUNNEL === 'true'
           ? '127.0.0.1:50051'
           : '0.0.0.0:50051',
       protoPath: [
-        join(__dirname, '/module/grpc/proto/message.proto'),
-        join(__dirname, '/module/grpc/proto/service.proto'),
+        join(__dirname, '/module/grpc/proto/grpc_order/message.proto'),
+        join(__dirname, '/module/grpc/proto/grpc_order/service.proto'),
       ],
     },
   });

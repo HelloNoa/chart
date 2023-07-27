@@ -60,7 +60,6 @@ export class OrderBookService {
   }
 
   async getRefreshObrderBook(symbolName: string) {
-    // console.log(symbolName);
     try {
       await new Promise(async (res) => {
         const [ob] = await this.OrderClientService.enguineOrderBook(symbolName);
@@ -69,7 +68,6 @@ export class OrderBookService {
         } else {
           ob.subscribe({
             next: (aa) => {
-              // console.log(aa);
               this.queue.push({
                 symbol: symbolName,
                 type: 3,
@@ -99,12 +97,10 @@ export class OrderBookService {
         // console.log(bidask)
         if (bidask === null) {
           console.error('get bidask null!');
-          if (!this.orderBook.hasOwnProperty(e.name)) {
-            this.orderBook[e.name] = {
-              ask: [],
-              bid: [],
-            };
-          }
+          this.orderBook[e.name] = {
+            ask: [],
+            bid: [],
+          };
         } else {
           this.orderBook[e.name] = bidask;
         }
@@ -188,13 +184,14 @@ export class OrderBookService {
               })
               .sort((a, b) => b.price - a.price);
           }
-          this.incomeUpdata[req.symbol] = new Date().getTime();
         }
+        this.incomeUpdata[req.symbol] = new Date().getTime();
       }
 
       return;
     }
-    console.log('before', this.orderBook[req.symbol]);
+
+    // console.log('before', this.orderBook[req.symbol]);
     switch (req.type) {
       case 0:
         // OrderMatchingChannel;
@@ -302,7 +299,7 @@ export class OrderBookService {
         break;
     }
     this.incomeUpdata[req.symbol] = new Date().getTime();
-    console.log('after', this.orderBook[req.symbol]);
+    // console.log('after', this.orderBook[req.symbol]);
     return true;
   }
 

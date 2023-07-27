@@ -5,8 +5,13 @@ import { RedisClusterService } from 'nestjs-redis-cluster';
 @Injectable()
 export class RedisPubSubService {
   private client: IORedis.Cluster;
+
   constructor(private readonly redisService: RedisClusterService) {
     this.client = this.redisService.getCluster('REDIS_SERVICE');
+  }
+
+  get Client() {
+    return this.client;
   }
 
   onModuleInit() {
