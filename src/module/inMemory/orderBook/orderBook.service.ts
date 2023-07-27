@@ -88,7 +88,7 @@ export class OrderBookService {
   }
 
   async onModuleInit() {
-    const list = await this.orderSymbolService.findAll();
+    const list = await this.orderSymbolService.findActiveSymbols();
     // const list = [{ id: 4, name: 'BTCADA' }];
     await Promise.all(
       list.map(async (e) => {
