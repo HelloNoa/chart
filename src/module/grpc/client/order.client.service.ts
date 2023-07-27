@@ -41,18 +41,9 @@ export class OrderClientService implements OnModuleInit {
     @Inject(PACKAGE[0]) private clientBTCETH: ClientGrpc,
     @Inject(PACKAGE[1]) private clientBTCETC: ClientGrpc,
     @Inject(PACKAGE[2]) private clientBTCMATIC: ClientGrpc,
-    @Inject(PACKAGE[3]) private clientBTCLPT: ClientGrpc,
-    @Inject(PACKAGE[4]) private clientBTCMANA: ClientGrpc,
-    @Inject(PACKAGE[5]) private clientBTCAXS: ClientGrpc,
-    @Inject(PACKAGE[6]) private clientBTCAUDIO: ClientGrpc,
-    @Inject(PACKAGE[7]) private clientBTCSAND: ClientGrpc,
-    @Inject(PACKAGE[8]) private clientBTCCOMP: ClientGrpc,
-    @Inject(PACKAGE[9]) private clientBTCLINK: ClientGrpc,
-    @Inject(PACKAGE[10]) private clientBTCDYDX: ClientGrpc,
-    @Inject(PACKAGE[11]) private clientBTCBNB: ClientGrpc,
-    @Inject(PACKAGE[12]) private clientBTCOP: ClientGrpc,
-    @Inject(PACKAGE[13]) private clientBTCAVAX: ClientGrpc,
-    @Inject(PACKAGE[14]) private clientBTCARB: ClientGrpc,
+    @Inject(PACKAGE[3]) private clientBTCSAND: ClientGrpc,
+    @Inject(PACKAGE[4]) private clientBTCCOMP: ClientGrpc,
+    @Inject(PACKAGE[5]) private clientBTCARB: ClientGrpc, // @Inject(PACKAGE[0]) private clientBTCETH: ClientGrpc, // @Inject(PACKAGE[1]) private clientBTCETC: ClientGrpc, // @Inject(PACKAGE[2]) private clientBTCMATIC: ClientGrpc, // @Inject(PACKAGE[3]) private clientBTCLPT: ClientGrpc, // @Inject(PACKAGE[4]) private clientBTCMANA: ClientGrpc, // @Inject(PACKAGE[5]) private clientBTCAXS: ClientGrpc, // @Inject(PACKAGE[6]) private clientBTCAUDIO: ClientGrpc, // @Inject(PACKAGE[7]) private clientBTCSAND: ClientGrpc, // @Inject(PACKAGE[8]) private clientBTCCOMP: ClientGrpc, // @Inject(PACKAGE[9]) private clientBTCLINK: ClientGrpc, // @Inject(PACKAGE[10]) private clientBTCDYDX: ClientGrpc, // @Inject(PACKAGE[11]) private clientBTCBNB: ClientGrpc, // @Inject(PACKAGE[12]) private clientBTCOP: ClientGrpc, // @Inject(PACKAGE[13]) private clientBTCAVAX: ClientGrpc, // @Inject(PACKAGE[14]) private clientBTCARB: ClientGrpc,
   ) {
     // Object.values(grpcEndPoint).map((e) => e.market + '_PACKAGE');
   }
