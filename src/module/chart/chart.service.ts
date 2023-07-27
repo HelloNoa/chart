@@ -41,11 +41,21 @@ export class ChartService {
 
   //마켓리스트
   async marketList() {
-    const symvolList = await this.orderSymbolService.findAll();
+    // FIXME: 나중에 빼세요~
+    const temp = [
+      'BTCARB',
+      'BTCCOMP',
+      'BTCETC',
+      'BTCETH',
+      'BTCMATIC',
+      'BTCSAND',
+    ];
+    const symbolList = await this.orderSymbolService.findSymbols(temp);
+
     const lastTick = await this.chartService.getDailyTick();
     if (lastTick === null) {
       console.error('lastTick is null.');
-      return symvolList.map(
+      return symbolList.map(
         (
           e: order_symbol & {
             price?: number;
@@ -63,7 +73,7 @@ export class ChartService {
       );
     }
     return await Promise.all(
-      symvolList.map(
+      symbolList.map(
         async (
           e: order_symbol & {
             price?: number;
