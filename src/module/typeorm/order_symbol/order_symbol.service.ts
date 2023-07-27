@@ -21,6 +21,18 @@ export class order_symbolService {
     });
   }
 
+  async findActiveSymbols() {
+    const ACTIVE_ORDER_SYMBOL = [
+      'BTCARB',
+      'BTCCOMP',
+      'BTCETC',
+      'BTCETH',
+      'BTCMATIC',
+      'BTCSAND',
+    ];
+    return this.findSymbols(ACTIVE_ORDER_SYMBOL);
+  } 
+
   async getSymbolId(name: string) {
     try {
       const symbol = await this.orderSymbolRepository.findOne({
