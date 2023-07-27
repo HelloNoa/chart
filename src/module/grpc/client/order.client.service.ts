@@ -83,46 +83,46 @@ export class OrderClientService implements OnModuleInit {
             this.EngineOrderBookService[e] =
               this.clientBTCMATIC.getService<OrderBook>('OrderBook');
             break;
-          case 'BTCLPT':
-            this.LimitOrderService[e] =
-              this.clientBTCLPT.getService<LimitOrder>('LimitOrder');
-            this.MarketOrderService[e] =
-              this.clientBTCLPT.getService<MarketOrder>('MarketOrder');
-            this.CancelOrderService[e] =
-              this.clientBTCLPT.getService<CancelOrder>('CancelOrder');
-            this.EngineOrderBookService[e] =
-              this.clientBTCLPT.getService<OrderBook>('OrderBook');
-            break;
-          case 'BTCMANA':
-            this.LimitOrderService[e] =
-              this.clientBTCMANA.getService<LimitOrder>('LimitOrder');
-            this.MarketOrderService[e] =
-              this.clientBTCMANA.getService<MarketOrder>('MarketOrder');
-            this.CancelOrderService[e] =
-              this.clientBTCMANA.getService<CancelOrder>('CancelOrder');
-            this.EngineOrderBookService[e] =
-              this.clientBTCMANA.getService<OrderBook>('OrderBook');
-            break;
-          case 'BTCAXS':
-            this.LimitOrderService[e] =
-              this.clientBTCAXS.getService<LimitOrder>('LimitOrder');
-            this.MarketOrderService[e] =
-              this.clientBTCAXS.getService<MarketOrder>('MarketOrder');
-            this.CancelOrderService[e] =
-              this.clientBTCAXS.getService<CancelOrder>('CancelOrder');
-            this.EngineOrderBookService[e] =
-              this.clientBTCAXS.getService<OrderBook>('OrderBook');
-            break;
-          case 'BTCAUDIO':
-            this.LimitOrderService[e] =
-              this.clientBTCAUDIO.getService<LimitOrder>('LimitOrder');
-            this.MarketOrderService[e] =
-              this.clientBTCAUDIO.getService<MarketOrder>('MarketOrder');
-            this.CancelOrderService[e] =
-              this.clientBTCAUDIO.getService<CancelOrder>('CancelOrder');
-            this.EngineOrderBookService[e] =
-              this.clientBTCAUDIO.getService<OrderBook>('OrderBook');
-            break;
+          // case 'BTCLPT':
+          //   this.LimitOrderService[e] =
+          //     this.clientBTCLPT.getService<LimitOrder>('LimitOrder');
+          //   this.MarketOrderService[e] =
+          //     this.clientBTCLPT.getService<MarketOrder>('MarketOrder');
+          //   this.CancelOrderService[e] =
+          //     this.clientBTCLPT.getService<CancelOrder>('CancelOrder');
+          //   this.EngineOrderBookService[e] =
+          //     this.clientBTCLPT.getService<OrderBook>('OrderBook');
+          //   break;
+          // case 'BTCMANA':
+          //   this.LimitOrderService[e] =
+          //     this.clientBTCMANA.getService<LimitOrder>('LimitOrder');
+          //   this.MarketOrderService[e] =
+          //     this.clientBTCMANA.getService<MarketOrder>('MarketOrder');
+          //   this.CancelOrderService[e] =
+          //     this.clientBTCMANA.getService<CancelOrder>('CancelOrder');
+          //   this.EngineOrderBookService[e] =
+          //     this.clientBTCMANA.getService<OrderBook>('OrderBook');
+          //   break;
+          // case 'BTCAXS':
+          //   this.LimitOrderService[e] =
+          //     this.clientBTCAXS.getService<LimitOrder>('LimitOrder');
+          //   this.MarketOrderService[e] =
+          //     this.clientBTCAXS.getService<MarketOrder>('MarketOrder');
+          //   this.CancelOrderService[e] =
+          //     this.clientBTCAXS.getService<CancelOrder>('CancelOrder');
+          //   this.EngineOrderBookService[e] =
+          //     this.clientBTCAXS.getService<OrderBook>('OrderBook');
+          //   break;
+          // case 'BTCAUDIO':
+          //   this.LimitOrderService[e] =
+          //     this.clientBTCAUDIO.getService<LimitOrder>('LimitOrder');
+          //   this.MarketOrderService[e] =
+          //     this.clientBTCAUDIO.getService<MarketOrder>('MarketOrder');
+          //   this.CancelOrderService[e] =
+          //     this.clientBTCAUDIO.getService<CancelOrder>('CancelOrder');
+          //   this.EngineOrderBookService[e] =
+          //     this.clientBTCAUDIO.getService<OrderBook>('OrderBook');
+          //   break;
           case 'BTCSAND':
             this.LimitOrderService[e] =
               this.clientBTCSAND.getService<LimitOrder>('LimitOrder');
@@ -143,56 +143,56 @@ export class OrderClientService implements OnModuleInit {
             this.EngineOrderBookService[e] =
               this.clientBTCCOMP.getService<OrderBook>('OrderBook');
             break;
-          case 'BTCLINK':
-            this.LimitOrderService[e] =
-              this.clientBTCLINK.getService<LimitOrder>('LimitOrder');
-            this.MarketOrderService[e] =
-              this.clientBTCLINK.getService<MarketOrder>('MarketOrder');
-            this.CancelOrderService[e] =
-              this.clientBTCLINK.getService<CancelOrder>('CancelOrder');
-            this.EngineOrderBookService[e] =
-              this.clientBTCLINK.getService<OrderBook>('OrderBook');
-            break;
-          case 'BTCDYDX':
-            this.LimitOrderService[e] =
-              this.clientBTCDYDX.getService<LimitOrder>('LimitOrder');
-            this.MarketOrderService[e] =
-              this.clientBTCDYDX.getService<MarketOrder>('MarketOrder');
-            this.CancelOrderService[e] =
-              this.clientBTCDYDX.getService<CancelOrder>('CancelOrder');
-            this.EngineOrderBookService[e] =
-              this.clientBTCDYDX.getService<OrderBook>('OrderBook');
-            break;
-          case 'BTCBNB':
-            this.LimitOrderService[e] =
-              this.clientBTCBNB.getService<LimitOrder>('LimitOrder');
-            this.MarketOrderService[e] =
-              this.clientBTCBNB.getService<MarketOrder>('MarketOrder');
-            this.CancelOrderService[e] =
-              this.clientBTCBNB.getService<CancelOrder>('CancelOrder');
-            this.EngineOrderBookService[e] =
-              this.clientBTCBNB.getService<OrderBook>('OrderBook');
-            break;
-          case 'BTCOP':
-            this.LimitOrderService[e] =
-              this.clientBTCOP.getService<LimitOrder>('LimitOrder');
-            this.MarketOrderService[e] =
-              this.clientBTCOP.getService<MarketOrder>('MarketOrder');
-            this.CancelOrderService[e] =
-              this.clientBTCOP.getService<CancelOrder>('CancelOrder');
-            this.EngineOrderBookService[e] =
-              this.clientBTCOP.getService<OrderBook>('OrderBook');
-            break;
-          case 'BTCAVAX':
-            this.LimitOrderService[e] =
-              this.clientBTCAVAX.getService<LimitOrder>('LimitOrder');
-            this.MarketOrderService[e] =
-              this.clientBTCAVAX.getService<MarketOrder>('MarketOrder');
-            this.CancelOrderService[e] =
-              this.clientBTCAVAX.getService<CancelOrder>('CancelOrder');
-            this.EngineOrderBookService[e] =
-              this.clientBTCAVAX.getService<OrderBook>('OrderBook');
-            break;
+          // case 'BTCLINK':
+          //   this.LimitOrderService[e] =
+          //     this.clientBTCLINK.getService<LimitOrder>('LimitOrder');
+          //   this.MarketOrderService[e] =
+          //     this.clientBTCLINK.getService<MarketOrder>('MarketOrder');
+          //   this.CancelOrderService[e] =
+          //     this.clientBTCLINK.getService<CancelOrder>('CancelOrder');
+          //   this.EngineOrderBookService[e] =
+          //     this.clientBTCLINK.getService<OrderBook>('OrderBook');
+          //   break;
+          // case 'BTCDYDX':
+          //   this.LimitOrderService[e] =
+          //     this.clientBTCDYDX.getService<LimitOrder>('LimitOrder');
+          //   this.MarketOrderService[e] =
+          //     this.clientBTCDYDX.getService<MarketOrder>('MarketOrder');
+          //   this.CancelOrderService[e] =
+          //     this.clientBTCDYDX.getService<CancelOrder>('CancelOrder');
+          //   this.EngineOrderBookService[e] =
+          //     this.clientBTCDYDX.getService<OrderBook>('OrderBook');
+          //   break;
+          // case 'BTCBNB':
+          //   this.LimitOrderService[e] =
+          //     this.clientBTCBNB.getService<LimitOrder>('LimitOrder');
+          //   this.MarketOrderService[e] =
+          //     this.clientBTCBNB.getService<MarketOrder>('MarketOrder');
+          //   this.CancelOrderService[e] =
+          //     this.clientBTCBNB.getService<CancelOrder>('CancelOrder');
+          //   this.EngineOrderBookService[e] =
+          //     this.clientBTCBNB.getService<OrderBook>('OrderBook');
+          //   break;
+          // case 'BTCOP':
+          //   this.LimitOrderService[e] =
+          //     this.clientBTCOP.getService<LimitOrder>('LimitOrder');
+          //   this.MarketOrderService[e] =
+          //     this.clientBTCOP.getService<MarketOrder>('MarketOrder');
+          //   this.CancelOrderService[e] =
+          //     this.clientBTCOP.getService<CancelOrder>('CancelOrder');
+          //   this.EngineOrderBookService[e] =
+          //     this.clientBTCOP.getService<OrderBook>('OrderBook');
+          //   break;
+          // case 'BTCAVAX':
+          //   this.LimitOrderService[e] =
+          //     this.clientBTCAVAX.getService<LimitOrder>('LimitOrder');
+          //   this.MarketOrderService[e] =
+          //     this.clientBTCAVAX.getService<MarketOrder>('MarketOrder');
+          //   this.CancelOrderService[e] =
+          //     this.clientBTCAVAX.getService<CancelOrder>('CancelOrder');
+          //   this.EngineOrderBookService[e] =
+          //     this.clientBTCAVAX.getService<OrderBook>('OrderBook');
+          //   break;
           case 'BTCARB':
             this.LimitOrderService[e] =
               this.clientBTCARB.getService<LimitOrder>('LimitOrder');
